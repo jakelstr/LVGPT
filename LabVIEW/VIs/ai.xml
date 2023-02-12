@@ -1,0 +1,35 @@
+<vis>
+	<vi>
+		<bd name="test">
+			<nodes>
+				<node xPos="0" yPos="0" name="s1" type="String Control" value="Hello,">
+					<terminals>
+						<terminal id="8b6ef507-daff-406e-a131-30ac71a34871" name="s1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="50" name="s2" type="String Control" value=" World">
+					<terminals>
+						<terminal id="9421731e-3fb1-4940-9894-4e7af51c288a" name="s2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="100" name="result" type="String Indicator">
+					<terminals>
+						<terminal id="4fbe8d8a-c385-44fc-a761-0d0dae4b44aa" name="result" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="150" name="add" type="Concatenate Strings">
+					<terminals>
+						<terminal id="e660ae8f-70e9-499a-8542-5a7245b7e512" name="string" />
+						<terminal id="543dc719-431b-4a49-8962-03912069dc5c" name="string" />
+						<terminal id="e7c9a616-30a6-4399-b28e-c29b0046d4ad" name="concatenated string" />
+					</terminals>
+				</node>
+			</nodes>
+			<wires>
+				<wire id="182446f8-5197-4009-b292-1ba28ab1e6ae" from="e7c9a616-30a6-4399-b28e-c29b0046d4ad" to="4fbe8d8a-c385-44fc-a761-0d0dae4b44aa" />
+				<wire id="a128a3c0-6a16-40f0-a811-02cdc972d8e8" from="8b6ef507-daff-406e-a131-30ac71a34871" to="e660ae8f-70e9-499a-8542-5a7245b7e512" />
+				<wire id="cc84703e-8c38-48f4-8b22-60e2807edcdf" from="9421731e-3fb1-4940-9894-4e7af51c288a" to="543dc719-431b-4a49-8962-03912069dc5c" />
+			</wires>
+		</bd>
+	</vi>
+</vis>

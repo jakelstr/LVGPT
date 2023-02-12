@@ -1,0 +1,35 @@
+<vis>
+	<vi>
+		<bd name="test">
+			<nodes>
+				<node xPos="0" yPos="0" name="num1" type="Numeric Control" numericType="Quad" value="2">
+					<terminals>
+						<terminal id="ff5ab79b-10fb-4060-863e-e1a9154aa398" name="num1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="50" name="num2" type="Numeric Control" numericType="Quad" value="3">
+					<terminals>
+						<terminal id="7a4a3777-5dab-471c-b4c7-765f14ec32f4" name="num2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="100" name="num3" type="Numeric Indicator" numericType="Quad">
+					<terminals>
+						<terminal id="2216a031-7591-4f7f-a8f0-78826428f8a4" name="num3" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="150" name="add" type="Add">
+					<terminals>
+						<terminal id="163096e1-3daf-4a74-ac54-3c70bb69858c" name="x" />
+						<terminal id="e088c570-de8b-4f4e-b9ec-2472a4c75930" name="y" />
+						<terminal id="33ddad8a-d464-4973-884f-d4e5e14a76ea" name="x+y" />
+					</terminals>
+				</node>
+			</nodes>
+			<wires>
+				<wire id="78786190-9634-47d6-96f2-96e69a5316cc" from="33ddad8a-d464-4973-884f-d4e5e14a76ea" to="2216a031-7591-4f7f-a8f0-78826428f8a4" />
+				<wire id="f47401c2-6e11-4171-a1e2-1fe3144f0e0f" from="ff5ab79b-10fb-4060-863e-e1a9154aa398" to="163096e1-3daf-4a74-ac54-3c70bb69858c" />
+				<wire id="da399dea-7293-468a-b557-0fe6981af02e" from="7a4a3777-5dab-471c-b4c7-765f14ec32f4" to="e088c570-de8b-4f4e-b9ec-2472a4c75930" />
+			</wires>
+		</bd>
+	</vi>
+</vis>

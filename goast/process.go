@@ -43,6 +43,12 @@ func findBottomBinaryExpr(expr ast.Expr) string {
 	return fmt.Sprintf("%s", expr)
 }
 
+/* func processBinaryExpr(expr ast.BinaryExpr) string{
+	var left string = findBottomBinaryExpr(expr.X)
+	var right string = findBottomBinaryExpr(expr.Y)
+	return fmt.Sprintf("<binary<op>%s</op>\n<left>%s</left>\n<right>%s</right>\n", x.Op, left, right)
+} */
+
 func processCallExpr(expr ast.Expr) string {
 	if selectorExpr, ok := expr.(*ast.SelectorExpr); ok {
 		return fmt.Sprintf("<SelectorExpr>%s</SelectorExpr>", selectorExpr.Sel.Name)
@@ -51,6 +57,8 @@ func processCallExpr(expr ast.Expr) string {
 }
 
 func main() {
+	visited := make(map[ast.Node]bool)
+
 	depthCounter := -1
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, "../python/codexout.go", nil, parser.AllErrors)
@@ -128,6 +136,17 @@ func main() {
 		case *ast.CallExpr:
 			funcName := x.Fun.(*ast.SelectorExpr).Sel.Name
 			fmt.Println("Function call:", funcName)
+			w.WriteString(fmt.Sprintf("<args>"))
+			for _, arg := range x.Args {
+				if basicLit, ok := arg.(*ast.BasicLit); ok {
+					w.WriteString(fmt.Sprintf("<arg><BasicLit>%s</BasicLit></arg>", processBasicLit(*basicLit)))
+				}
+				if ident, ok := arg.(*ast.Ident); ok {
+					w.WriteString(fmt.Sprintf("<arg><Ident><name>%s</name></Ident></arg>\n", ident.Name))
+					w.Flush()
+				}
+			}
+			w.WriteString(fmt.Sprintf("</args>"))
 		case *ast.AssignStmt:
 			fmt.Printf("AssignStmt: ")
 
@@ -144,7 +163,9 @@ func main() {
 					//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
 				}
 				if _, ok := rhs.(*ast.BinaryExpr); ok {
-					w.WriteString(fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, "BinaryExpr"))
+					binaryExpr := rhs.(*ast.BinaryExpr)
+					visited[binaryExpr] = true
+					w.WriteString(fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, findBottomBinaryExpr((binaryExpr))))
 					//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
 				}
 			}
@@ -162,15 +183,36 @@ func main() {
 			}*/
 
 		case *ast.BasicLit:
-			w.WriteString(fmt.Sprintf("<value>%s</value>\n", stripQuotes(x.Value)))
+			w.WriteString(processBasicLit(*x))
 			w.Flush()
 
 		case *ast.DeclStmt:
 			fmt.Printf("Decl statement %s\n", x.Decl)
-
 		case *ast.ValueSpec:
 			//fmt.Printf("Value Spec %s\n", x.Values)
 			w.WriteString(fmt.Sprintf("<type>%s</type>\n", x.Type))
+			w.WriteString(fmt.Sprintf("<names>\n"))
+			for _, name := range x.Names {
+				//visited[name] = true
+				w.WriteString(fmt.Sprintf("<name>%s</name>\n", name.Name))
+			}
+			w.WriteString(fmt.Sprintf("</names>\n"))
+			w.WriteString(fmt.Sprintf("<values>\n"))
+			for _, value := range x.Values {
+				w.WriteString(fmt.Sprintf("<value>\n"))
+				if _, ok := value.(*ast.BinaryExpr); ok {
+					visited[value] = true
+					w.WriteString(findBottomBinaryExpr(value))
+					//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
+				}
+				if basicLit, ok := value.(*ast.BasicLit); ok {
+					visited[value] = true
+					w.WriteString(fmt.Sprintf("<BasicLit>%s</BasicLit>", processBasicLit(*basicLit)))
+					//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
+				}
+				w.WriteString(fmt.Sprintf("</value>\n"))
+			}
+			w.WriteString(fmt.Sprintf("</values>\n"))
 			w.Flush()
 
 		case *ast.GenDecl:
@@ -192,11 +234,14 @@ func main() {
 				}
 			}
 		case *ast.BinaryExpr:
-			var left string = findBottomBinaryExpr(x.X)
-			var right string = findBottomBinaryExpr(x.Y)
+			//var left string = findBottomBinaryExpr(x.X)
+			//var right string = findBottomBinaryExpr(x.Y)
 
-			w.WriteString(fmt.Sprintf("<op>%s</op>\n<left>%s</left>\n<right>%s</right>\n", x.Op, left, right))
-			w.Flush()
+			//w.WriteString(fmt.Sprintf("<op>%s</op>\n<left>%s</left>\n<right>%s</right>\n", x.Op, left, right))
+			if !visited[x] {
+				w.WriteString(findBottomBinaryExpr(x))
+				w.Flush()
+			}
 
 		default:
 			nodeType := fmt.Sprintf("%T", n)

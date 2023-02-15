@@ -63,6 +63,16 @@ class StringControl(LVNode):
         self.attributes["value"] = val
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
+    
+class StringConstant(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        LVNode.addTerminal(self, name)
+        self.attributes["type"] = "String Constant"
+    def setValue(self, val):
+        self.attributes["value"] = val
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
 
 class StringIndicator(LVNode):
     def __init__(self, name):
@@ -128,15 +138,36 @@ class DivideNode(LVNode):
 class ConcatenateStringsNode(LVNode):
     def  __init__(self):
         LVNode.__init__(self, "concat")
-        LVNode.addTerminal(self, "x")
-        LVNode.addTerminal(self, "y")
-        LVNode.addTerminal(self, "x/y")
-        self.attributes["type"] = "Divide"
+        LVNode.addTerminal(self, "string")
+        LVNode.addTerminal(self, "string")
+        LVNode.addTerminal(self, "concatenated string")
+        self.attributes["type"] = "Concatenate Strings"
+        self.attributes["nodes"] = "2"
     def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "x/y")
-        leftTerm = LVNode.getTerminalByName(self, "x")
-        rightTerm = LVNode.getTerminalByName(self, "y")
-        return (leftTerm, rightTerm, outputTerm)
+        outputTerm = LVNode.getTerminalByName(self, "concatenated string")
+        return (None, None, outputTerm)
+    def addTerminal(self):
+        LVNode.addTerminal(self, "string")
+        self.attributes["nodes"] = str(int(self.attributes["nodes"]) + 1)
+    def getStringTerms(self):
+        return [item for item in self.terminals.values() if item.name == "string"]
+    
+class FormatIntoStringsNode(LVNode):
+    def  __init__(self):
+        LVNode.__init__(self, "fstr")
+        LVNode.addTerminal(self, "input 1")
+        LVNode.addTerminal(self, "format string")
+        LVNode.addTerminal(self, "resulting string")
+        self.attributes["type"] = "Format Into String"
+        self.attributes["nodes"] = "1"
+    def getTerms(self):
+        outputTerm = LVNode.getTerminalByName(self, "concatenated string")
+        return (None, None, outputTerm)
+    def addTerminal(self):
+        self.attributes["nodes"] = str(int(self.attributes["nodes"]) + 1)
+        LVNode.addTerminal(self, "input " + str(int(self.attributes["nodes"])))
+    def getInputTerms(self):
+        return [item for item in self.terminals.values() if "input" in item.name]
 
 class var:
     def __init__(self, name, value, varType):
@@ -203,6 +234,46 @@ def getIndicatorNodeByVarType(varName, varType):
         case "STRING":
             return StringIndicator(varName)
     return LVNode(varName)
+
+def determineBinaryDictOpUniform(binaryDict):
+    left = binaryDict["left"]
+    right = binaryDict["right"]
+    op = type(binaryDict["op"])
+    uniform = True
+    inputs = []
+    if type(left) is dict:
+        subUniform, subOp, subInputs = determineBinaryDictOpUniform(left)
+        uniform = uniform and subUniform and subOp == op
+        subInputs.extend(inputs)
+        inputs = subInputs
+    else:
+        inputs.append(left)
+    if type(right) is dict:
+        subUniform, subOp, subInputs = determineBinaryDictOpUniform(right)
+        uniform = uniform and subUniform and subOp == op
+        subInputs.extend(inputs)
+        inputs = subInputs
+    else:
+        inputs.append(right)
+    return (uniform, op, inputs)
+
+def convertBinaryDictToConcatStrings(binaryDict, blockLevel):
+    wires = []
+    nodes = []
+    uniform, op, binVars = determineBinaryDictOpUniform(binaryDict)
+    if uniform and op is AddNode:
+        concatNode = ConcatenateStringsNode()
+        if len(binVars) > 2:
+            for x in range(len(binVars) - 2):
+                concatNode.addTerminal()
+        binaryDict["op"] = concatNode
+        stringTerms = concatNode.getStringTerms()
+        for x in range(len(binVars)):
+            varNode = blockTable[blockLevel]["nodes"][binVars[x].nodeUUID]
+            w = wire(varNode.getTerminal().uuid, stringTerms[x].uuid)
+            wires.append(w)
+    nodes.append(concatNode)
+    return (binaryDict, wires, nodes, "STRING")
 
 def processBinaryExpr(node):
     returnDict = {}
@@ -280,14 +351,33 @@ def processBlockStmtChild(node, blockLevel):
         valSpec = node.find("GenDecl/ValueSpec")
         if valSpec is not None:
             varType = valSpec.find("type").text
-            name = valSpec.find("Ident/name").text
+            name = valSpec.find("names/name").text
             value = None
-            basicLit = valSpec.find("BasicLit/value")
-            if basicLit is not None:
-                value = basicLit.text
+            varNode = None
+            valueTag = valSpec.find("values/value")
+
+            match valueTag[0].tag:
+                case "BasicLit":
+                    varNode = getControlNodeByVarType(name, varType)
+                    value = valueTag.find("BasicLit/value").text
+                case "BinaryExpr":
+                    varNode = getIndicatorNodeByVarType(name, varType)
+                    binExpNode = valueTag.find("BinaryExpr")
+                    if binExpNode is not None:
+                        binExpDict = processBinaryExpr(binExpNode)
+                        binExpDict, wires, nodes, outType = processBinaryDict(binExpDict, blockLevel)
+                        if outType.upper() == "STRING":
+                            binExpDict, wires, nodes, outType = convertBinaryDictToConcatStrings(binExpDict, blockLevel)
+                        _, _, finalOutputTerm = binExpDict["op"].getTerms()
+                        varType  = outType
+                        finalWire = wire(finalOutputTerm.uuid, varNode.getTerminal().uuid)
+                        blockTable[blockLevel]["wires"].append(finalWire)
+                        blockTable[blockLevel]["wires"].extend(wires)
+                        for b in nodes:
+                            blockTable[blockLevel]["nodes"][b.uuid] = b
             varItem = var(name, value, varType)
-            varNode = getControlNodeByVarType(name, varType)
-            varNode.setValue(value)
+            if value is not None:
+                varNode.setValue(value)
             varItem.nodeUUID = varNode.uuid
             blockTable[blockLevel]["nodes"][varNode.uuid] = varNode
             blockTable[blockLevel]["vars"][name] = varItem
@@ -306,7 +396,7 @@ def processBlockStmtChild(node, blockLevel):
             if lhs in rhsDict:
                 rhsNode = rhsDict[lhs]
                 if len(rhsNode) > 0:
-                     if rhsNode[0].tag == "BasicLit":
+                    if rhsNode[0].tag == "BasicLit":
                         rhsNode = rhsNode[0]
                         value = rhsNode.find("value").text
                         varType = rhsNode.find("kind").text.lower()
@@ -325,23 +415,67 @@ def processBlockStmtChild(node, blockLevel):
                             blockTable[blockLevel]["nodes"][varNode.uuid] = varNode
                             blockTable[blockLevel]["vars"][varItem.name] = varItem
                          
-                else:
-                    if rhsNode.text == "BinaryExpr":
-                        binExpNode = node.find("BinaryExpr")
-                        if binExpNode is not None:
-                            binExpDict = processBinaryExpr(binExpNode)
-                            binExpDict, wires, nodes, outType = processBinaryDict(binExpDict, blockLevel)
-                            _, _, finalOutputTerm = binExpDict["op"].getTerms()
-                            varItem = var(lhsDict[lhs], 0, outType)
-                            varNode = getIndicatorNodeByVarType(varItem.name, varItem.varType)
-                            varItem.nodeUUID = varNode.uuid
-                            blockTable[blockLevel]["nodes"][varNode.uuid] = varNode
-                            blockTable[blockLevel]["vars"][varItem.name] = varItem
-                            finalWire = wire(finalOutputTerm.uuid, varNode.getTerminal().uuid)
-                            blockTable[blockLevel]["wires"].append(finalWire)
-                            blockTable[blockLevel]["wires"].extend(wires)
-                            for b in nodes:
-                                blockTable[blockLevel]["nodes"][b.uuid] = b
+                    elif rhsNode[0].tag == "BinaryExpr":
+                        binExpDict = processBinaryExpr(rhsNode[0])
+                        binExpDict, wires, nodes, outType = processBinaryDict(binExpDict, blockLevel)
+                        _, _, finalOutputTerm = binExpDict["op"].getTerms()
+                        varItem = var(lhsDict[lhs], 0, outType)
+                        varNode = getIndicatorNodeByVarType(varItem.name, varItem.varType)
+                        varItem.nodeUUID = varNode.uuid
+                        blockTable[blockLevel]["nodes"][varNode.uuid] = varNode
+                        blockTable[blockLevel]["vars"][varItem.name] = varItem
+                        finalWire = wire(finalOutputTerm.uuid, varNode.getTerminal().uuid)
+                        blockTable[blockLevel]["wires"].append(finalWire)
+                        blockTable[blockLevel]["wires"].extend(wires)
+                        for b in nodes:
+                            blockTable[blockLevel]["nodes"][b.uuid] = b
+    elif node.tag == "ExprStmt":
+        wires = []
+        nodes = []
+        callExpr = node.find("CallExpr")
+        if callExpr is not None:
+            selectorExpr = callExpr.find("SelectorExpr")
+            if selectorExpr is not None:
+                names = selectorExpr.findall("Ident/name")
+                if len(names) == 2 and names[0].text == "fmt" and names[1].text == "Printf":
+                    args = callExpr.find("args")
+                    if args is not None:
+                        argNodes = args.findall("arg")
+                        if argNodes[0].find("BasicLit") is not None:
+                            formatNode = FormatIntoStringsNode()
+                            formatString = argNodes[0].find("BasicLit/value").text
+                            formatStringNode = StringConstant("format string")
+                            formatStringNode.setValue(formatString)
+                            nodes.append(formatNode)
+                            nodes.append(formatStringNode)
+                            formatWire = wire(formatStringNode.getTerminal().uuid, formatNode.getTerminalByName("format string").uuid)
+                            wires.append(formatWire)
+                            remaining_args = argNodes[1:]
+                            for i in range(len(remaining_args)):
+                                if i > 0:
+                                    formatNode.addTerminal()
+                                arg = remaining_args[i]
+                                if arg.find("Ident") is not None:
+                                    varName = arg.find("Ident/name").text
+                                    if varName in blockTable[blockLevel]["vars"]:
+                                        varItem = blockTable[blockLevel]["vars"][varName]
+                                        if varItem.nodeUUID in blockTable[blockLevel]["nodes"]:
+                                            varNode = blockTable[blockLevel]["nodes"][varItem.nodeUUID]
+                                            inputTerminal = formatNode.getInputTerms()[i] #these are probably in order idk
+                                            inputWire = wire(varNode.getTerminal().uuid, inputTerminal.uuid)
+                                            wires.append(inputWire)
+                            outputNode = StringIndicator("output")
+                            nodes.append(outputNode)
+                            outputWire = wire(formatNode.getTerminalByName("resulting string").uuid, outputNode.getTerminal().uuid)
+                            wires.append(outputWire)
+                            for n in nodes:
+                                blockTable[blockLevel]["nodes"][n.uuid] = n
+                            for w in wires:
+                                blockTable[blockLevel]["wires"].append(w)
+
+
+
+                                    
 
 def writeNodeToXML(node, index):
     rootElem = ET.Element("node")

@@ -5,6 +5,7 @@
 	<GenDecl>
 		<ImportSpec>
 			<BasicLit>
+				<kind>STRING</kind>
 				<value>fmt</value>
 			</BasicLit>
 		</ImportSpec>
@@ -20,7 +21,7 @@
 		<BlockStmt>
 			<AssignStmt>
 				<LhsArray>
-					<Lhs id="0">num1</Lhs>
+					<Lhs id="0">x</Lhs>
 				</LhsArray>
 				<RhsArray>
 					<Rhs id="0">
@@ -31,15 +32,16 @@
 					</Rhs>
 				</RhsArray>
 				<Ident>
-					<name>num1</name>
+					<name>x</name>
 				</Ident>
 				<BasicLit>
+					<kind>INT</kind>
 					<value>2</value>
 				</BasicLit>
 			</AssignStmt>
 			<AssignStmt>
 				<LhsArray>
-					<Lhs id="0">num2</Lhs>
+					<Lhs id="0">y</Lhs>
 				</LhsArray>
 				<RhsArray>
 					<Rhs id="0">
@@ -50,46 +52,67 @@
 					</Rhs>
 				</RhsArray>
 				<Ident>
-					<name>num2</name>
+					<name>y</name>
 				</Ident>
 				<BasicLit>
+					<kind>INT</kind>
 					<value>3</value>
 				</BasicLit>
 			</AssignStmt>
 			<AssignStmt>
 				<LhsArray>
-					<Lhs id="0">num3</Lhs>
+					<Lhs id="0">result</Lhs>
 				</LhsArray>
 				<RhsArray>
-					<Rhs id="0">BinaryExpr</Rhs>
+					<Rhs id="0">
+						<BinaryExpr>
+							<op>*</op>
+							<left>x</left>
+							<right>y</right>
+						</BinaryExpr>
+					</Rhs>
 				</RhsArray>
 				<Ident>
-					<name>num3</name>
+					<name>result</name>
 				</Ident>
 				<BinaryExpr>
-					<op>+</op>
-					<left>num1</left>
-					<right>num2</right>
 					<Ident>
-						<name>num1</name>
+						<name>x</name>
 					</Ident>
 					<Ident>
-						<name>num2</name>
+						<name>y</name>
 					</Ident>
 				</BinaryExpr>
 			</AssignStmt>
 			<ExprStmt>
 				<CallExpr>
+					<args>
+						<arg>
+							<BasicLit>
+								<kind>STRING</kind>
+								<value>Result: %d</value>
+							</BasicLit>
+						</arg>
+						<arg>
+							<Ident>
+								<name>result</name>
+							</Ident>
+						</arg>
+					</args>
 					<SelectorExpr>
 						<Ident>
 							<name>fmt</name>
 						</Ident>
 						<Ident>
-							<name>Println</name>
+							<name>Printf</name>
 						</Ident>
 					</SelectorExpr>
+					<BasicLit>
+						<kind>STRING</kind>
+						<value>Result: %d</value>
+					</BasicLit>
 					<Ident>
-						<name>num3</name>
+						<name>result</name>
 					</Ident>
 				</CallExpr>
 			</ExprStmt>

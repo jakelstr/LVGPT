@@ -2,33 +2,53 @@
 	<vi>
 		<bd name="test">
 			<nodes>
-				<node xPos="0" yPos="0" name="num1" type="Numeric Control" numericType="Quad" value="2">
+				<node xPos="0" yPos="0" name="x" type="Numeric Control" numericType="Quad" value="2">
 					<terminals>
-						<terminal id="ff5ab79b-10fb-4060-863e-e1a9154aa398" name="num1" />
+						<terminal id="b6de9fa9-09ab-4c13-9e7b-28a24d744886" name="x" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="50" name="num2" type="Numeric Control" numericType="Quad" value="3">
+				<node xPos="0" yPos="50" name="y" type="Numeric Control" numericType="Quad" value="3">
 					<terminals>
-						<terminal id="7a4a3777-5dab-471c-b4c7-765f14ec32f4" name="num2" />
+						<terminal id="c901caac-5027-48bc-92d6-4f26335041f8" name="y" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="100" name="num3" type="Numeric Indicator" numericType="Quad">
+				<node xPos="0" yPos="100" name="result" type="Numeric Indicator" numericType="Quad">
 					<terminals>
-						<terminal id="2216a031-7591-4f7f-a8f0-78826428f8a4" name="num3" />
+						<terminal id="04751c30-ab42-4c8b-9369-4dbe93f8e507" name="result" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="150" name="add" type="Add">
+				<node xPos="0" yPos="150" name="mult" type="Multiply">
 					<terminals>
-						<terminal id="163096e1-3daf-4a74-ac54-3c70bb69858c" name="x" />
-						<terminal id="e088c570-de8b-4f4e-b9ec-2472a4c75930" name="y" />
-						<terminal id="33ddad8a-d464-4973-884f-d4e5e14a76ea" name="x+y" />
+						<terminal id="f30eb10a-a496-43a3-98db-942327682c93" name="x" />
+						<terminal id="dfd952ef-81ab-4e05-81c4-5d9dc4feaf0d" name="y" />
+						<terminal id="88299465-72ce-4dc2-b985-f3c3bab38f68" name="x*y" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="200" name="fstr" type="Format Into String" nodes="1">
+					<terminals>
+						<terminal id="bc2fe05c-9d6f-4163-8130-a3bb87381148" name="input 1" />
+						<terminal id="745950e9-bdf0-41ce-9c98-507e5139daa0" name="format string" />
+						<terminal id="2d5b6aca-098a-4e42-9505-593e7996192d" name="resulting string" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="250" name="format string" type="String Constant" value="Result: %d">
+					<terminals>
+						<terminal id="64a047c1-dc58-49be-9840-6b4376317a62" name="format string" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="300" name="output" type="String Indicator">
+					<terminals>
+						<terminal id="28394fc6-94ae-4907-bb4e-3182be621ce0" name="output" />
 					</terminals>
 				</node>
 			</nodes>
 			<wires>
-				<wire id="78786190-9634-47d6-96f2-96e69a5316cc" from="33ddad8a-d464-4973-884f-d4e5e14a76ea" to="2216a031-7591-4f7f-a8f0-78826428f8a4" />
-				<wire id="f47401c2-6e11-4171-a1e2-1fe3144f0e0f" from="ff5ab79b-10fb-4060-863e-e1a9154aa398" to="163096e1-3daf-4a74-ac54-3c70bb69858c" />
-				<wire id="da399dea-7293-468a-b557-0fe6981af02e" from="7a4a3777-5dab-471c-b4c7-765f14ec32f4" to="e088c570-de8b-4f4e-b9ec-2472a4c75930" />
+				<wire id="cd901df5-f8ab-46bf-8d3d-74bed8f6f07a" from="88299465-72ce-4dc2-b985-f3c3bab38f68" to="04751c30-ab42-4c8b-9369-4dbe93f8e507" />
+				<wire id="224608f2-3172-4efb-9c40-b127c4158100" from="b6de9fa9-09ab-4c13-9e7b-28a24d744886" to="f30eb10a-a496-43a3-98db-942327682c93" />
+				<wire id="f0d15e85-badc-4c80-9300-ef9cc578387d" from="c901caac-5027-48bc-92d6-4f26335041f8" to="dfd952ef-81ab-4e05-81c4-5d9dc4feaf0d" />
+				<wire id="0c146052-af35-4e80-a8e0-921b50be1ccb" from="64a047c1-dc58-49be-9840-6b4376317a62" to="745950e9-bdf0-41ce-9c98-507e5139daa0" />
+				<wire id="0863a1a8-c98b-446c-aaf3-349ce69cb4b4" from="04751c30-ab42-4c8b-9369-4dbe93f8e507" to="bc2fe05c-9d6f-4163-8130-a3bb87381148" />
+				<wire id="142cf6cd-0be2-412c-9bc0-ec28035e65c5" from="2d5b6aca-098a-4e42-9505-593e7996192d" to="28394fc6-94ae-4907-bb4e-3182be621ce0" />
 			</wires>
 		</bd>
 	</vi>

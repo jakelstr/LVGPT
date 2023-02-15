@@ -2,7 +2,7 @@ import os
 import openai
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-prompt = 'Write a program in Go that takes 2 string variables, contatenates them and assigns that result to a 3rd string variable. Explicitly use variables. This code should not ask the user any questions. Declare variables with values when logical.'
+prompt = 'Write a program in Go that multiplies 2 numbers together, assigns that result to another variable and then outputs the result as a string in the format "Result: x" where x is the result. Explicitly use variables. This code should not ask the user any questions. Declare variables with values when logical.'
 model = 'text-davinci-002'
 
 completions = openai.Completion.create(

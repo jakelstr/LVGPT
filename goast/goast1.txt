@@ -20,82 +20,61 @@
 </FuncType>
 <BlockStmt>
 <AssignStmt>
+<token>:=</token>
 <LhsArray>
-<Lhs id="0">x</Lhs>
+<Lhs id="0">num</Lhs>
 </LhsArray>
 <RhsArray>
 <Rhs id="0">
 <BasicLit><kind>INT</kind>
-<value>2</value>
+<value>5</value>
 </BasicLit></Rhs>
 </RhsArray>
-<Ident>
-<name>x</name>
-</Ident>
 <BasicLit>
 <kind>INT</kind>
-<value>2</value>
+<value>5</value>
 </BasicLit>
 </AssignStmt>
-<AssignStmt>
-<LhsArray>
-<Lhs id="0">y</Lhs>
-</LhsArray>
-<RhsArray>
-<Rhs id="0">
-<BasicLit><kind>INT</kind>
-<value>3</value>
-</BasicLit></Rhs>
-</RhsArray>
-<Ident>
-<name>y</name>
-</Ident>
-<BasicLit>
-<kind>INT</kind>
-<value>3</value>
-</BasicLit>
-</AssignStmt>
-<AssignStmt>
-<LhsArray>
-<Lhs id="0">result</Lhs>
-</LhsArray>
-<RhsArray>
-<Rhs id="0"><BinaryExpr><op>*</op><left>x</left><right>y</right></BinaryExpr></Rhs>
-</RhsArray>
-<Ident>
-<name>result</name>
-</Ident>
-<BinaryExpr>
-<Ident>
-<name>x</name>
-</Ident>
-<Ident>
-<name>y</name>
-</Ident>
-</BinaryExpr>
-</AssignStmt>
+<IfStmt>
+<cond><BinaryExpr><op>&lt;</op><left>num</left><right><BasicLit><kind>INT</kind>
+<value>0</value>
+</BasicLit></right></BinaryExpr></cond><body><BlockStmt>
 <ExprStmt>
 <CallExpr>
 <args><arg><BasicLit><kind>STRING</kind>
-<value>Result: %d</value>
-</BasicLit></arg><arg><Ident><name>result</name></Ident></arg>
-</args><SelectorExpr>
-<Ident>
-<name>fmt</name>
-</Ident>
-<Ident>
-<name>Printf</name>
-</Ident>
-</SelectorExpr>
+<value>Less than 0</value>
+</BasicLit></arg></args><SelectorExpr>
+<x>fmt</x><sel>Println</sel></SelectorExpr>
 <BasicLit>
 <kind>STRING</kind>
-<value>Result: %d</value>
+<value>Less than 0</value>
 </BasicLit>
-<Ident>
-<name>result</name>
-</Ident>
 </CallExpr>
 </ExprStmt>
+</BlockStmt>
+</body>
+<Ident>
+<name>num</name>
+</Ident>
+<BasicLit>
+<kind>INT</kind>
+<value>0</value>
+</BasicLit>
+<BlockStmt>
+<ExprStmt>
+<CallExpr>
+<args><arg><BasicLit><kind>STRING</kind>
+<value>Greater than 10</value>
+</BasicLit></arg></args><SelectorExpr>
+<x>fmt</x><sel>Println</sel></SelectorExpr>
+<BasicLit>
+<kind>STRING</kind>
+<value>Greater than 10</value>
+</BasicLit>
+</CallExpr>
+</ExprStmt>
+</BlockStmt>
+</IfStmt>
 </BlockStmt>
 </FuncDecl>
 </File>

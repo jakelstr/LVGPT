@@ -3,8 +3,11 @@ package main
 import "fmt"
 
 func main() {
-	x := 2
-	y := 3
-	result := x * y
-	fmt.Printf("Result: %d", result)
+	num := 5
+
+	if num < 0 {
+		fmt.Println("Less than 0")
+	} else {
+		fmt.Println("Greater than 10")
+	}
 }

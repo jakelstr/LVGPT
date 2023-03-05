@@ -20,102 +20,150 @@
 		</FuncType>
 		<BlockStmt>
 			<AssignStmt>
+				<token>:=</token>
 				<LhsArray>
-					<Lhs id="0">x</Lhs>
+					<Lhs id="0">num</Lhs>
 				</LhsArray>
 				<RhsArray>
 					<Rhs id="0">
 						<BasicLit>
 							<kind>INT</kind>
-							<value>2</value>
+							<value>5</value>
 						</BasicLit>
 					</Rhs>
 				</RhsArray>
 				<Ident>
-					<name>x</name>
+					<name>num</name>
 				</Ident>
 				<BasicLit>
 					<kind>INT</kind>
-					<value>2</value>
+					<value>5</value>
 				</BasicLit>
 			</AssignStmt>
-			<AssignStmt>
-				<LhsArray>
-					<Lhs id="0">y</Lhs>
-				</LhsArray>
-				<RhsArray>
-					<Rhs id="0">
+			<IfStmt>
+				<cond>
+					<BinaryExpr>
+						<op>&lt;</op>
+						<left>num</left>
+						<right>
+							<BasicLit>
+								<kind>INT</kind>
+								<value>0</value>
+							</BasicLit>
+						</right>
+					</BinaryExpr>
+				</cond>
+				<else>
+					<IfStmt>
+						<cond>
+							<BinaryExpr>
+								<op>&lt;=</op>
+								<left>num</left>
+								<right>
+									<BasicLit>
+										<kind>INT</kind>
+										<value>10</value>
+									</BasicLit>
+								</right>
+							</BinaryExpr>
+						</cond>
+						<body />
+						<Ident>
+							<name>num</name>
+						</Ident>
 						<BasicLit>
 							<kind>INT</kind>
-							<value>3</value>
+							<value>10</value>
 						</BasicLit>
-					</Rhs>
-				</RhsArray>
+						<BlockStmt>
+							<ExprStmt>
+								<CallExpr>
+									<args>
+										<arg>
+											<BasicLit>
+												<kind>STRING</kind>
+												<value>Between 0 and 10</value>
+											</BasicLit>
+										</arg>
+									</args>
+									<SelectorExpr>
+										<Ident>
+											<name>fmt</name>
+										</Ident>
+										<Ident>
+											<name>Println</name>
+										</Ident>
+									</SelectorExpr>
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>Between 0 and 10</value>
+									</BasicLit>
+								</CallExpr>
+							</ExprStmt>
+						</BlockStmt>
+						<BlockStmt>
+							<ExprStmt>
+								<CallExpr>
+									<args>
+										<arg>
+											<BasicLit>
+												<kind>STRING</kind>
+												<value>Greater than 10</value>
+											</BasicLit>
+										</arg>
+									</args>
+									<SelectorExpr>
+										<Ident>
+											<name>fmt</name>
+										</Ident>
+										<Ident>
+											<name>Println</name>
+										</Ident>
+									</SelectorExpr>
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>Greater than 10</value>
+									</BasicLit>
+								</CallExpr>
+							</ExprStmt>
+						</BlockStmt>
+					</IfStmt>
+				</else>
+				<body />
 				<Ident>
-					<name>y</name>
+					<name>num</name>
 				</Ident>
 				<BasicLit>
 					<kind>INT</kind>
-					<value>3</value>
+					<value>0</value>
 				</BasicLit>
-			</AssignStmt>
-			<AssignStmt>
-				<LhsArray>
-					<Lhs id="0">result</Lhs>
-				</LhsArray>
-				<RhsArray>
-					<Rhs id="0">
-						<BinaryExpr>
-							<op>*</op>
-							<left>x</left>
-							<right>y</right>
-						</BinaryExpr>
-					</Rhs>
-				</RhsArray>
-				<Ident>
-					<name>result</name>
-				</Ident>
-				<BinaryExpr>
-					<Ident>
-						<name>x</name>
-					</Ident>
-					<Ident>
-						<name>y</name>
-					</Ident>
-				</BinaryExpr>
-			</AssignStmt>
-			<ExprStmt>
-				<CallExpr>
-					<args>
-						<arg>
+				<BlockStmt>
+					<ExprStmt>
+						<CallExpr>
+							<args>
+								<arg>
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>Less than 0</value>
+									</BasicLit>
+								</arg>
+							</args>
+							<SelectorExpr>
+								<Ident>
+									<name>fmt</name>
+								</Ident>
+								<Ident>
+									<name>Println</name>
+								</Ident>
+							</SelectorExpr>
 							<BasicLit>
 								<kind>STRING</kind>
-								<value>Result: %d</value>
+								<value>Less than 0</value>
 							</BasicLit>
-						</arg>
-						<arg>
-							<Ident>
-								<name>result</name>
-							</Ident>
-						</arg>
-					</args>
-					<SelectorExpr>
-						<Ident>
-							<name>fmt</name>
-						</Ident>
-						<Ident>
-							<name>Printf</name>
-						</Ident>
-					</SelectorExpr>
-					<BasicLit>
-						<kind>STRING</kind>
-						<value>Result: %d</value>
-					</BasicLit>
-					<Ident>
-						<name>result</name>
-					</Ident>
-				</CallExpr>
-			</ExprStmt>
+						</CallExpr>
+					</ExprStmt>
+				</BlockStmt>
+			</IfStmt>
 		</BlockStmt>
 	</FuncDecl>
 </File>

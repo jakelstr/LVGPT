@@ -1,239 +1,9 @@
 import xml.etree.ElementTree as ET
 import uuid
+from lvgptGraph import *
 
 blockTable = {}
-
-class terminal:
-    def __init__(self, name):
-        self.uuid = str(uuid.uuid4())
-        self.name = name
-        self.edges = []
-class wire:
-    def __init__(self, fromUUID, toUUID):
-        self.uuid = str(uuid.uuid4())
-        self.fromUUID = fromUUID
-        self.toUUID = toUUID
-
-class LVNode:
-    def __init__(self, name):
-        self.uuid = str(uuid.uuid4())
-        self.terminals = {}
-        self.name = name
-        self.attributes = {"name" : name}
-        self.isIndicator = False
-
-    def addTerminal(self, name):
-        term = terminal(name)
-        self.terminals[term.uuid] = term
-
-    def getTerminalByName(self, name):
-        for t in self.terminals:
-            if self.terminals[t].name == name:
-                return self.terminals[t]
-        return None
-
-
-class NumericControl(LVNode):
-    def __init__(self, name, numType):
-        LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name)
-        self.attributes["type"] = "Numeric Control"
-        self.attributes["numericType"] = numType
-    def setValue(self, val):
-        self.attributes["value"] = val
-    def getTerminal(self):
-        return LVNode.getTerminalByName(self, self.name)
-
-class NumericIndicator(LVNode):
-    def __init__(self, name, numType):
-        LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name)
-        self.attributes["type"] = "Numeric Indicator"
-        self.attributes["numericType"] = numType
-        self.isIndicator = True
-    def getTerminal(self):
-        return LVNode.getTerminalByName(self, self.name)
-    
-class StringControl(LVNode):
-    def __init__(self, name):
-        LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name)
-        self.attributes["type"] = "String Control"
-    def setValue(self, val):
-        self.attributes["value"] = val
-    def getTerminal(self):
-        return LVNode.getTerminalByName(self, self.name)
-    
-class StringConstant(LVNode):
-    def __init__(self, name):
-        LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name)
-        self.attributes["type"] = "String Constant"
-    def setValue(self, val):
-        self.attributes["value"] = val
-    def getTerminal(self):
-        return LVNode.getTerminalByName(self, self.name)
-
-class StringIndicator(LVNode):
-    def __init__(self, name):
-        LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name)
-        self.attributes["type"] = "String Indicator"
-        self.isIndicator = True
-    def getTerminal(self):
-        return LVNode.getTerminalByName(self, self.name)
-
-class AddNode(LVNode):
-    def  __init__(self):
-        LVNode.__init__(self, "add")
-        LVNode.addTerminal(self, "x")
-        LVNode.addTerminal(self, "y")
-        LVNode.addTerminal(self, "x+y")
-        self.attributes["type"] = "Add"
-    def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "x+y")
-        leftTerm = LVNode.getTerminalByName(self, "x")
-        rightTerm = LVNode.getTerminalByName(self, "y")
-        return (leftTerm, rightTerm, outputTerm)
-    
-class MultiplyNode(LVNode):
-    def  __init__(self):
-        LVNode.__init__(self, "mult")
-        LVNode.addTerminal(self, "x")
-        LVNode.addTerminal(self, "y")
-        LVNode.addTerminal(self, "x*y")
-        self.attributes["type"] = "Multiply"
-    def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "x*y")
-        leftTerm = LVNode.getTerminalByName(self, "x")
-        rightTerm = LVNode.getTerminalByName(self, "y")
-        return (leftTerm, rightTerm, outputTerm)
-
-class SubtractNode(LVNode):
-    def  __init__(self):
-        LVNode.__init__(self, "subtract")
-        LVNode.addTerminal(self, "x")
-        LVNode.addTerminal(self, "y")
-        LVNode.addTerminal(self, "x-y")
-        self.attributes["type"] = "Subtract"
-    def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "x-y")
-        leftTerm = LVNode.getTerminalByName(self, "x")
-        rightTerm = LVNode.getTerminalByName(self, "y")
-        return (leftTerm, rightTerm, outputTerm)
-    
-class DivideNode(LVNode):
-    def  __init__(self):
-        LVNode.__init__(self, "divide")
-        LVNode.addTerminal(self, "x")
-        LVNode.addTerminal(self, "y")
-        LVNode.addTerminal(self, "x/y")
-        self.attributes["type"] = "Divide"
-    def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "x/y")
-        leftTerm = LVNode.getTerminalByName(self, "x")
-        rightTerm = LVNode.getTerminalByName(self, "y")
-        return (leftTerm, rightTerm, outputTerm)
-
-class ConcatenateStringsNode(LVNode):
-    def  __init__(self):
-        LVNode.__init__(self, "concat")
-        LVNode.addTerminal(self, "string")
-        LVNode.addTerminal(self, "string")
-        LVNode.addTerminal(self, "concatenated string")
-        self.attributes["type"] = "Concatenate Strings"
-        self.attributes["nodes"] = "2"
-    def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "concatenated string")
-        return (None, None, outputTerm)
-    def addTerminal(self):
-        LVNode.addTerminal(self, "string")
-        self.attributes["nodes"] = str(int(self.attributes["nodes"]) + 1)
-    def getStringTerms(self):
-        return [item for item in self.terminals.values() if item.name == "string"]
-    
-class FormatIntoStringsNode(LVNode):
-    def  __init__(self):
-        LVNode.__init__(self, "fstr")
-        LVNode.addTerminal(self, "input 1")
-        LVNode.addTerminal(self, "format string")
-        LVNode.addTerminal(self, "resulting string")
-        self.attributes["type"] = "Format Into String"
-        self.attributes["nodes"] = "1"
-    def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "concatenated string")
-        return (None, None, outputTerm)
-    def addTerminal(self):
-        self.attributes["nodes"] = str(int(self.attributes["nodes"]) + 1)
-        LVNode.addTerminal(self, "input " + str(int(self.attributes["nodes"])))
-    def getInputTerms(self):
-        return [item for item in self.terminals.values() if "input" in item.name]
-
-class var:
-    def __init__(self, name, value, varType):
-        self.value = value
-        self.varType = varType
-        self.name = name
-
-def getControlNodeByVarType(varName, varType):
-    match varType.upper():
-        case "INT":
-            return NumericControl(varName, "Quad")
-        case "INT8":
-            return NumericControl(varName, "Byte")
-        case "INT16":
-            return NumericControl(varName, "Word")
-        case "INT32":
-            return NumericControl(varName, "Long")
-        case "INT64":
-            return NumericControl(varName, "Quad")
-        case "UINT":
-            return NumericControl(varName, "Unsigned Quad")
-        case "UINT8":
-            return NumericControl(varName, "Unsigned Byte")
-        case "UINT16":
-            return NumericControl(varName, "Unsigned Word")
-        case "UINT32":
-            return NumericControl(varName, "Unsigned Long")
-        case "UINT64":
-            return NumericControl(varName, "Unsigned Quad")
-        case "FLOAT32":
-            return NumericControl(varName, "Single Precision")
-        case "FLOAT64":
-            return NumericControl(varName, "Double Precision")
-        case "STRING":
-            return StringControl(varName)
-    return LVNode(varName)
-
-def getIndicatorNodeByVarType(varName, varType):
-    match varType.upper():
-        case "INT":
-            return NumericIndicator(varName, "Quad")
-        case "INT8":
-            return NumericIndicator(varName, "Byte")
-        case "INT16":
-            return NumericIndicator(varName, "Word")
-        case "INT32":
-            return NumericIndicator(varName, "Long")
-        case "INT64":
-            return NumericIndicator(varName, "Quad")
-        case "UINT":
-            return NumericIndicator(varName, "Unsigned Quad")
-        case "UINT8":
-            return NumericIndicator(varName, "Unsigned Byte")
-        case "UINT16":
-            return NumericIndicator(varName, "Unsigned Word")
-        case "UINT32":
-            return NumericIndicator(varName, "Unsigned Long")
-        case "UINT64":
-            return NumericIndicator(varName, "Unsigned Quad")
-        case "FLOAT32":
-            return NumericIndicator(varName, "Single Precision")
-        case "FLOAT64":
-            return NumericIndicator(varName, "Double Precision")
-        case "STRING":
-            return StringIndicator(varName)
-    return LVNode(varName)
+lvGraph = LVGraph()
 
 def determineBinaryDictOpUniform(binaryDict):
     left = binaryDict["left"]
@@ -258,22 +28,21 @@ def determineBinaryDictOpUniform(binaryDict):
     return (uniform, op, inputs)
 
 def convertBinaryDictToConcatStrings(binaryDict, blockLevel):
-    wires = []
-    nodes = []
     uniform, op, binVars = determineBinaryDictOpUniform(binaryDict)
     if uniform and op is AddNode:
+        lvGraph.deleteNode(binaryDict['op'].uuid)
         concatNode = ConcatenateStringsNode()
+        lvGraph.addNode(concatNode)
         if len(binVars) > 2:
             for x in range(len(binVars) - 2):
                 concatNode.addTerminal()
         binaryDict["op"] = concatNode
         stringTerms = concatNode.getStringTerms()
         for x in range(len(binVars)):
-            varNode = blockTable[blockLevel]["nodes"][binVars[x].nodeUUID]
-            w = wire(varNode.getTerminal().uuid, stringTerms[x].uuid)
-            wires.append(w)
-    nodes.append(concatNode)
-    return (binaryDict, wires, nodes, "STRING")
+            varNode = lvGraph.getNodeByUUID(binVars[x])
+            lvGraph.addTerminalEdge(varNode.getTerminal().uuid, stringTerms[x].uuid)
+    
+    return (binaryDict, "STRING")
 
 def processBinaryExpr(node):
     returnDict = {}
@@ -289,52 +58,46 @@ def processBinaryExpr(node):
     left = node.find("left")
     right = node.find("right")
     if len(left) > 0:
-        returnDict["left"] = processBinaryExpr(left[0])
+        if left[0].tag == "BinaryExpr":
+            returnDict["left"] = processBinaryExpr(left[0])
     else:
         returnDict["left"] = left.text
     if len(right) > 0:
-        returnDict["right"] = processBinaryExpr(right[0])
+        if left[0].tag == "BinaryExpr":
+            returnDict["right"] = processBinaryExpr(right[0])
     else:
         returnDict["right"] = right.text
     return returnDict
 
-def processBinaryDict(binaryDict, blockLevel):
-    wires = []
-    nodes = []
+def processBinaryDict(binaryDict):
     left = binaryDict["left"]
     right = binaryDict["right"]
     op = binaryDict["op"]
+    opNodeName = lvGraph.getAvailableNodeName(op.name)
+    op.name = opNodeName
+    lvGraph.addNode(op)
     outType = "int"
     leftOutType = "int"
     rightOutType = "int"
     opLeftTerm, opRightTerm, opOutputTerm = op.getTerms()
     if type(left) is dict:
-        left, subWires, subNodes, leftOutType = processBinaryDict(left, blockLevel)
-        wires.extend(subWires)
-        nodes.extend(subNodes)
+        left, leftOutType = processBinaryDict(left)
         _, _, subOutput = left["op"].getTerms()
-        wires.append(wire(subOutput.uuid, opLeftTerm.uuid))
+        lvGraph.addTerminalEdge(subOutput.uuid, opLeftTerm.uuid)
     else:
-        if left in blockTable[blockLevel]["vars"]:
-            left = blockTable[blockLevel]["vars"][left]
-            leftNode = blockTable[blockLevel]["nodes"][left.nodeUUID]
-            leftWire = wire(leftNode.getTerminal().uuid, opLeftTerm.uuid)
-            leftOutType = left.varType
-            wires.append(leftWire)
+        left = lvGraph.getNodeByName(left)
+        leftNode = lvGraph.getNodeByUUID(left)
+        lvGraph.addTerminalEdge(leftNode.getTerminal().uuid, opLeftTerm.uuid)
+        leftOutType = leftNode.varType
     if type(right) is dict:
-        right, subWires, subNodes, rightOutType = processBinaryDict(right, blockLevel)
+        right, rightOutType = processBinaryDict(right)
         _, _, subOutput = right["op"].getTerms()
-        wires.append(wire(subOutput.uuid, opRightTerm.uuid))
-        wires.extend(subWires)
-        nodes.extend(subNodes)
+        lvGraph.addTerminalEdge(subOutput.uuid, opRightTerm.uuid)
     else:
-        if right in blockTable[blockLevel]["vars"]:
-            right = blockTable[blockLevel]["vars"][right]
-            rightNode = blockTable[blockLevel]["nodes"][right.nodeUUID]
-            rightWire = wire(rightNode.getTerminal().uuid, opRightTerm.uuid)
-            rightOutType = right.varType
-            wires.append(rightWire)
-    nodes.append(op)
+        right = lvGraph.getNodeByName(right)
+        rightNode = lvGraph.getNodeByUUID(right)
+        lvGraph.addTerminalEdge(rightNode.getTerminal().uuid, opRightTerm.uuid)
+        rightOutType = rightNode.varType
     if leftOutType.upper() == rightOutType.upper():
         outType = leftOutType.upper()
     else:
@@ -342,10 +105,23 @@ def processBinaryDict(binaryDict, blockLevel):
         pass
     binaryDict["left"] = left
     binaryDict["right"] = right
-    return (binaryDict, wires, nodes, outType)
+    return (binaryDict, outType)
+
+def addBinaryNodeToLVGraph(binaryXMLNode, nodeName):
+    binExpDict = processBinaryExpr(binaryXMLNode)
+    binExpDict, outType = processBinaryDict(binExpDict)
+    if outType.upper() == "STRING":
+        binExpDict, outType = convertBinaryDictToConcatStrings(binExpDict, 0)
+    _, _, finalOutputTerm = binExpDict["op"].getTerms()
+    nodeName = lvGraph.getAvailableNodeName(nodeName)
+    varNode = getIndicatorNodeByVarType(nodeName, outType)
+    lvGraph.addNode(varNode)
+    lvGraph.addTerminalEdge(finalOutputTerm.uuid, varNode.getTerminal().uuid)
+    return nodeName
 
 
-def processBlockStmtChild(node, blockLevel):
+def processBlockStmtChild(node, blockUUID):
+    lvGraph.diagramUUID = blockUUID
     if node.tag == "DeclStmt":
         varType = ""
         valSpec = node.find("GenDecl/ValueSpec")
@@ -358,31 +134,20 @@ def processBlockStmtChild(node, blockLevel):
 
             match valueTag[0].tag:
                 case "BasicLit":
-                    varNode = getControlNodeByVarType(name, varType)
+                    nodeName = lvGraph.getAvailableNodeName(name)
+                    varNode = getControlNodeByVarType(nodeName, varType)
                     value = valueTag.find("BasicLit/value").text
+                    if value is not None:
+                        varNode.setValue(value)
+                    lvGraph.addNode(varNode)
                 case "BinaryExpr":
                     varNode = getIndicatorNodeByVarType(name, varType)
                     binExpNode = valueTag.find("BinaryExpr")
                     if binExpNode is not None:
-                        binExpDict = processBinaryExpr(binExpNode)
-                        binExpDict, wires, nodes, outType = processBinaryDict(binExpDict, blockLevel)
-                        if outType.upper() == "STRING":
-                            binExpDict, wires, nodes, outType = convertBinaryDictToConcatStrings(binExpDict, blockLevel)
-                        _, _, finalOutputTerm = binExpDict["op"].getTerms()
-                        varType  = outType
-                        finalWire = wire(finalOutputTerm.uuid, varNode.getTerminal().uuid)
-                        blockTable[blockLevel]["wires"].append(finalWire)
-                        blockTable[blockLevel]["wires"].extend(wires)
-                        for b in nodes:
-                            blockTable[blockLevel]["nodes"][b.uuid] = b
-            varItem = var(name, value, varType)
-            if value is not None:
-                varNode.setValue(value)
-            varItem.nodeUUID = varNode.uuid
-            blockTable[blockLevel]["nodes"][varNode.uuid] = varNode
-            blockTable[blockLevel]["vars"][name] = varItem
+                        addBinaryNodeToLVGraph(binExpNode, name)
     elif node.tag == "AssignStmt":
         lhsDict = {}
+        token = node.find("token").text
         lhsArrayNode = node.find("LhsArray")
         for lhs in lhsArrayNode:
             lhsDict[lhs.attrib["id"]] = lhs.text
@@ -399,81 +164,65 @@ def processBlockStmtChild(node, blockLevel):
                     if rhsNode[0].tag == "BasicLit":
                         rhsNode = rhsNode[0]
                         value = rhsNode.find("value").text
-                        varType = rhsNode.find("kind").text.lower()
-                        varItem = var(lhsDict[lhs], value, varType)
-                        if varItem.name in blockTable[blockLevel]["vars"]:
-                            if blockTable[blockLevel]["vars"][varItem.name].value == None:
-                                blockTable[blockLevel]["vars"][varItem.name].value = varItem.value
-                                nodeUUID = blockTable[blockLevel]["vars"][varItem.name].nodeUUID
-                                blockTable[blockLevel]["nodes"][nodeUUID].setValue(value)
-                                #if it had a value already then I'm not sure what to do yet
-                                #my best guess is it would have to end up as a property node value setting
-                        else:
-                            varNode = getControlNodeByVarType(varItem.name, varItem.varType)
+                        varType = rhsNode.find("kind").text.upper()
+                        nodeName = lhsDict[lhs]
+                        if token == "=":
+                            nodeUUID = lvGraph.getNodeByName(nodeName) #need some way to keep track of name changes if vars are duplicated (idk how important)
+                            node = lvGraph.getNodeByUUID(nodeUUID)
+                            node.setValue(value)
+                            #if it had a value already then I'm not sure what to do yet
+                            #my best guess is it would have to end up as a property node value setting
+                        else: #token will be := for new variables
+                            nodeName = lvGraph.getAvailableNodeName(nodeName)
+                            varNode = getControlNodeByVarType(nodeName, varType)
+                            lvGraph.addNode(varNode)
                             varNode.setValue(value)
-                            varItem.nodeUUID = varNode.uuid
-                            blockTable[blockLevel]["nodes"][varNode.uuid] = varNode
-                            blockTable[blockLevel]["vars"][varItem.name] = varItem
                          
                     elif rhsNode[0].tag == "BinaryExpr":
-                        binExpDict = processBinaryExpr(rhsNode[0])
-                        binExpDict, wires, nodes, outType = processBinaryDict(binExpDict, blockLevel)
-                        _, _, finalOutputTerm = binExpDict["op"].getTerms()
-                        varItem = var(lhsDict[lhs], 0, outType)
-                        varNode = getIndicatorNodeByVarType(varItem.name, varItem.varType)
-                        varItem.nodeUUID = varNode.uuid
-                        blockTable[blockLevel]["nodes"][varNode.uuid] = varNode
-                        blockTable[blockLevel]["vars"][varItem.name] = varItem
-                        finalWire = wire(finalOutputTerm.uuid, varNode.getTerminal().uuid)
-                        blockTable[blockLevel]["wires"].append(finalWire)
-                        blockTable[blockLevel]["wires"].extend(wires)
-                        for b in nodes:
-                            blockTable[blockLevel]["nodes"][b.uuid] = b
+                        addBinaryNodeToLVGraph(rhsNode[0], lhsDict[lhs])
     elif node.tag == "ExprStmt":
-        wires = []
-        nodes = []
         callExpr = node.find("CallExpr")
         if callExpr is not None:
             selectorExpr = callExpr.find("SelectorExpr")
             if selectorExpr is not None:
                 names = selectorExpr.findall("Ident/name")
-                if len(names) == 2 and names[0].text == "fmt" and names[1].text == "Printf":
-                    args = callExpr.find("args")
-                    if args is not None:
-                        argNodes = args.findall("arg")
-                        if argNodes[0].find("BasicLit") is not None:
-                            formatNode = FormatIntoStringsNode()
-                            formatString = argNodes[0].find("BasicLit/value").text
-                            formatStringNode = StringConstant("format string")
-                            formatStringNode.setValue(formatString)
-                            nodes.append(formatNode)
-                            nodes.append(formatStringNode)
-                            formatWire = wire(formatStringNode.getTerminal().uuid, formatNode.getTerminalByName("format string").uuid)
-                            wires.append(formatWire)
-                            remaining_args = argNodes[1:]
-                            for i in range(len(remaining_args)):
-                                if i > 0:
-                                    formatNode.addTerminal()
-                                arg = remaining_args[i]
-                                if arg.find("Ident") is not None:
-                                    varName = arg.find("Ident/name").text
-                                    if varName in blockTable[blockLevel]["vars"]:
-                                        varItem = blockTable[blockLevel]["vars"][varName]
-                                        if varItem.nodeUUID in blockTable[blockLevel]["nodes"]:
-                                            varNode = blockTable[blockLevel]["nodes"][varItem.nodeUUID]
-                                            inputTerminal = formatNode.getInputTerms()[i] #these are probably in order idk
-                                            inputWire = wire(varNode.getTerminal().uuid, inputTerminal.uuid)
-                                            wires.append(inputWire)
-                            outputNode = StringIndicator("output")
-                            nodes.append(outputNode)
-                            outputWire = wire(formatNode.getTerminalByName("resulting string").uuid, outputNode.getTerminal().uuid)
-                            wires.append(outputWire)
-                            for n in nodes:
-                                blockTable[blockLevel]["nodes"][n.uuid] = n
-                            for w in wires:
-                                blockTable[blockLevel]["wires"].append(w)
-
-
+                if len(names) == 2 and names[0].text == "fmt":
+                    match names[1].text:
+                        case "Printf":
+                            args = callExpr.find("args")
+                            if args is not None:
+                                argNodes = args.findall("arg")
+                                if argNodes[0].find("BasicLit") is not None:
+                                    formatNode = FormatIntoStringsNode()
+                                    formatString = argNodes[0].find("BasicLit/value").text
+                                    formatStringNode = StringConstant("format string")
+                                    formatStringNode.setValue(formatString)
+                                    lvGraph.addNode(formatNode)
+                                    lvGraph.addNode(formatStringNode)
+                                    lvGraph.addTerminalEdge(formatStringNode.getTerminal().uuid, formatNode.getTerminalByName("format string").uuid)
+                                    remaining_args = argNodes[1:]
+                                    for i in range(len(remaining_args)):
+                                        if i > 0:
+                                            lvGraph.addTerminalToNode(formatNode.uuid)
+                                        arg = remaining_args[i]
+                                        if arg.find("Ident") is not None:
+                                            varName = arg.find("Ident/name").text
+                                            varNode = lvGraph.getNodeByUUID(lvGraph.getNodeByName(varName))
+                                            inputTerminal = lvGraph.getNodeByUUID(formatNode.uuid).getInputTerms()[i] #these are probably in order idk
+                                            lvGraph.addTerminalEdge(varNode.getTerminal().uuid, inputTerminal.uuid)
+                                    outputNode = StringIndicator(lvGraph.getAvailableNodeName("output"))
+                                    lvGraph.addNode(outputNode)
+                                    lvGraph.addTerminalEdge(formatNode.getTerminalByName("resulting string").uuid, outputNode.getTerminal().uuid)
+                        case "Println":
+                            args = callExpr.find("args")
+                            if args is not None:
+                                argNodes = args.findall("arg")
+                                for arg in argNodes:
+                                    match arg[0].tag:
+                                        case "BinaryExpr":
+                                            binExpNode = arg[0]
+                                            if binExpNode is not None:
+                                                addBinaryNodeToLVGraph(binExpNode, "output")
 
                                     
 
@@ -517,13 +266,14 @@ if len(funcDecls) > 0:
     for funcDecl in funcDecls:
         ident = funcDecl.find("Ident/name").text
         if ident == "main":
-            blockTable[0] = {"vars":{}, "nodes":{}, "wires":[]}
+            bdUUID = str(uuid.uuid4())
+            blockTable[bdUUID] = {"vars":{}, "nodes":{}, "wires":[]}
             mainBlockStmt = funcDecl.find("BlockStmt")
             for node in mainBlockStmt:
-                processBlockStmtChild(node, 0)
-            for i, n in enumerate(blockTable[0]["nodes"]):
-                outputNodesElem.append(writeNodeToXML(blockTable[0]["nodes"][n], i))
-            for w in blockTable[0]["wires"]:
+                processBlockStmtChild(node, bdUUID)
+            for i, n in enumerate(lvGraph.graph["nodes"]):
+                outputNodesElem.append(writeNodeToXML(lvGraph.graph["nodes"][n], i))
+            for w in lvGraph.getWires():
                 outputWiresElem.append(writeWireToXML(w))
 bdNode.append(outputNodesElem)
 bdNode.append(outputWiresElem)
@@ -533,4 +283,3 @@ tree = ET.ElementTree(visNode)
 with open("python/ai.xml", "wb") as files:
     ET.indent(tree, space="\t", level=0)
     tree.write(files)
-            

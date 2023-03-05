@@ -119,6 +119,89 @@ def addBinaryNodeToLVGraph(binaryXMLNode, nodeName):
     lvGraph.addTerminalEdge(finalOutputTerm.uuid, varNode.getTerminal().uuid)
     return nodeName
 
+def getPrintExprFunction(callExprNode):
+    selectorExpr = callExprNode.find("SelectorExpr")
+    if selectorExpr is not None:
+        xVal = selectorExpr.find("x").text
+        selVal = selectorExpr.find("sel").text
+        if xVal is not None and selVal is not None and xVal == "fmt":
+            return selVal
+    return None
+
+def findPrintExpression(parentNode, x, sel):
+    found = False
+    exprNode = None
+    exprStmt = parentNode.find("ExprStmt/CallExpr")
+    if exprStmt is not None:
+        selectorExpr = exprStmt.find("SelectorExpr")
+        if selectorExpr is not None:
+            xVal = selectorExpr.find("x").text
+            selVal = selectorExpr.find("sel").text
+            if x == xVal and sel == selVal:
+                found = True
+                exprNode = exprStmt
+    return (found, exprNode)
+
+def unaryPrintStmt(blockStmt):
+    retVal = False
+    retNode = None
+    if len(blockStmt) == 1:
+        found, node = findPrintExpression(blockStmt, "fmt", "Println")
+        retVal = found
+        retNode = node
+    return retVal, retNode
+
+def determineIfStatementRep(ifNode):
+    ifUnaryPrint = False
+    ifUnaryPrintNode = None
+    elseUnaryPrint = False
+    elseUnaryPrintNode = None
+    bodyNode = ifNode.find("body")
+    if bodyNode is not None:
+        if bodyNode[0].tag == "BlockStmt":
+            ifUnaryPrint, ifUnaryPrintNode = unaryPrintStmt(bodyNode[0])
+
+    elseNode = ifNode.find("else")
+    if elseNode is not None:
+        if elseNode[0].tag == "BlockStmt":
+            elseUnaryPrint, elseUnaryPrintNode = unaryPrintStmt(elseNode[0])
+
+    return (ifUnaryPrint, elseUnaryPrint, ifUnaryPrintNode, elseUnaryPrintNode)
+
+def printNodeToLVRep(printNode):
+    outputTermUUID = None
+    printFunction = getPrintExprFunction(printNode)
+    if printFunction == "Println":
+        arg = printNode.find("args/arg")
+        if arg[0].tag == "BasicLit":
+            kind = arg[0].find("kind").text.upper()
+            val = arg[0].find("value").text
+            if kind == "STRING":
+                nodeName = lvGraph.getAvailableNodeName("strcon")
+                node = StringConstant(nodeName)
+                node.setValue(val)
+                lvGraph.addNode(node)
+                outputTermUUID = node.getTerminal().uuid
+        elif arg[0].tag == "Ident":
+            identName = arg[0].find("name").text
+            nodeUUID = lvGraph.getNodeByName(identName)
+            node = lvGraph.getNodeByUUID(nodeUUID)
+            if node.varType != "STRING":
+                formatNode = FormatIntoStringsNode()
+                formatString = "%d"
+                formatStringNode = StringConstant("format string")
+                formatStringNode.setValue(formatString)
+                lvGraph.addNode(formatNode)
+                lvGraph.addNode(formatStringNode)
+                lvGraph.addTerminalEdge(formatStringNode.getTerminal().uuid, formatNode.getTerminalByName("format string").uuid)
+                inputTerminal = lvGraph.getNodeByUUID(formatNode.uuid).getInputTerms()[0] #these are probably in order idk
+                lvGraph.addTerminalEdge(node.getTerminal().uuid, inputTerminal.uuid)
+                outputTermUUID = formatNode.getTerminalByName("resulting string").uuid
+            else:
+                outputTermUUID = node.getTerminal().uuid
+    return outputTermUUID
+
+
 
 def processBlockStmtChild(node, blockUUID):
     lvGraph.diagramUUID = blockUUID
@@ -150,7 +233,7 @@ def processBlockStmtChild(node, blockUUID):
         token = node.find("token").text
         lhsArrayNode = node.find("LhsArray")
         for lhs in lhsArrayNode:
-            lhsDict[lhs.attrib["id"]] = lhs.text
+            lhsDict[lhs.attrib["id"]] = lhs.find("Ident/name").text
         
         rhsDict = {}
         rhsArrayNode = node.find("RhsArray")
@@ -160,12 +243,12 @@ def processBlockStmtChild(node, blockUUID):
         for lhs in lhsDict:
             if lhs in rhsDict:
                 rhsNode = rhsDict[lhs]
+                nodeName = lhsDict[lhs]
                 if len(rhsNode) > 0:
                     if rhsNode[0].tag == "BasicLit":
                         rhsNode = rhsNode[0]
                         value = rhsNode.find("value").text
                         varType = rhsNode.find("kind").text.upper()
-                        nodeName = lhsDict[lhs]
                         if token == "=":
                             nodeUUID = lvGraph.getNodeByName(nodeName) #need some way to keep track of name changes if vars are duplicated (idk how important)
                             node = lvGraph.getNodeByUUID(nodeUUID)
@@ -180,6 +263,14 @@ def processBlockStmtChild(node, blockUUID):
                          
                     elif rhsNode[0].tag == "BinaryExpr":
                         addBinaryNodeToLVGraph(rhsNode[0], lhsDict[lhs])
+                    elif rhsNode[0].tag == "Ident":
+                        identName = rhsNode[0].find("name").text
+                        if identName == "true" or identName == "false":
+                            nodeName = lvGraph.getAvailableNodeName(nodeName)
+                            varNode = getControlNodeByVarType(nodeName, "BOOL")
+                            lvGraph.addNode(varNode)
+                            varNode.setValue(identName)
+                            
     elif node.tag == "ExprStmt":
         callExpr = node.find("CallExpr")
         if callExpr is not None:
@@ -223,7 +314,29 @@ def processBlockStmtChild(node, blockUUID):
                                             binExpNode = arg[0]
                                             if binExpNode is not None:
                                                 addBinaryNodeToLVGraph(binExpNode, "output")
-
+    elif node.tag == "IfStmt":
+        condNode = node.find("cond")
+        condUUID = None
+        if condNode[0].tag == "BinaryExpr":
+            binExprNode = condNode.find("BinaryExpr")
+            print(binExprNode.find("op").text)
+        elif condNode[0].tag == "Ident":
+            identName = condNode[0].find("name").text
+            condUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
+        ifUnary, elseUnary, ifPrintNode, elsePrintNode = determineIfStatementRep(node)
+        if ifUnary and elseUnary:
+            trueResultTerm = printNodeToLVRep(ifPrintNode)
+            falseResultTerm = printNodeToLVRep(elsePrintNode)
+            selectNode = SelectNode()
+            selectNode.name = lvGraph.getAvailableNodeName("select")
+            lvGraph.addNode(selectNode)
+            trueTerm, selectTerm, falseTerm, outTerm = selectNode.getTerms()
+            lvGraph.addTerminalEdge(trueResultTerm, trueTerm.uuid)
+            lvGraph.addTerminalEdge(falseResultTerm, falseTerm.uuid)
+            lvGraph.addTerminalEdge(condUUID, selectTerm.uuid)
+            outNode = getIndicatorNodeByVarType(lvGraph.getAvailableNodeName("output"), "STRING")
+            lvGraph.addNode(outNode)
+            lvGraph.addTerminalEdge(outTerm.uuid, outNode.getTerminal().uuid)
                                     
 
 def writeNodeToXML(node, index):

@@ -68,14 +68,10 @@ func processCallExpr(expr ast.Expr) string {
 func processIfStmt(expr *ast.IfStmt) string {
 	condString := ""
 	elseString := ""
-	if binExp, ok := expr.Cond.(*ast.BinaryExpr); ok {
-		condString = findBottomBinaryExpr(binExp)
-		visited[binExp] = true
-	}
+	condString = walkNode(expr.Cond)
 	if expr.Else != nil {
-		if subIfStmt, ok := expr.Else.(*ast.IfStmt); ok {
-			elseString = fmt.Sprintf("<else>%s</else>", walkNode(subIfStmt))
-		}
+		elseString = fmt.Sprintf("<else>%s</else>", walkNode(expr.Else))
+
 	}
 	bodyString := walkNode(expr.Body)
 	return fmt.Sprintf("<cond>%s</cond>%s<body>%s</body>", condString, elseString, bodyString)
@@ -150,16 +146,7 @@ func processNode(n ast.Node) string {
 		fmt.Println("Function call:", funcName)
 		retString += fmt.Sprintf("<args>")
 		for _, arg := range x.Args {
-			if basicLit, ok := arg.(*ast.BasicLit); ok {
-				retString += fmt.Sprintf("<arg><BasicLit>%s</BasicLit></arg>", processBasicLit(*basicLit))
-			}
-			if ident, ok := arg.(*ast.Ident); ok {
-				retString += fmt.Sprintf("<arg><Ident><name>%s</name></Ident></arg>\n", ident.Name)
-
-			}
-			if binaryExp, ok := arg.(*ast.BinaryExpr); ok {
-				retString += fmt.Sprintf("<arg>%s</arg>", findBottomBinaryExpr(binaryExp))
-			}
+			retString += fmt.Sprintf("<arg>%s</arg>", walkNode(arg))
 		}
 		retString += fmt.Sprintf("</args>")
 	case *ast.AssignStmt:
@@ -167,23 +154,23 @@ func processNode(n ast.Node) string {
 		retString += fmt.Sprintf("<token>%s</token>\n", x.Tok)
 		retString += "<LhsArray>\n"
 		for i, lhs := range x.Lhs {
-			retString += fmt.Sprintf("<Lhs id=\"%d\">%s</Lhs>\n", i, lhs)
-			visited[lhs] = true
+			retString += fmt.Sprintf("<Lhs id=\"%d\">%s</Lhs>\n", i, walkNode(lhs))
 		}
 		retString += "</LhsArray>\n"
 		retString += "<RhsArray>\n"
 		for i, rhs := range x.Rhs {
-			if _, ok := rhs.(*ast.BasicLit); ok {
-				basicLit := rhs.(*ast.BasicLit)
-				retString += fmt.Sprintf("<Rhs id=\"%d\">\n<BasicLit>%s</BasicLit></Rhs>\n", i, processBasicLit(*basicLit))
-				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
-			}
-			if _, ok := rhs.(*ast.BinaryExpr); ok {
-				binaryExpr := rhs.(*ast.BinaryExpr)
-				visited[binaryExpr] = true
-				retString += fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, findBottomBinaryExpr((binaryExpr)))
-				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
-			}
+			/* 			if _, ok := rhs.(*ast.BasicLit); ok {
+			   				basicLit := rhs.(*ast.BasicLit)
+			   				retString += fmt.Sprintf("<Rhs id=\"%d\">\n%s</Rhs>\n", i, walkNode(basicLit))
+			   				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
+			   			}
+			   			if _, ok := rhs.(*ast.BinaryExpr); ok {
+			   				binaryExpr := rhs.(*ast.BinaryExpr)
+			   				visited[binaryExpr] = true
+			   				retString += fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, findBottomBinaryExpr((binaryExpr)))
+			   				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
+			   			} */
+			retString += fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, walkNode(rhs))
 		}
 		retString += "</RhsArray>\n"
 
@@ -253,6 +240,8 @@ func processNode(n ast.Node) string {
 		if !visited[x] {
 			retString += findBottomBinaryExpr(x)
 		}
+	case *ast.SwitchStmt:
+		retString += fmt.Sprintf("<tag>%s</tag><body>%s</body>", walkNode(x.Tag), walkNode(x.Body))
 
 	default:
 		nodeType := fmt.Sprintf("%T", n)

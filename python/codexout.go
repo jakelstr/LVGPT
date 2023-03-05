@@ -4,10 +4,10 @@ import "fmt"
 
 func main() {
 	num := 5
-
-	if num < 0 {
-		fmt.Println("Less than 0")
+	test := true
+	if test {
+		fmt.Println(num)
 	} else {
-		fmt.Println("Greater than 10")
+		fmt.Println("LOW")
 	}
 }

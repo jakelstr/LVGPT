@@ -22,58 +22,62 @@
 <AssignStmt>
 <token>:=</token>
 <LhsArray>
-<Lhs id="0">num</Lhs>
+<Lhs id="0"><Ident>
+<name>num</name>
+</Ident>
+</Lhs>
 </LhsArray>
 <RhsArray>
-<Rhs id="0">
-<BasicLit><kind>INT</kind>
-<value>5</value>
-</BasicLit></Rhs>
-</RhsArray>
-<BasicLit>
+<Rhs id="0"><BasicLit>
 <kind>INT</kind>
 <value>5</value>
 </BasicLit>
+</Rhs>
+</RhsArray>
+</AssignStmt>
+<AssignStmt>
+<token>:=</token>
+<LhsArray>
+<Lhs id="0"><Ident>
+<name>test</name>
+</Ident>
+</Lhs>
+</LhsArray>
+<RhsArray>
+<Rhs id="0"><Ident>
+<name>true</name>
+</Ident>
+</Rhs>
+</RhsArray>
 </AssignStmt>
 <IfStmt>
-<cond><BinaryExpr><op>&lt;</op><left>num</left><right><BasicLit><kind>INT</kind>
-<value>0</value>
-</BasicLit></right></BinaryExpr></cond><body><BlockStmt>
+<cond><Ident>
+<name>test</name>
+</Ident>
+</cond><else><BlockStmt>
 <ExprStmt>
 <CallExpr>
-<args><arg><BasicLit><kind>STRING</kind>
-<value>Less than 0</value>
-</BasicLit></arg></args><SelectorExpr>
-<x>fmt</x><sel>Println</sel></SelectorExpr>
-<BasicLit>
+<args><arg><BasicLit>
 <kind>STRING</kind>
-<value>Less than 0</value>
+<value>LOW</value>
 </BasicLit>
+</arg></args><SelectorExpr>
+<x>fmt</x><sel>Println</sel></SelectorExpr>
+</CallExpr>
+</ExprStmt>
+</BlockStmt>
+</else><body><BlockStmt>
+<ExprStmt>
+<CallExpr>
+<args><arg><Ident>
+<name>num</name>
+</Ident>
+</arg></args><SelectorExpr>
+<x>fmt</x><sel>Println</sel></SelectorExpr>
 </CallExpr>
 </ExprStmt>
 </BlockStmt>
 </body>
-<Ident>
-<name>num</name>
-</Ident>
-<BasicLit>
-<kind>INT</kind>
-<value>0</value>
-</BasicLit>
-<BlockStmt>
-<ExprStmt>
-<CallExpr>
-<args><arg><BasicLit><kind>STRING</kind>
-<value>Greater than 10</value>
-</BasicLit></arg></args><SelectorExpr>
-<x>fmt</x><sel>Println</sel></SelectorExpr>
-<BasicLit>
-<kind>STRING</kind>
-<value>Greater than 10</value>
-</BasicLit>
-</CallExpr>
-</ExprStmt>
-</BlockStmt>
 </IfStmt>
 </BlockStmt>
 </FuncDecl>

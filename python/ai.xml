@@ -2,13 +2,55 @@
 	<vi>
 		<bd name="test">
 			<nodes>
-				<node xPos="0" yPos="0" name="num" type="Numeric Control" numericType="Quad" parentDiagram="75cb94f1-26aa-4f6f-9bae-032fb561b22e" value="5">
+				<node xPos="0" yPos="0" name="num" type="Numeric Control" numericType="Quad" parentDiagram="6b47e7cc-7648-486d-ba0d-05321a41f60c" value="5">
 					<terminals>
-						<terminal id="1e48a530-cbe3-4765-9e4f-181adbfc6450" name="num" />
+						<terminal id="d7352ab5-a2b7-4c86-b2c2-4a278cf15be9" name="num" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="50" name="test" type="Bool Control" parentDiagram="6b47e7cc-7648-486d-ba0d-05321a41f60c" value="true">
+					<terminals>
+						<terminal id="51be6645-a424-4f00-9a24-0be758aea6e4" name="test" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="100" name="fstr" type="Format Into String" nodes="1" parentDiagram="6b47e7cc-7648-486d-ba0d-05321a41f60c">
+					<terminals>
+						<terminal id="9d1ebb95-834d-4f6f-adf5-7536ad34d754" name="input 1" />
+						<terminal id="a5a6f2dd-7a0b-488d-8dfe-62b48a556738" name="format string" />
+						<terminal id="8a2a60f3-46cb-4ccd-aa71-1e50abe79f18" name="resulting string" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="150" name="format string" type="String Constant" value="%d" parentDiagram="6b47e7cc-7648-486d-ba0d-05321a41f60c">
+					<terminals>
+						<terminal id="a2c0d953-c9ba-411e-a94c-13a5008ae7e5" name="format string" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="200" name="strcon" type="String Constant" value="LOW" parentDiagram="6b47e7cc-7648-486d-ba0d-05321a41f60c">
+					<terminals>
+						<terminal id="038922dd-a1b3-45ad-84cd-5041ec3e2280" name="strcon" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="250" name="select" type="Select" parentDiagram="6b47e7cc-7648-486d-ba0d-05321a41f60c">
+					<terminals>
+						<terminal id="900e433d-2b73-477c-a6d4-5cc3075901b6" name="t" />
+						<terminal id="339b11fd-7c86-4fb4-83d9-53143d604d9c" name="s" />
+						<terminal id="c0d96fc7-43ae-4e92-8a39-87a63ab3a449" name="f" />
+						<terminal id="4797aaa8-12c8-4ce0-b421-7d981e4f5395" name="s? t:f" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="300" name="output" type="String Indicator" parentDiagram="6b47e7cc-7648-486d-ba0d-05321a41f60c">
+					<terminals>
+						<terminal id="51b5ccc3-a906-4fcd-acda-e9743891b33a" name="output" />
 					</terminals>
 				</node>
 			</nodes>
-			<wires />
+			<wires>
+				<wire id="9d660a22-0c5b-46a7-a1bd-9bf5e5b2a548" from="d7352ab5-a2b7-4c86-b2c2-4a278cf15be9" to="9d1ebb95-834d-4f6f-adf5-7536ad34d754" />
+				<wire id="ad7c349e-9cd5-4023-a6b7-c1b59bbee75b" from="51be6645-a424-4f00-9a24-0be758aea6e4" to="339b11fd-7c86-4fb4-83d9-53143d604d9c" />
+				<wire id="7162cd9f-659b-4180-9806-29d299c1c44e" from="a5a6f2dd-7a0b-488d-8dfe-62b48a556738" to="a2c0d953-c9ba-411e-a94c-13a5008ae7e5" />
+				<wire id="dcc225e8-83c6-4bfc-bbfc-5773ee8d328a" from="8a2a60f3-46cb-4ccd-aa71-1e50abe79f18" to="900e433d-2b73-477c-a6d4-5cc3075901b6" />
+				<wire id="183e3f92-80f0-4f68-bbe5-34943aad3c99" from="038922dd-a1b3-45ad-84cd-5041ec3e2280" to="c0d96fc7-43ae-4e92-8a39-87a63ab3a449" />
+				<wire id="530d6a2f-16d2-4e71-95c9-5f1b7b8eae7e" from="4797aaa8-12c8-4ce0-b421-7d981e4f5395" to="51b5ccc3-a906-4fcd-acda-e9743891b33a" />
+			</wires>
 		</bd>
 	</vi>
 </vis>

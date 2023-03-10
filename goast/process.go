@@ -51,7 +51,7 @@ type CodePage struct {
 
 func findBottomBinaryExpr(expr ast.Expr) string {
 	if binaryExpr, ok := expr.(*ast.BinaryExpr); ok {
-		return fmt.Sprintf("<BinaryExpr><op>%s</op><left>%s</left><right>%s</right></BinaryExpr>", xmlEscape(fmt.Sprintf("%s", binaryExpr.Op)), findBottomBinaryExpr(binaryExpr.X), findBottomBinaryExpr(binaryExpr.Y))
+		return fmt.Sprintf("<op>%s</op><left>%s</left><right>%s</right>", xmlEscape(fmt.Sprintf("%s", binaryExpr.Op)), walkNode(binaryExpr.X), walkNode(binaryExpr.Y))
 	} else if basicLit, ok := expr.(*ast.BasicLit); ok {
 		return fmt.Sprintf("<BasicLit>%s</BasicLit>", processBasicLit(*basicLit))
 	}
@@ -142,8 +142,8 @@ func processNode(n ast.Node) string {
 			fmt.Println("Function:", x.Name.Name, "has no return values")
 		}
 	case *ast.CallExpr:
-		funcName := x.Fun.(*ast.SelectorExpr).Sel.Name
-		fmt.Println("Function call:", funcName)
+		//funcName := x.Fun.(*ast.SelectorExpr).Sel.Name
+		//fmt.Println("Function call:", funcName)
 		retString += fmt.Sprintf("<args>")
 		for _, arg := range x.Args {
 			retString += fmt.Sprintf("<arg>%s</arg>", walkNode(arg))
@@ -190,11 +190,28 @@ func processNode(n ast.Node) string {
 	case *ast.BasicLit:
 		retString += processBasicLit(*x)
 
+	case *ast.CompositeLit:
+		retString += fmt.Sprintf("<type>%s</type><elts>", walkNode(x.Type))
+		for i, elt := range x.Elts {
+			retString += fmt.Sprintf("<elt id=\"%d\">%s</elt>", i, walkNode(elt))
+		}
+		retString += "</elts>"
+	case *ast.IndexExpr:
+		retString += fmt.Sprintf("<index>%s</index><x>%s</x>", walkNode(x.Index), walkNode(x.X))
+
 	case *ast.DeclStmt:
 		fmt.Printf("Decl statement %s\n", x.Decl)
+	case *ast.ArrayType:
+		if x.Len != nil {
+			retString += fmt.Sprintf("<len>%s</len>", walkNode(x.Len))
+		}
+		if x.Elt != nil {
+			retString += fmt.Sprintf("<type>%s</type>", walkNode(x.Elt))
+		}
+
 	case *ast.ValueSpec:
 		//fmt.Printf("Value Spec %s\n", x.Values)
-		retString += fmt.Sprintf("<type>%s</type>\n", x.Type)
+		retString += fmt.Sprintf("<type>%s</type>\n", walkNode(x.Type))
 		retString += fmt.Sprintf("<names>\n")
 		for _, name := range x.Names {
 			//visited[name] = true
@@ -237,9 +254,8 @@ func processNode(n ast.Node) string {
 			}
 		}
 	case *ast.BinaryExpr:
-		if !visited[x] {
-			retString += findBottomBinaryExpr(x)
-		}
+		retString += findBottomBinaryExpr(x)
+
 	case *ast.SwitchStmt:
 		retString += fmt.Sprintf("<tag>%s</tag><body>%s</body>", walkNode(x.Tag), walkNode(x.Body))
 

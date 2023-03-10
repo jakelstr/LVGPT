@@ -24,82 +24,105 @@
 				<LhsArray>
 					<Lhs id="0">
 						<Ident>
-							<name>num</name>
+							<name>arr</name>
 						</Ident>
 					</Lhs>
 				</LhsArray>
 				<RhsArray>
 					<Rhs id="0">
-						<BasicLit>
-							<kind>INT</kind>
-							<value>5</value>
-						</BasicLit>
+						<CompositeLit>
+							<type>
+								<ArrayType>
+									<type>
+										<Ident>
+											<name>string</name>
+										</Ident>
+									</type>
+								</ArrayType>
+							</type>
+							<elts>
+								<elt id="0">
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>a</value>
+									</BasicLit>
+								</elt>
+								<elt id="1">
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>b</value>
+									</BasicLit>
+								</elt>
+								<elt id="2">
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>c</value>
+									</BasicLit>
+								</elt>
+								<elt id="3">
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>d</value>
+									</BasicLit>
+								</elt>
+								<elt id="4">
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>e</value>
+									</BasicLit>
+								</elt>
+							</elts>
+						</CompositeLit>
 					</Rhs>
 				</RhsArray>
 			</AssignStmt>
 			<AssignStmt>
-				<token>:=</token>
+				<token>=</token>
 				<LhsArray>
 					<Lhs id="0">
 						<Ident>
-							<name>test</name>
+							<name>arr</name>
 						</Ident>
 					</Lhs>
 				</LhsArray>
 				<RhsArray>
 					<Rhs id="0">
-						<Ident>
-							<name>true</name>
-						</Ident>
+						<CallExpr>
+							<args>
+								<arg>
+									<Ident>
+										<name>arr</name>
+									</Ident>
+								</arg>
+								<arg>
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>f</value>
+									</BasicLit>
+								</arg>
+							</args>
+							<Ident>
+								<name>append</name>
+							</Ident>
+						</CallExpr>
 					</Rhs>
 				</RhsArray>
 			</AssignStmt>
-			<IfStmt>
-				<cond>
-					<Ident>
-						<name>test</name>
-					</Ident>
-				</cond>
-				<else>
-					<BlockStmt>
-						<ExprStmt>
-							<CallExpr>
-								<args>
-									<arg>
-										<BasicLit>
-											<kind>STRING</kind>
-											<value>LOW</value>
-										</BasicLit>
-									</arg>
-								</args>
-								<SelectorExpr>
-									<x>fmt</x>
-									<sel>Println</sel>
-								</SelectorExpr>
-							</CallExpr>
-						</ExprStmt>
-					</BlockStmt>
-				</else>
-				<body>
-					<BlockStmt>
-						<ExprStmt>
-							<CallExpr>
-								<args>
-									<arg>
-										<Ident>
-											<name>num</name>
-										</Ident>
-									</arg>
-								</args>
-								<SelectorExpr>
-									<x>fmt</x>
-									<sel>Println</sel>
-								</SelectorExpr>
-							</CallExpr>
-						</ExprStmt>
-					</BlockStmt>
-				</body>
-			</IfStmt>
+			<ExprStmt>
+				<CallExpr>
+					<args>
+						<arg>
+							<Ident>
+								<name>arr</name>
+							</Ident>
+						</arg>
+					</args>
+					<SelectorExpr>
+						<x>fmt</x>
+						<sel>Println</sel>
+					</SelectorExpr>
+				</CallExpr>
+			</ExprStmt>
 		</BlockStmt>
 	</FuncDecl>
 </File>

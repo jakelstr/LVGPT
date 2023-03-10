@@ -2,7 +2,6 @@ import xml.etree.ElementTree as ET
 import uuid
 from lvgptGraph import *
 
-blockTable = {}
 lvGraph = LVGraph()
 
 def determineBinaryDictOpUniform(binaryDict):
@@ -55,16 +54,30 @@ def processBinaryExpr(node):
         returnDict["op"] = MultiplyNode()
     elif op == "/":
         returnDict["op"] = DivideNode()
+    elif op == ">=":
+        returnDict["op"] = GreaterOrEqualNode()
     left = node.find("left")
     right = node.find("right")
     if len(left) > 0:
         if left[0].tag == "BinaryExpr":
             returnDict["left"] = processBinaryExpr(left[0])
+        if left[0].tag == "Ident":
+            returnDict["left"] = left[0].find("name").text
     else:
         returnDict["left"] = left.text
     if len(right) > 0:
-        if left[0].tag == "BinaryExpr":
+        if right[0].tag == "BinaryExpr":
             returnDict["right"] = processBinaryExpr(right[0])
+        elif right[0].tag == "Ident":
+            returnDict["right"] = right[0].find("name").text
+        elif right[0].tag == "BasicLit":
+            varType = right[0].find("kind").text
+            val = right[0].find("value").text
+            nodeName = lvGraph.getAvailableNodeName("const")
+            node = getConstantNodeByVarType(nodeName, varType)
+            node.setValue(val)
+            lvGraph.addNode(node)
+            returnDict["right"] = nodeName
     else:
         returnDict["right"] = right.text
     return returnDict
@@ -107,17 +120,20 @@ def processBinaryDict(binaryDict):
     binaryDict["right"] = right
     return (binaryDict, outType)
 
-def addBinaryNodeToLVGraph(binaryXMLNode, nodeName):
+def addBinaryNodeToLVGraph(binaryXMLNode, nodeName, createOutputNode=True):
     binExpDict = processBinaryExpr(binaryXMLNode)
     binExpDict, outType = processBinaryDict(binExpDict)
     if outType.upper() == "STRING":
         binExpDict, outType = convertBinaryDictToConcatStrings(binExpDict, 0)
     _, _, finalOutputTerm = binExpDict["op"].getTerms()
-    nodeName = lvGraph.getAvailableNodeName(nodeName)
-    varNode = getIndicatorNodeByVarType(nodeName, outType)
-    lvGraph.addNode(varNode)
-    lvGraph.addTerminalEdge(finalOutputTerm.uuid, varNode.getTerminal().uuid)
-    return nodeName
+    retVal = finalOutputTerm.uuid
+    if createOutputNode:
+        nodeName = lvGraph.getAvailableNodeName(nodeName)
+        retVal = nodeName
+        varNode = getIndicatorNodeByVarType(nodeName, outType)
+        lvGraph.addNode(varNode)
+        lvGraph.addTerminalEdge(finalOutputTerm.uuid, varNode.getTerminal().uuid)
+    return retVal
 
 def getPrintExprFunction(callExprNode):
     selectorExpr = callExprNode.find("SelectorExpr")
@@ -201,39 +217,64 @@ def printNodeToLVRep(printNode):
                 outputTermUUID = node.getTerminal().uuid
     return outputTermUUID
 
+def readArrayType(arrayTypeNode):
+    arrayType = arrayTypeNode.find("type/Ident/name").text.upper()
+    return arrayType
 
+def getConstantNodeFromBasicLit(basicLit):
+    value = basicLit.find("value").text
+    varType = basicLit.find("kind").text.upper()
+    node = getConstantNodeByVarType(lvGraph.getAvailableNodeName("const"), varType)
+    node.setValue(value)
+    return node
 
 def processBlockStmtChild(node, blockUUID):
     lvGraph.diagramUUID = blockUUID
     if node.tag == "DeclStmt":
         varType = ""
         valSpec = node.find("GenDecl/ValueSpec")
+        name = valSpec.find("names/name").text
+        name = lvGraph.getAvailableNodeName(name)
         if valSpec is not None:
-            varType = valSpec.find("type").text
-            name = valSpec.find("names/name").text
+            varTypeNode = valSpec.find("type")
+            if len(varTypeNode) == 0:
+                varType = varTypeNode.text
+            else:
+                if varTypeNode[0].tag == "ArrayType":
+                    arrayType = readArrayType(varTypeNode[0])
+                    arrayNode = getArrayControlNodeByVarType(name, arrayType)
+                    lvGraph.addNode(arrayNode)
+    
             value = None
             varNode = None
             valueTag = valSpec.find("values/value")
-
-            match valueTag[0].tag:
-                case "BasicLit":
-                    nodeName = lvGraph.getAvailableNodeName(name)
-                    varNode = getControlNodeByVarType(nodeName, varType)
-                    value = valueTag.find("BasicLit/value").text
-                    if value is not None:
-                        varNode.setValue(value)
-                    lvGraph.addNode(varNode)
-                case "BinaryExpr":
-                    varNode = getIndicatorNodeByVarType(name, varType)
-                    binExpNode = valueTag.find("BinaryExpr")
-                    if binExpNode is not None:
-                        addBinaryNodeToLVGraph(binExpNode, name)
+            if valueTag is not None:
+                match valueTag[0].tag:
+                    case "BasicLit":
+                        nodeName = lvGraph.getAvailableNodeName(name)
+                        varNode = getControlNodeByVarType(nodeName, varType)
+                        value = valueTag.find("BasicLit/value").text
+                        if value is not None:
+                            varNode.setValue(value)
+                        lvGraph.addNode(varNode)
+                    case "BinaryExpr":
+                        varNode = getIndicatorNodeByVarType(name, varType)
+                        binExpNode = valueTag.find("BinaryExpr")
+                        if binExpNode is not None:
+                            addBinaryNodeToLVGraph(binExpNode, name)
     elif node.tag == "AssignStmt":
         lhsDict = {}
         token = node.find("token").text
         lhsArrayNode = node.find("LhsArray")
+        varName = None
+        varIndex = None #this is for array types
         for lhs in lhsArrayNode:
-            lhsDict[lhs.attrib["id"]] = lhs.find("Ident/name").text
+            if lhs[0].tag == "IndexExpr":
+                varName = lhs[0].find("x/Ident/name").text
+                varIndex = lhs[0].find("index/BasicLit/value").text
+            else:
+                varName = lhs.find("Ident/name").text
+            lhsDict[lhs.attrib["id"]] = (varName, varIndex)
         
         rhsDict = {}
         rhsArrayNode = node.find("RhsArray")
@@ -243,7 +284,8 @@ def processBlockStmtChild(node, blockUUID):
         for lhs in lhsDict:
             if lhs in rhsDict:
                 rhsNode = rhsDict[lhs]
-                nodeName = lhsDict[lhs]
+                nodeName = lhsDict[lhs][0]
+                varIndex = lhsDict[lhs][1]
                 if len(rhsNode) > 0:
                     if rhsNode[0].tag == "BasicLit":
                         rhsNode = rhsNode[0]
@@ -252,7 +294,10 @@ def processBlockStmtChild(node, blockUUID):
                         if token == "=":
                             nodeUUID = lvGraph.getNodeByName(nodeName) #need some way to keep track of name changes if vars are duplicated (idk how important)
                             node = lvGraph.getNodeByUUID(nodeUUID)
-                            node.setValue(value)
+                            if varIndex is not None:
+                                node.setValue(int(varIndex), value)
+                            else:
+                                node.setValue(value)
                             #if it had a value already then I'm not sure what to do yet
                             #my best guess is it would have to end up as a property node value setting
                         else: #token will be := for new variables
@@ -260,7 +305,24 @@ def processBlockStmtChild(node, blockUUID):
                             varNode = getControlNodeByVarType(nodeName, varType)
                             lvGraph.addNode(varNode)
                             varNode.setValue(value)
-                         
+
+                    elif rhsNode[0].tag == "CompositeLit":
+                        varType = None
+                        typeNode = rhsNode[0].find("type")
+                        if token == "=":
+                            pass
+                        else:
+                            if typeNode[0].tag == "ArrayType":
+                                varType = readArrayType(typeNode[0])
+                                nodeName = lvGraph.getAvailableNodeName(nodeName)
+                                varNode = getArrayControlNodeByVarType(nodeName, varType)
+                                eltNodes = rhsNode[0].findall("elts/elt")
+                                for elt in eltNodes:
+                                    valNode = elt.find("BasicLit/value")
+                                    if valNode is not None:
+                                        varNode.setValue(int(elt.attrib["id"]), valNode.text)
+                                lvGraph.addNode(varNode)
+
                     elif rhsNode[0].tag == "BinaryExpr":
                         addBinaryNodeToLVGraph(rhsNode[0], lhsDict[lhs])
                     elif rhsNode[0].tag == "Ident":
@@ -270,6 +332,31 @@ def processBlockStmtChild(node, blockUUID):
                             varNode = getControlNodeByVarType(nodeName, "BOOL")
                             lvGraph.addNode(varNode)
                             varNode.setValue(identName)
+                    elif rhsNode[0].tag == "CallExpr":
+                        funcName = rhsNode[0].find("Ident/name")
+                        args = rhsNode[0].findall("args/arg")
+                        if funcName is not None:
+                            funcName = funcName.text
+                            match (funcName):
+                                case "append":
+                                    if len(args) == 2:
+                                        incomingArray = args[0]
+                                        incomingArray = incomingArray.find("Ident/name").text
+                                        incomingArray = lvGraph.getNodeByUUID(lvGraph.getNodeByName(incomingArray))
+                                        newItem = args[1]
+                                        newElemNode = None
+                                        if newItem[0].tag == "BasicLit":
+                                            newElemNode = getConstantNodeFromBasicLit(newItem[0])
+                                        if newElemNode is not None:
+                                            lvGraph.addNode(newElemNode)
+                                            insertNode = InsertIntoArrayNode(lvGraph.getAvailableNodeName("insertintoarray"))
+                                            lvGraph.addNode(insertNode)
+                                            inputTerm, indexTerm, newElemTerm, outputTerm = insertNode.getTerms()
+                                            lvGraph.addTerminalEdge(newElemNode.getTerminal().uuid, newElemTerm.uuid)
+                                            lvGraph.addTerminalEdge(incomingArray.getTerminal().uuid, inputTerm.uuid)
+
+
+
                             
     elif node.tag == "ExprStmt":
         callExpr = node.find("CallExpr")
@@ -318,8 +405,7 @@ def processBlockStmtChild(node, blockUUID):
         condNode = node.find("cond")
         condUUID = None
         if condNode[0].tag == "BinaryExpr":
-            binExprNode = condNode.find("BinaryExpr")
-            print(binExprNode.find("op").text)
+           condUUID = addBinaryNodeToLVGraph(condNode[0], None, False)
         elif condNode[0].tag == "Ident":
             identName = condNode[0].find("name").text
             condUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
@@ -343,6 +429,16 @@ def writeNodeToXML(node, index):
     rootElem = ET.Element("node")
     rootElem.attrib["xPos"] = "0"
     rootElem.attrib["yPos"] = str(index * 50)
+    if hasattr(node, "value") and node.value is not None:
+        if type(node.value) is not list:
+            rootElem.attrib["value"] = node.value
+        else:
+            valuesElem = ET.Element("values")
+            for v in node.value:
+                valueElem = ET.Element("value")
+                valueElem.text = v
+                valuesElem.append(valueElem)
+            rootElem.append(valuesElem)
     for attrib in node.attributes:
         rootElem.attrib[attrib] = node.attributes[attrib]
     terminalsElem = ET.Element("terminals")
@@ -380,7 +476,6 @@ if len(funcDecls) > 0:
         ident = funcDecl.find("Ident/name").text
         if ident == "main":
             bdUUID = str(uuid.uuid4())
-            blockTable[bdUUID] = {"vars":{}, "nodes":{}, "wires":[]}
             mainBlockStmt = funcDecl.find("BlockStmt")
             for node in mainBlockStmt:
                 processBlockStmtChild(node, bdUUID)

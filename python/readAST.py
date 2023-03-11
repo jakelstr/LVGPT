@@ -73,7 +73,7 @@ def processBinaryExpr(node):
         elif right[0].tag == "BasicLit":
             varType = right[0].find("kind").text
             val = right[0].find("value").text
-            nodeName = lvGraph.getAvailableNodeName("const")
+            nodeName = "const"
             node = getConstantNodeByVarType(nodeName, varType)
             node.setValue(val)
             lvGraph.addNode(node)
@@ -86,7 +86,7 @@ def processBinaryDict(binaryDict):
     left = binaryDict["left"]
     right = binaryDict["right"]
     op = binaryDict["op"]
-    opNodeName = lvGraph.getAvailableNodeName(op.name)
+    opNodeName = op.name
     op.name = opNodeName
     lvGraph.addNode(op)
     outType = "int"
@@ -128,7 +128,6 @@ def addBinaryNodeToLVGraph(binaryXMLNode, nodeName, createOutputNode=True):
     _, _, finalOutputTerm = binExpDict["op"].getTerms()
     retVal = finalOutputTerm.uuid
     if createOutputNode:
-        nodeName = lvGraph.getAvailableNodeName(nodeName)
         retVal = nodeName
         varNode = getIndicatorNodeByVarType(nodeName, outType)
         lvGraph.addNode(varNode)
@@ -193,7 +192,7 @@ def printNodeToLVRep(printNode):
             kind = arg[0].find("kind").text.upper()
             val = arg[0].find("value").text
             if kind == "STRING":
-                nodeName = lvGraph.getAvailableNodeName("strcon")
+                nodeName = "strcon"
                 node = StringConstant(nodeName)
                 node.setValue(val)
                 lvGraph.addNode(node)
@@ -234,7 +233,6 @@ def processBlockStmtChild(node, blockUUID):
         varType = ""
         valSpec = node.find("GenDecl/ValueSpec")
         name = valSpec.find("names/name").text
-        name = lvGraph.getAvailableNodeName(name)
         if valSpec is not None:
             varTypeNode = valSpec.find("type")
             if len(varTypeNode) == 0:
@@ -251,8 +249,7 @@ def processBlockStmtChild(node, blockUUID):
             if valueTag is not None:
                 match valueTag[0].tag:
                     case "BasicLit":
-                        nodeName = lvGraph.getAvailableNodeName(name)
-                        varNode = getControlNodeByVarType(nodeName, varType)
+                        varNode = getControlNodeByVarType(name, varType)
                         value = valueTag.find("BasicLit/value").text
                         if value is not None:
                             varNode.setValue(value)
@@ -301,9 +298,9 @@ def processBlockStmtChild(node, blockUUID):
                             #if it had a value already then I'm not sure what to do yet
                             #my best guess is it would have to end up as a property node value setting
                         else: #token will be := for new variables
-                            nodeName = lvGraph.getAvailableNodeName(nodeName)
                             varNode = getControlNodeByVarType(nodeName, varType)
                             lvGraph.addNode(varNode)
+                            lvGraph.addSymbolTableEntry(nodeName, varNode.getTerminal().uuid)
                             varNode.setValue(value)
 
                     elif rhsNode[0].tag == "CompositeLit":
@@ -314,7 +311,6 @@ def processBlockStmtChild(node, blockUUID):
                         else:
                             if typeNode[0].tag == "ArrayType":
                                 varType = readArrayType(typeNode[0])
-                                nodeName = lvGraph.getAvailableNodeName(nodeName)
                                 varNode = getArrayControlNodeByVarType(nodeName, varType)
                                 eltNodes = rhsNode[0].findall("elts/elt")
                                 for elt in eltNodes:
@@ -322,15 +318,16 @@ def processBlockStmtChild(node, blockUUID):
                                     if valNode is not None:
                                         varNode.setValue(int(elt.attrib["id"]), valNode.text)
                                 lvGraph.addNode(varNode)
+                                lvGraph.addSymbolTableEntry(nodeName, varNode.getTerminal().uuid)
 
                     elif rhsNode[0].tag == "BinaryExpr":
                         addBinaryNodeToLVGraph(rhsNode[0], lhsDict[lhs])
                     elif rhsNode[0].tag == "Ident":
                         identName = rhsNode[0].find("name").text
                         if identName == "true" or identName == "false":
-                            nodeName = lvGraph.getAvailableNodeName(nodeName)
                             varNode = getControlNodeByVarType(nodeName, "BOOL")
                             lvGraph.addNode(varNode)
+                            lvGraph.addSymbolTableEntry(nodeName, varNode.getTerminal().uuid)
                             varNode.setValue(identName)
                     elif rhsNode[0].tag == "CallExpr":
                         funcName = rhsNode[0].find("Ident/name")
@@ -342,7 +339,7 @@ def processBlockStmtChild(node, blockUUID):
                                     if len(args) == 2:
                                         incomingArray = args[0]
                                         incomingArray = incomingArray.find("Ident/name").text
-                                        incomingArray = lvGraph.getNodeByUUID(lvGraph.getNodeByName(incomingArray))
+                                        incomingArrayTerminalUUID = lvGraph.getTerminalFromSymbolTable(incomingArray) 
                                         newItem = args[1]
                                         newElemNode = None
                                         if newItem[0].tag == "BasicLit":
@@ -352,8 +349,11 @@ def processBlockStmtChild(node, blockUUID):
                                             insertNode = InsertIntoArrayNode(lvGraph.getAvailableNodeName("insertintoarray"))
                                             lvGraph.addNode(insertNode)
                                             inputTerm, indexTerm, newElemTerm, outputTerm = insertNode.getTerms()
+                                            lvGraph.addTerminalEdge(incomingArrayTerminalUUID, inputTerm.uuid)
+                                            lvGraph.addSymbolTableEntry(incomingArray, outputTerm.uuid)
                                             lvGraph.addTerminalEdge(newElemNode.getTerminal().uuid, newElemTerm.uuid)
-                                            lvGraph.addTerminalEdge(incomingArray.getTerminal().uuid, inputTerm.uuid)
+                                            lvGraph.setTerminalVarType(inputTerm.uuid, lvGraph.getTerminalVarType(incomingArrayTerminalUUID))
+                                            lvGraph.setTerminalVarType(outputTerm.uuid, lvGraph.getTerminalVarType(inputTerm.uuid))
 
 
 
@@ -363,9 +363,10 @@ def processBlockStmtChild(node, blockUUID):
         if callExpr is not None:
             selectorExpr = callExpr.find("SelectorExpr")
             if selectorExpr is not None:
-                names = selectorExpr.findall("Ident/name")
-                if len(names) == 2 and names[0].text == "fmt":
-                    match names[1].text:
+                x = selectorExpr.find("x").text
+                sel = selectorExpr.find("sel").text
+                if x == "fmt":
+                    match sel:
                         case "Printf":
                             args = callExpr.find("args")
                             if args is not None:
@@ -388,7 +389,7 @@ def processBlockStmtChild(node, blockUUID):
                                             varNode = lvGraph.getNodeByUUID(lvGraph.getNodeByName(varName))
                                             inputTerminal = lvGraph.getNodeByUUID(formatNode.uuid).getInputTerms()[i] #these are probably in order idk
                                             lvGraph.addTerminalEdge(varNode.getTerminal().uuid, inputTerminal.uuid)
-                                    outputNode = StringIndicator(lvGraph.getAvailableNodeName("output"))
+                                    outputNode = StringIndicator("output")
                                     lvGraph.addNode(outputNode)
                                     lvGraph.addTerminalEdge(formatNode.getTerminalByName("resulting string").uuid, outputNode.getTerminal().uuid)
                         case "Println":
@@ -401,6 +402,13 @@ def processBlockStmtChild(node, blockUUID):
                                             binExpNode = arg[0]
                                             if binExpNode is not None:
                                                 addBinaryNodeToLVGraph(binExpNode, "output")
+                                        case "Ident":
+                                            varName = arg[0].find("name").text
+                                            terminalUUID = lvGraph.getTerminalFromSymbolTable(varName)
+                                            outputNode = getIndicatorNodeByVarType(lvGraph.getAvailableNodeName(varName + " Out"), lvGraph.getTerminalVarType(terminalUUID))
+                                            lvGraph.addNode(outputNode)
+                                            lvGraph.addTerminalEdge(terminalUUID, outputNode.getTerminal().uuid)
+
     elif node.tag == "IfStmt":
         condNode = node.find("cond")
         condUUID = None
@@ -414,13 +422,13 @@ def processBlockStmtChild(node, blockUUID):
             trueResultTerm = printNodeToLVRep(ifPrintNode)
             falseResultTerm = printNodeToLVRep(elsePrintNode)
             selectNode = SelectNode()
-            selectNode.name = lvGraph.getAvailableNodeName("select")
+            selectNode.name = "select"
             lvGraph.addNode(selectNode)
             trueTerm, selectTerm, falseTerm, outTerm = selectNode.getTerms()
             lvGraph.addTerminalEdge(trueResultTerm, trueTerm.uuid)
             lvGraph.addTerminalEdge(falseResultTerm, falseTerm.uuid)
             lvGraph.addTerminalEdge(condUUID, selectTerm.uuid)
-            outNode = getIndicatorNodeByVarType(lvGraph.getAvailableNodeName("output"), "STRING")
+            outNode = getIndicatorNodeByVarType("output", "STRING")
             lvGraph.addNode(outNode)
             lvGraph.addTerminalEdge(outTerm.uuid, outNode.getTerminal().uuid)
                                     

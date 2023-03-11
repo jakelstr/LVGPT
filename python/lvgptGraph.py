@@ -3,19 +3,18 @@ import uuid
 class LVGraph:
     def __init__(self):
         #nodes is nodeUUID->LVNode, terminals is terminalUUID->nodeUUID, nodeNames is nodeName->nodeUUID
-        self.graph = {"nodes":{}, "terminals":{}, "nodeNames":{}}
+        self.graph = {"nodes":{}, "terminals":{}, "nodeNames":{}, "symbolTable":{}}
         self.diagramUUID = ""
 
     def addNode(self, node):
         if node.name in self.graph["nodeNames"]:
-            return False
-        else:
-            node.attributes["parentDiagram"] = self.diagramUUID
-            self.graph["nodeNames"][node.name] = node.uuid
-            self.graph["nodes"][node.uuid] = node
-            for termUUID in node.terminals:
-                self.graph["terminals"][termUUID] = node.uuid
-        return True
+            node.name = self.getAvailableNodeName(node.name)
+        node.attributes["parentDiagram"] = self.diagramUUID
+        self.graph["nodeNames"][node.name] = node.uuid
+        self.graph["nodes"][node.uuid] = node
+        for termUUID in node.terminals:
+            self.graph["terminals"][termUUID] = node.uuid
+        
     def getAvailableNodeName(self, desiredName):
         if desiredName not in self.graph["nodeNames"]:
             return desiredName
@@ -72,6 +71,22 @@ class LVGraph:
         node = self.graph["nodes"][nodeUUID]
         termUUID = node.addTerminal()
         self.graph["terminals"][termUUID] = nodeUUID
+
+    def addSymbolTableEntry(self, symbolName, terminalUUID):
+        if self.diagramUUID not in self.graph["symbolTable"]:
+            self.graph["symbolTable"][self.diagramUUID] = {}
+        self.graph["symbolTable"][self.diagramUUID][symbolName] = terminalUUID
+    
+    def getTerminalFromSymbolTable(self, symbolName):
+        return self.graph["symbolTable"][self.diagramUUID][symbolName]
+    
+    def setTerminalVarType(self, terminalUUID, varType):
+        parentNode = self.getNodeByUUID(self.getTerminalOwner(terminalUUID))
+        parentNode.terminals[terminalUUID].varType = varType
+
+    def getTerminalVarType(self, terminalUUID):
+        parentNode = self.getNodeByUUID(self.getTerminalOwner(terminalUUID))
+        return parentNode.terminals[terminalUUID].varType
 
 
 class terminal:
@@ -362,7 +377,7 @@ class StringArrayControl(LVNode):
 class StringArrayIndicator(LVNode):
     def __init__(self, name):
         LVNode.__init__(self, name)
-        self.attributes["type"] = "String Array Control"
+        self.attributes["type"] = "String Array Indicator"
         self.varType = "1DSTRINGARRAY"
         LVNode.addTerminal(self, name, True)
         self.value = []
@@ -468,6 +483,8 @@ def getIndicatorNodeByVarType(varName, varType):
             return NumericIndicator(varName, "Double Precision")
         case "STRING":
             return StringIndicator(varName)
+        case "1DSTRINGARRAY":
+            return StringArrayIndicator(varName)
         case "BOOL":
             return BoolIndicator(varName)
     return LVNode(varName)

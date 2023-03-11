@@ -7,5 +7,7 @@ func main() {
 
 	arr = append(arr, "f")
 
+	arr = append(arr, "g")
+
 	fmt.Println(arr)
 }

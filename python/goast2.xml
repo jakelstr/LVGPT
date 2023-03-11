@@ -108,6 +108,38 @@
 					</Rhs>
 				</RhsArray>
 			</AssignStmt>
+			<AssignStmt>
+				<token>=</token>
+				<LhsArray>
+					<Lhs id="0">
+						<Ident>
+							<name>arr</name>
+						</Ident>
+					</Lhs>
+				</LhsArray>
+				<RhsArray>
+					<Rhs id="0">
+						<CallExpr>
+							<args>
+								<arg>
+									<Ident>
+										<name>arr</name>
+									</Ident>
+								</arg>
+								<arg>
+									<BasicLit>
+										<kind>STRING</kind>
+										<value>g</value>
+									</BasicLit>
+								</arg>
+							</args>
+							<Ident>
+								<name>append</name>
+							</Ident>
+						</CallExpr>
+					</Rhs>
+				</RhsArray>
+			</AssignStmt>
 			<ExprStmt>
 				<CallExpr>
 					<args>

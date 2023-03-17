@@ -22,59 +22,99 @@
 <AssignStmt>
 <token>:=</token>
 <LhsArray>
-<Lhs id="0">num</Lhs>
+<Lhs id="0"><Ident>
+<name>arr</name>
+</Ident>
+</Lhs>
 </LhsArray>
 <RhsArray>
-<Rhs id="0">
-<BasicLit><kind>INT</kind>
-<value>5</value>
-</BasicLit></Rhs>
-</RhsArray>
-<BasicLit>
-<kind>INT</kind>
-<value>5</value>
-</BasicLit>
-</AssignStmt>
-<IfStmt>
-<cond><BinaryExpr><op>&lt;</op><left>num</left><right><BasicLit><kind>INT</kind>
-<value>0</value>
-</BasicLit></right></BinaryExpr></cond><body><BlockStmt>
-<ExprStmt>
-<CallExpr>
-<args><arg><BasicLit><kind>STRING</kind>
-<value>Less than 0</value>
-</BasicLit></arg></args><SelectorExpr>
-<x>fmt</x><sel>Println</sel></SelectorExpr>
-<BasicLit>
-<kind>STRING</kind>
-<value>Less than 0</value>
-</BasicLit>
-</CallExpr>
-</ExprStmt>
-</BlockStmt>
-</body>
-<Ident>
-<name>num</name>
+<Rhs id="0"><CompositeLit>
+<type><ArrayType>
+<type><Ident>
+<name>string</name>
 </Ident>
-<BasicLit>
-<kind>INT</kind>
-<value>0</value>
+</type></ArrayType>
+</type><elts><elt id="0"><BasicLit>
+<kind>STRING</kind>
+<value>a</value>
 </BasicLit>
-<BlockStmt>
+</elt><elt id="1"><BasicLit>
+<kind>STRING</kind>
+<value>b</value>
+</BasicLit>
+</elt><elt id="2"><BasicLit>
+<kind>STRING</kind>
+<value>c</value>
+</BasicLit>
+</elt><elt id="3"><BasicLit>
+<kind>STRING</kind>
+<value>d</value>
+</BasicLit>
+</elt><elt id="4"><BasicLit>
+<kind>STRING</kind>
+<value>e</value>
+</BasicLit>
+</elt></elts></CompositeLit>
+</Rhs>
+</RhsArray>
+</AssignStmt>
+<AssignStmt>
+<token>=</token>
+<LhsArray>
+<Lhs id="0"><Ident>
+<name>arr</name>
+</Ident>
+</Lhs>
+</LhsArray>
+<RhsArray>
+<Rhs id="0"><CallExpr>
+<args><arg><Ident>
+<name>arr</name>
+</Ident>
+</arg><arg><BasicLit>
+<kind>STRING</kind>
+<value>f</value>
+</BasicLit>
+</arg></args><Ident>
+<name>append</name>
+</Ident>
+</CallExpr>
+</Rhs>
+</RhsArray>
+</AssignStmt>
+<AssignStmt>
+<token>=</token>
+<LhsArray>
+<Lhs id="0"><Ident>
+<name>arr</name>
+</Ident>
+</Lhs>
+</LhsArray>
+<RhsArray>
+<Rhs id="0"><CallExpr>
+<args><arg><Ident>
+<name>arr</name>
+</Ident>
+</arg><arg><BasicLit>
+<kind>STRING</kind>
+<value>g</value>
+</BasicLit>
+</arg></args><Ident>
+<name>append</name>
+</Ident>
+</CallExpr>
+</Rhs>
+</RhsArray>
+</AssignStmt>
 <ExprStmt>
 <CallExpr>
-<args><arg><BasicLit><kind>STRING</kind>
-<value>Greater than 10</value>
-</BasicLit></arg></args><SelectorExpr>
+<args><arg><Ident>
+<name>arr</name>
+</Ident>
+</arg></args><SelectorExpr>
 <x>fmt</x><sel>Println</sel></SelectorExpr>
-<BasicLit>
-<kind>STRING</kind>
-<value>Greater than 10</value>
-</BasicLit>
 </CallExpr>
 </ExprStmt>
-</BlockStmt>
-</IfStmt>
 </BlockStmt>
 </FuncDecl>
 </File>

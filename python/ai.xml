@@ -2,13 +2,58 @@
 	<vi>
 		<bd name="test">
 			<nodes>
-				<node xPos="0" yPos="0" name="num" type="Numeric Control" numericType="Quad" parentDiagram="75cb94f1-26aa-4f6f-9bae-032fb561b22e" value="5">
+				<node xPos="0" yPos="0" name="arr" type="String Array Control" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+					<values>
+						<value>a</value>
+						<value>b</value>
+						<value>c</value>
+						<value>d</value>
+						<value>e</value>
+					</values>
 					<terminals>
-						<terminal id="1e48a530-cbe3-4765-9e4f-181adbfc6450" name="num" />
+						<terminal id="303dc415-df4f-4f35-a004-07791cb8e4a8" name="arr" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="50" value="f" name="const" type="String Constant" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+					<terminals>
+						<terminal id="5fd383b1-a14f-47b6-972e-1b70cc3eed26" name="const" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="100" name="insertintoarray" type="Insert Into Array" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+					<terminals>
+						<terminal id="9e1136e0-c340-4a08-9402-62ef99ff2620" name="n-dim array" />
+						<terminal id="2a86a376-ed89-42cc-b194-88e5dd135974" name="index 0" />
+						<terminal id="044e7be5-b43d-4278-b74d-eb7e9cd5eab5" name="n or n-1 dim array" />
+						<terminal id="bb7ea2ea-89b7-4f60-ba19-fc1efeec698f" name="output array" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="150" value="g" name="const2" type="String Constant" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+					<terminals>
+						<terminal id="6b7be837-e321-41b0-abee-efd45d47916e" name="const2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="200" name="insertintoarray2" type="Insert Into Array" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+					<terminals>
+						<terminal id="bb0c41bf-3432-418e-8d30-36a1abd86739" name="n-dim array" />
+						<terminal id="0bb7425f-3ccd-43da-b7c9-96f62bf41d15" name="index 0" />
+						<terminal id="c9f82871-371a-4ed0-a674-de34e174b005" name="n or n-1 dim array" />
+						<terminal id="6e6ba57a-feab-4b6a-8ce5-8c4175a9036a" name="output array" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="250" name="arr Out" type="String Array Indicator" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+					<values />
+					<terminals>
+						<terminal id="72a5ae5c-5b46-4513-b783-8e3cf2850127" name="arr Out" />
 					</terminals>
 				</node>
 			</nodes>
-			<wires />
+			<wires>
+				<wire id="5b465be9-df3a-4bb6-888d-7b030aaca239" from="303dc415-df4f-4f35-a004-07791cb8e4a8" to="9e1136e0-c340-4a08-9402-62ef99ff2620" />
+				<wire id="f4ec7aad-eb3f-481e-9c32-7101f56fba96" from="5fd383b1-a14f-47b6-972e-1b70cc3eed26" to="044e7be5-b43d-4278-b74d-eb7e9cd5eab5" />
+				<wire id="ed9b56de-9bf0-4afa-8810-1fe0979c121b" from="bb7ea2ea-89b7-4f60-ba19-fc1efeec698f" to="bb0c41bf-3432-418e-8d30-36a1abd86739" />
+				<wire id="c5f88a2b-1ec3-4c2b-a1ab-b08be085c315" from="6b7be837-e321-41b0-abee-efd45d47916e" to="c9f82871-371a-4ed0-a674-de34e174b005" />
+				<wire id="3fd093e1-b618-4349-a1de-b2318f32e15c" from="6e6ba57a-feab-4b6a-8ce5-8c4175a9036a" to="72a5ae5c-5b46-4513-b783-8e3cf2850127" />
+			</wires>
 		</bd>
 	</vi>
 </vis>

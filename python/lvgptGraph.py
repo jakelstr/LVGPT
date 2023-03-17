@@ -3,19 +3,18 @@ import uuid
 class LVGraph:
     def __init__(self):
         #nodes is nodeUUID->LVNode, terminals is terminalUUID->nodeUUID, nodeNames is nodeName->nodeUUID
-        self.graph = {"nodes":{}, "terminals":{}, "nodeNames":{}}
+        self.graph = {"nodes":{}, "terminals":{}, "nodeNames":{}, "symbolTable":{}}
         self.diagramUUID = ""
 
     def addNode(self, node):
         if node.name in self.graph["nodeNames"]:
-            return False
-        else:
-            node.attributes["parentDiagram"] = self.diagramUUID
-            self.graph["nodeNames"][node.name] = node.uuid
-            self.graph["nodes"][node.uuid] = node
-            for termUUID in node.terminals:
-                self.graph["terminals"][termUUID] = node.uuid
-        return True
+            node.name = self.getAvailableNodeName(node.name)
+        node.attributes["parentDiagram"] = self.diagramUUID
+        self.graph["nodeNames"][node.name] = node.uuid
+        self.graph["nodes"][node.uuid] = node
+        for termUUID in node.terminals:
+            self.graph["terminals"][termUUID] = node.uuid
+        
     def getAvailableNodeName(self, desiredName):
         if desiredName not in self.graph["nodeNames"]:
             return desiredName
@@ -73,6 +72,22 @@ class LVGraph:
         termUUID = node.addTerminal()
         self.graph["terminals"][termUUID] = nodeUUID
 
+    def addSymbolTableEntry(self, symbolName, terminalUUID):
+        if self.diagramUUID not in self.graph["symbolTable"]:
+            self.graph["symbolTable"][self.diagramUUID] = {}
+        self.graph["symbolTable"][self.diagramUUID][symbolName] = terminalUUID
+    
+    def getTerminalFromSymbolTable(self, symbolName):
+        return self.graph["symbolTable"][self.diagramUUID][symbolName]
+    
+    def setTerminalVarType(self, terminalUUID, varType):
+        parentNode = self.getNodeByUUID(self.getTerminalOwner(terminalUUID))
+        parentNode.terminals[terminalUUID].varType = varType
+
+    def getTerminalVarType(self, terminalUUID):
+        parentNode = self.getNodeByUUID(self.getTerminalOwner(terminalUUID))
+        return parentNode.terminals[terminalUUID].varType
+
 
 class terminal:
     def __init__(self, name):
@@ -80,6 +95,7 @@ class terminal:
         self.name = name
         self.isInput = True
         self.edges = []
+        self.varType = None
 class wire:
     def __init__(self, fromUUID, toUUID):
         self.uuid = str(uuid.uuid4())
@@ -93,11 +109,15 @@ class LVNode:
         self.name = name
         self.attributes = {"name" : name}
         self.isIndicator = False
-        self.varType = "NULL"
+        self.varType = None
 
-    def addTerminal(self, name, isInput=True):
+    def addTerminal(self, name, isInput=True, varType=None):
         term = terminal(name)
         term.isInput = isInput
+        if varType is None:
+            term.varType = self.varType
+        else:
+            term.varType = varType
         self.terminals[term.uuid] = term
         return term.uuid
 
@@ -111,55 +131,99 @@ class LVNode:
 class NumericControl(LVNode):
     def __init__(self, name, numType):
         LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name, False)
         self.attributes["type"] = "Numeric Control"
         self.attributes["numericType"] = numType
         self.varType = numType
+        LVNode.addTerminal(self, name, False)
     def setValue(self, val):
-        self.attributes["value"] = val
+        self.value = val
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
+    
+class NumericConstant(LVNode):
+    def __init__(self, name, numType):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "Numeric Constant"
+        self.attributes["numericType"] = numType
+        self.varType = numType
+        LVNode.addTerminal(self, name, False)
+    def setValue(self, val):
+        self.value = val
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
 
 class NumericIndicator(LVNode):
     def __init__(self, name, numType):
         LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name)
         self.attributes["type"] = "Numeric Indicator"
         self.attributes["numericType"] = numType
         self.varType = numType
         self.isIndicator = True
+        LVNode.addTerminal(self, name)
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
     
 class StringControl(LVNode):
     def __init__(self, name):
         LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name, False)
         self.attributes["type"] = "String Control"
         self.varType = "STRING"
+        LVNode.addTerminal(self, name, False)
     def setValue(self, val):
-        self.attributes["value"] = val
+        self.value = val
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
     
 class StringConstant(LVNode):
     def __init__(self, name):
         LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name, False)
         self.attributes["type"] = "String Constant"
         self.varType = "STRING"
+        LVNode.addTerminal(self, name, False)
     def setValue(self, val):
-        self.attributes["value"] = val
+        self.value = val
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
 
 class StringIndicator(LVNode):
     def __init__(self, name):
         LVNode.__init__(self, name)
-        LVNode.addTerminal(self, name)
         self.attributes["type"] = "String Indicator"
         self.isIndicator = True
         self.varType = "STRING"
+        LVNode.addTerminal(self, name)
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
+    
+class BoolConstant(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "Bool Constant"
+        self.varType = "BOOL"
+        LVNode.addTerminal(self, name, False)
+    def setValue(self, val):
+        self.value = val
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
+
+class BoolControl(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "Bool Control"
+        self.varType = "BOOL"
+        LVNode.addTerminal(self, name, False)
+    def setValue(self, val):
+        self.value = val
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
+    
+class BoolIndicator(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "Bool Indicator"
+        self.isIndicator = True
+        self.varType = "BOOL"
+        LVNode.addTerminal(self, name)
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
 
@@ -214,6 +278,19 @@ class DivideNode(LVNode):
         leftTerm = LVNode.getTerminalByName(self, "x")
         rightTerm = LVNode.getTerminalByName(self, "y")
         return (leftTerm, rightTerm, outputTerm)
+    
+class GreaterOrEqualNode(LVNode):
+    def  __init__(self):
+        LVNode.__init__(self, "divide")
+        LVNode.addTerminal(self, "x")
+        LVNode.addTerminal(self, "y")
+        LVNode.addTerminal(self, "x >= y?", False, "BOOL")
+        self.attributes["type"] = "Greater Or Equal"
+    def getTerms(self):
+        outputTerm = LVNode.getTerminalByName(self, "x >= y?")
+        leftTerm = LVNode.getTerminalByName(self, "x")
+        rightTerm = LVNode.getTerminalByName(self, "y")
+        return (leftTerm, rightTerm, outputTerm)
 
 class ConcatenateStringsNode(LVNode):
     def  __init__(self):
@@ -241,13 +318,72 @@ class FormatIntoStringsNode(LVNode):
         self.attributes["type"] = "Format Into String"
         self.attributes["nodes"] = "1"
     def getTerms(self):
-        outputTerm = LVNode.getTerminalByName(self, "concatenated string")
+        outputTerm = LVNode.getTerminalByName(self, "resulting string")
         return (None, None, outputTerm)
     def addTerminal(self):
         self.attributes["nodes"] = str(int(self.attributes["nodes"]) + 1)
         return LVNode.addTerminal(self, "input " + str(int(self.attributes["nodes"])))
     def getInputTerms(self):
         return [item for item in self.terminals.values() if "input" in item.name]
+    
+class SelectNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "select")
+        LVNode.addTerminal(self, "t")
+        LVNode.addTerminal(self, "s", varType="BOOL")
+        LVNode.addTerminal(self, "f")
+        LVNode.addTerminal(self, "s? t:f", False)
+        self.attributes["type"] = "Select"
+    def getTerms(self):
+        trueTerm = LVNode.getTerminalByName(self, "t")
+        selectorTerm = LVNode.getTerminalByName(self, "s")
+        falseTerm = LVNode.getTerminalByName(self, "f")
+        outputTerm = LVNode.getTerminalByName(self, "s? t:f")
+        return (trueTerm, selectorTerm, falseTerm, outputTerm)
+    
+class InsertIntoArrayNode(LVNode):
+    def __init__(self, nodeName):
+        LVNode.__init__(self, nodeName)
+        LVNode.addTerminal(self, "n-dim array", varType=None)
+        LVNode.addTerminal(self, "index 0", varType="QUAD")
+        LVNode.addTerminal(self, "n or n-1 dim array", varType=None)
+        LVNode.addTerminal(self, "output array", False)
+        self.attributes["type"] = "Insert Into Array"
+    def getTerms(self):
+        inputTerm = LVNode.getTerminalByName(self, "n-dim array")
+        positionTerm = LVNode.getTerminalByName(self, "index 0")
+        newItemTerm = LVNode.getTerminalByName(self, "n or n-1 dim array")
+        outputTerm = LVNode.getTerminalByName(self, "output array")
+        return (inputTerm, positionTerm, newItemTerm, outputTerm)
+    
+class StringArrayControl(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "String Array Control"
+        self.varType = "1DSTRINGARRAY"
+        LVNode.addTerminal(self, name, False)
+        self.value = []
+    def setValue(self, index, val):
+        if index >= 0:
+            if index == len(self.value):
+                #this is a new element at the end, so append
+                self.value.append(val)
+            elif index < len(self.value):
+                self.value[index] = val
+
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
+    
+class StringArrayIndicator(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "String Array Indicator"
+        self.varType = "1DSTRINGARRAY"
+        LVNode.addTerminal(self, name, True)
+        self.value = []
+
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
 
 class var:
     def __init__(self, name, value, varType):
@@ -283,6 +419,40 @@ def getControlNodeByVarType(varName, varType):
             return NumericControl(varName, "Double Precision")
         case "STRING":
             return StringControl(varName)
+        case "BOOL":
+            return BoolControl(varName)
+    return LVNode(varName)
+
+def getConstantNodeByVarType(varName, varType):
+    match varType.upper():
+        case "INT":
+            return NumericConstant(varName, "Quad")
+        case "INT8":
+            return NumericConstant(varName, "Byte")
+        case "INT16":
+            return NumericConstant(varName, "Word")
+        case "INT32":
+            return NumericConstant(varName, "Long")
+        case "INT64":
+            return NumericConstant(varName, "Quad")
+        case "UINT":
+            return NumericConstant(varName, "Unsigned Quad")
+        case "UINT8":
+            return NumericConstant(varName, "Unsigned Byte")
+        case "UINT16":
+            return NumericConstant(varName, "Unsigned Word")
+        case "UINT32":
+            return NumericConstant(varName, "Unsigned Long")
+        case "UINT64":
+            return NumericConstant(varName, "Unsigned Quad")
+        case "FLOAT32":
+            return NumericConstant(varName, "Single Precision")
+        case "FLOAT64":
+            return NumericConstant(varName, "Double Precision")
+        case "STRING":
+            return StringConstant(varName)
+        case "BOOL":
+            return BoolConstant(varName)
     return LVNode(varName)
 
 def getIndicatorNodeByVarType(varName, varType):
@@ -313,4 +483,40 @@ def getIndicatorNodeByVarType(varName, varType):
             return NumericIndicator(varName, "Double Precision")
         case "STRING":
             return StringIndicator(varName)
+        case "1DSTRINGARRAY":
+            return StringArrayIndicator(varName)
+        case "BOOL":
+            return BoolIndicator(varName)
+    return LVNode(varName)
+
+def getArrayControlNodeByVarType(varName, varType):
+    match varType.upper():
+        case "INT":
+            return NumericControl(varName, "Quad")
+        case "INT8":
+            return NumericControl(varName, "Byte")
+        case "INT16":
+            return NumericControl(varName, "Word")
+        case "INT32":
+            return NumericControl(varName, "Long")
+        case "INT64":
+            return NumericControl(varName, "Quad")
+        case "UINT":
+            return NumericControl(varName, "Unsigned Quad")
+        case "UINT8":
+            return NumericControl(varName, "Unsigned Byte")
+        case "UINT16":
+            return NumericControl(varName, "Unsigned Word")
+        case "UINT32":
+            return NumericControl(varName, "Unsigned Long")
+        case "UINT64":
+            return NumericControl(varName, "Unsigned Quad")
+        case "FLOAT32":
+            return NumericControl(varName, "Single Precision")
+        case "FLOAT64":
+            return NumericControl(varName, "Double Precision")
+        case "STRING":
+            return StringArrayControl(varName)
+        case "BOOL":
+            return BoolControl(varName)
     return LVNode(varName)

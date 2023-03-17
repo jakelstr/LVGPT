@@ -3,11 +3,11 @@ package main
 import "fmt"
 
 func main() {
-	num := 5
+	arr := []string{"a", "b", "c", "d", "e"}
 
-	if num < 0 {
-		fmt.Println("Less than 0")
-	} else {
-		fmt.Println("Greater than 10")
-	}
+	arr = append(arr, "f")
+
+	arr = append(arr, "g")
+
+	fmt.Println(arr)
 }

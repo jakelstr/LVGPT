@@ -1,4 +1,5 @@
 import uuid
+import xml.etree.ElementTree as ET
 
 class LVGraph:
     def __init__(self):
@@ -126,6 +127,23 @@ class LVNode:
             if self.terminals[t].name == name:
                 return self.terminals[t]
         return None
+    
+    def writeNodeToXML(self, index):
+        rootElem = ET.Element("node")
+        rootElem.attrib["xPos"] = "0"
+        rootElem.attrib["yPos"] = str(index * 50)
+        if hasattr(self, "value") and self.value is not None:
+            rootElem.attrib["value"] = self.value
+        for attrib in self.attributes:
+            rootElem.attrib[attrib] = self.attributes[attrib]
+        terminalsElem = ET.Element("terminals")
+        for term in self.terminals:
+            termElem = ET.Element("terminal")
+            termElem.attrib["id"] = self.terminals[term].uuid
+            termElem.attrib["name"] = self.terminals[term].name
+            terminalsElem.append(termElem)
+        rootElem.append(terminalsElem)
+        return rootElem
 
 
 class NumericControl(LVNode):
@@ -374,6 +392,28 @@ class StringArrayControl(LVNode):
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
     
+    def writeNodeToXML(self, index):
+        rootElem = ET.Element("node")
+        rootElem.attrib["xPos"] = "0"
+        rootElem.attrib["yPos"] = str(index * 50)
+        
+        valuesElem = ET.Element("values")
+        for v in self.value:
+            valueElem = ET.Element("value")
+            valueElem.text = v
+            valuesElem.append(valueElem)
+        rootElem.append(valuesElem)
+        for attrib in self.attributes:
+            rootElem.attrib[attrib] = self.attributes[attrib]
+        terminalsElem = ET.Element("terminals")
+        for term in self.terminals:
+            termElem = ET.Element("terminal")
+            termElem.attrib["id"] = self.terminals[term].uuid
+            termElem.attrib["name"] = self.terminals[term].name
+            terminalsElem.append(termElem)
+        rootElem.append(terminalsElem)
+        return rootElem
+    
 class StringArrayIndicator(LVNode):
     def __init__(self, name):
         LVNode.__init__(self, name)
@@ -384,6 +424,75 @@ class StringArrayIndicator(LVNode):
 
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
+    
+    def writeNodeToXML(self, index):
+        rootElem = ET.Element("node")
+        rootElem.attrib["xPos"] = "0"
+        rootElem.attrib["yPos"] = str(index * 50)
+        
+        valuesElem = ET.Element("values")
+        for v in self.value:
+            valueElem = ET.Element("value")
+            valueElem.text = v
+            valuesElem.append(valueElem)
+        rootElem.append(valuesElem)
+        for attrib in self.attributes:
+            rootElem.attrib[attrib] = self.attributes[attrib]
+        terminalsElem = ET.Element("terminals")
+        for term in self.terminals:
+            termElem = ET.Element("terminal")
+            termElem.attrib["id"] = self.terminals[term].uuid
+            termElem.attrib["name"] = self.terminals[term].name
+            terminalsElem.append(termElem)
+        rootElem.append(terminalsElem)
+        return rootElem
+    
+class CaseSelector(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "Case Structure"
+        LVNode.addTerminal(self, "case selector external")
+        LVNode.addTerminal(self, "case selector internal")
+        self.subdiagrams = {}
+        self.printTunnels = {}
+
+    def getCaseSelectorExternal(self):
+        return LVNode.getTerminalByName(self, "case selector external")
+    def getCaseSelectorInternal(self):
+        return LVNode.getTerminalByName(self, "case selector internal")
+    def addSubdiagram(self, subDiagramCase):
+        subDiagramUUID = str(uuid.uuid4())
+        self.subdiagrams[subDiagramUUID] = subDiagramCase
+        return subDiagramUUID
+    def addPrintTunnel(self, terminalUUID, caseUUID):
+        if caseUUID in self.printTunnels:
+            self.printTunnels[caseUUID].append(terminalUUID)
+        else:
+            self.printTunnels[caseUUID] = [terminalUUID]
+
+    def writeNodeToXML(self, index):
+        rootElem = ET.Element("node")
+        rootElem.attrib["xPos"] = "0"
+        rootElem.attrib["yPos"] = str(index * 50)
+        
+        casesElem = ET.Element("cases")
+        for subD in self.subdiagrams:
+            caseElem = ET.Element("case")
+            caseElem.attrib["caseName"] = self.subdiagrams[subD]
+            caseElem.attrib["caseUUID"] = subD
+            casesElem.append(caseElem)
+        rootElem.append(casesElem)
+        for attrib in self.attributes:
+            rootElem.attrib[attrib] = self.attributes[attrib]
+        terminalsElem = ET.Element("terminals")
+        for term in self.terminals:
+            termElem = ET.Element("terminal")
+            termElem.attrib["id"] = self.terminals[term].uuid
+            termElem.attrib["name"] = self.terminals[term].name
+            terminalsElem.append(termElem)
+        rootElem.append(terminalsElem)
+        return rootElem
+    
 
 class var:
     def __init__(self, name, value, varType):

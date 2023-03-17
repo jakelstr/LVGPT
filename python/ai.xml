@@ -1,58 +1,42 @@
 <vis>
 	<vi>
-		<bd name="test">
+		<bd name="test" diagramUUID="52148b77-77c8-4cc1-8ff4-4ac5b1c6d8dc">
 			<nodes>
-				<node xPos="0" yPos="0" name="arr" type="String Array Control" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
-					<values>
-						<value>a</value>
-						<value>b</value>
-						<value>c</value>
-						<value>d</value>
-						<value>e</value>
-					</values>
+				<node xPos="0" yPos="0" value="b" name="letter" type="String Control" parentDiagram="52148b77-77c8-4cc1-8ff4-4ac5b1c6d8dc">
 					<terminals>
-						<terminal id="303dc415-df4f-4f35-a004-07791cb8e4a8" name="arr" />
+						<terminal id="a9ce20be-08fe-4bbd-a6c1-ee2e9e9b4b30" name="letter" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="50" value="f" name="const" type="String Constant" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+				<node xPos="0" yPos="50" value="1" name="const" type="String Constant" parentDiagram="f9c9aa52-f75b-4594-ba18-84a16f2dcbb4">
 					<terminals>
-						<terminal id="5fd383b1-a14f-47b6-972e-1b70cc3eed26" name="const" />
+						<terminal id="9cda50b4-e458-441b-831a-19687b42f0b2" name="const" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="100" name="insertintoarray" type="Insert Into Array" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+				<node xPos="0" yPos="100" value="2" name="const2" type="String Constant" parentDiagram="f8d9936e-91d4-4420-9c12-27a2933d21e9">
 					<terminals>
-						<terminal id="9e1136e0-c340-4a08-9402-62ef99ff2620" name="n-dim array" />
-						<terminal id="2a86a376-ed89-42cc-b194-88e5dd135974" name="index 0" />
-						<terminal id="044e7be5-b43d-4278-b74d-eb7e9cd5eab5" name="n or n-1 dim array" />
-						<terminal id="bb7ea2ea-89b7-4f60-ba19-fc1efeec698f" name="output array" />
+						<terminal id="f5a45c87-2d2c-4abd-84af-6b94f101a9e0" name="const2" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="150" value="g" name="const2" type="String Constant" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+				<node xPos="0" yPos="150" name="case" type="Case Structure" parentDiagram="52148b77-77c8-4cc1-8ff4-4ac5b1c6d8dc">
+					<cases>
+						<case caseName="a" caseUUID="f9c9aa52-f75b-4594-ba18-84a16f2dcbb4" />
+						<case caseName="b" caseUUID="f8d9936e-91d4-4420-9c12-27a2933d21e9" />
+					</cases>
 					<terminals>
-						<terminal id="6b7be837-e321-41b0-abee-efd45d47916e" name="const2" />
+						<terminal id="e471b777-b7cc-4b0c-9d37-dd8ca5c10f63" name="case selector external" />
+						<terminal id="504ec051-73dd-4e3a-9e25-998ff2cbd828" name="case selector internal" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="200" name="insertintoarray2" type="Insert Into Array" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
+				<node xPos="0" yPos="200" name="output" type="String Indicator" parentDiagram="52148b77-77c8-4cc1-8ff4-4ac5b1c6d8dc">
 					<terminals>
-						<terminal id="bb0c41bf-3432-418e-8d30-36a1abd86739" name="n-dim array" />
-						<terminal id="0bb7425f-3ccd-43da-b7c9-96f62bf41d15" name="index 0" />
-						<terminal id="c9f82871-371a-4ed0-a674-de34e174b005" name="n or n-1 dim array" />
-						<terminal id="6e6ba57a-feab-4b6a-8ce5-8c4175a9036a" name="output array" />
-					</terminals>
-				</node>
-				<node xPos="0" yPos="250" name="arr Out" type="String Array Indicator" parentDiagram="d5630e38-575d-413d-9a14-4d87a6cfa183">
-					<values />
-					<terminals>
-						<terminal id="72a5ae5c-5b46-4513-b783-8e3cf2850127" name="arr Out" />
+						<terminal id="83608e7f-878f-44b0-bf27-09b8ebbbaa3f" name="output" />
 					</terminals>
 				</node>
 			</nodes>
 			<wires>
-				<wire id="5b465be9-df3a-4bb6-888d-7b030aaca239" from="303dc415-df4f-4f35-a004-07791cb8e4a8" to="9e1136e0-c340-4a08-9402-62ef99ff2620" />
-				<wire id="f4ec7aad-eb3f-481e-9c32-7101f56fba96" from="5fd383b1-a14f-47b6-972e-1b70cc3eed26" to="044e7be5-b43d-4278-b74d-eb7e9cd5eab5" />
-				<wire id="ed9b56de-9bf0-4afa-8810-1fe0979c121b" from="bb7ea2ea-89b7-4f60-ba19-fc1efeec698f" to="bb0c41bf-3432-418e-8d30-36a1abd86739" />
-				<wire id="c5f88a2b-1ec3-4c2b-a1ab-b08be085c315" from="6b7be837-e321-41b0-abee-efd45d47916e" to="c9f82871-371a-4ed0-a674-de34e174b005" />
-				<wire id="3fd093e1-b618-4349-a1de-b2318f32e15c" from="6e6ba57a-feab-4b6a-8ce5-8c4175a9036a" to="72a5ae5c-5b46-4513-b783-8e3cf2850127" />
+				<wire id="cb3f0e60-0bb8-45e7-8169-aec6b4cc08cc" from="a9ce20be-08fe-4bbd-a6c1-ee2e9e9b4b30" to="e471b777-b7cc-4b0c-9d37-dd8ca5c10f63" />
+				<wire id="23d0e27a-92a4-4d89-aa68-57eabd9cdfa5" from="9cda50b4-e458-441b-831a-19687b42f0b2" to="83608e7f-878f-44b0-bf27-09b8ebbbaa3f" />
+				<wire id="a5df7339-fcc3-4af9-8fe2-589f6a07a8ce" from="f5a45c87-2d2c-4abd-84af-6b94f101a9e0" to="83608e7f-878f-44b0-bf27-09b8ebbbaa3f" />
 			</wires>
 		</bd>
 	</vi>

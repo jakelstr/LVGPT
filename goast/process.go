@@ -253,6 +253,19 @@ func processNode(n ast.Node) string {
 				fmt.Printf("Unknown token type: %s\n", x.Tok)
 			}
 		}
+
+	case *ast.CaseClause:
+		retString += fmt.Sprint("<cases>")
+		for _, c := range x.List {
+			retString += fmt.Sprintf("<case>%s</case>", walkNode(c))
+		}
+		retString += fmt.Sprint("</cases>")
+		retString += fmt.Sprint("<body>")
+		for _, b := range x.Body {
+			retString += fmt.Sprintf("%s", walkNode(b))
+		}
+		retString += fmt.Sprint("</body>")
+
 	case *ast.BinaryExpr:
 		retString += findBottomBinaryExpr(x)
 

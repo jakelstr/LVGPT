@@ -3,11 +3,12 @@ package main
 import "fmt"
 
 func main() {
-	arr := []string{"a", "b", "c", "d", "e"}
+	letter := "b"
+	switch letter {
+	case "a":
+		fmt.Println("1")
+	case "b":
+		fmt.Println("2")
 
-	arr = append(arr, "f")
-
-	arr = append(arr, "g")
-
-	fmt.Println(arr)
+	}
 }

@@ -23,98 +23,57 @@
 <token>:=</token>
 <LhsArray>
 <Lhs id="0"><Ident>
-<name>arr</name>
+<name>letter</name>
 </Ident>
 </Lhs>
 </LhsArray>
 <RhsArray>
-<Rhs id="0"><CompositeLit>
-<type><ArrayType>
-<type><Ident>
-<name>string</name>
-</Ident>
-</type></ArrayType>
-</type><elts><elt id="0"><BasicLit>
-<kind>STRING</kind>
-<value>a</value>
-</BasicLit>
-</elt><elt id="1"><BasicLit>
+<Rhs id="0"><BasicLit>
 <kind>STRING</kind>
 <value>b</value>
 </BasicLit>
-</elt><elt id="2"><BasicLit>
-<kind>STRING</kind>
-<value>c</value>
-</BasicLit>
-</elt><elt id="3"><BasicLit>
-<kind>STRING</kind>
-<value>d</value>
-</BasicLit>
-</elt><elt id="4"><BasicLit>
-<kind>STRING</kind>
-<value>e</value>
-</BasicLit>
-</elt></elts></CompositeLit>
 </Rhs>
 </RhsArray>
 </AssignStmt>
-<AssignStmt>
-<token>=</token>
-<LhsArray>
-<Lhs id="0"><Ident>
-<name>arr</name>
+<SwitchStmt>
+<tag><Ident>
+<name>letter</name>
 </Ident>
-</Lhs>
-</LhsArray>
-<RhsArray>
-<Rhs id="0"><CallExpr>
-<args><arg><Ident>
-<name>arr</name>
-</Ident>
-</arg><arg><BasicLit>
+</tag><body><BlockStmt>
+<CaseClause>
+<cases><case><BasicLit>
 <kind>STRING</kind>
-<value>f</value>
+<value>a</value>
 </BasicLit>
-</arg></args><Ident>
-<name>append</name>
-</Ident>
-</CallExpr>
-</Rhs>
-</RhsArray>
-</AssignStmt>
-<AssignStmt>
-<token>=</token>
-<LhsArray>
-<Lhs id="0"><Ident>
-<name>arr</name>
-</Ident>
-</Lhs>
-</LhsArray>
-<RhsArray>
-<Rhs id="0"><CallExpr>
-<args><arg><Ident>
-<name>arr</name>
-</Ident>
-</arg><arg><BasicLit>
-<kind>STRING</kind>
-<value>g</value>
-</BasicLit>
-</arg></args><Ident>
-<name>append</name>
-</Ident>
-</CallExpr>
-</Rhs>
-</RhsArray>
-</AssignStmt>
-<ExprStmt>
+</case></cases><body><ExprStmt>
 <CallExpr>
-<args><arg><Ident>
-<name>arr</name>
-</Ident>
+<args><arg><BasicLit>
+<kind>STRING</kind>
+<value>1</value>
+</BasicLit>
 </arg></args><SelectorExpr>
 <x>fmt</x><sel>Println</sel></SelectorExpr>
 </CallExpr>
 </ExprStmt>
+</body></CaseClause>
+<CaseClause>
+<cases><case><BasicLit>
+<kind>STRING</kind>
+<value>b</value>
+</BasicLit>
+</case></cases><body><ExprStmt>
+<CallExpr>
+<args><arg><BasicLit>
+<kind>STRING</kind>
+<value>2</value>
+</BasicLit>
+</arg></args><SelectorExpr>
+<x>fmt</x><sel>Println</sel></SelectorExpr>
+</CallExpr>
+</ExprStmt>
+</body></CaseClause>
+</BlockStmt>
+</body></SwitchStmt>
 </BlockStmt>
 </FuncDecl>
 </File>

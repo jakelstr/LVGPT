@@ -227,6 +227,36 @@ def getConstantNodeFromBasicLit(basicLit):
     node.setValue(value)
     return node
 
+def processSwitchBody(bodyTag, caseNode):
+    caseClauses = bodyTag.findall("BlockStmt/CaseClause")
+    for c in caseClauses:
+        case = c.find("cases/case")
+        caseUUID = None
+        if case[0].tag == "BasicLit":
+            val = case.find("BasicLit/value").text
+            caseUUID = caseNode.addSubdiagram(val)
+            lvGraph.setDiagram(caseUUID)
+        body = c.find("body")
+        found, node = unaryPrintStmt(body)
+        if found:
+            arg = node.find("args/arg")
+            if arg[0].tag == "BasicLit":
+                constNode = getConstantNodeFromBasicLit(arg[0])
+                lvGraph.addNode(constNode)
+                caseNode.addPrintTunnel(constNode.getTerminal().uuid, caseUUID)
+    return caseNode
+
+def processCaseSelectorPrintTerminals(caseNode):
+    createdOutputNodes = []
+    for x in caseNode.printTunnels:
+        tunnels = caseNode.printTunnels[x]
+        while len(tunnels) > len(createdOutputNodes):
+            newNode = getIndicatorNodeByVarType(lvGraph.getAvailableNodeName("output"), "STRING")
+            lvGraph.addNode(newNode)
+            createdOutputNodes.append(newNode.getTerminal().uuid)
+        for i, t in enumerate(tunnels):
+            lvGraph.addTerminalEdge(t, createdOutputNodes[i])
+
 def processBlockStmtChild(node, blockUUID):
     lvGraph.diagramUUID = blockUUID
     if node.tag == "DeclStmt":
@@ -431,32 +461,20 @@ def processBlockStmtChild(node, blockUUID):
             outNode = getIndicatorNodeByVarType("output", "STRING")
             lvGraph.addNode(outNode)
             lvGraph.addTerminalEdge(outTerm.uuid, outNode.getTerminal().uuid)
-                                    
 
-def writeNodeToXML(node, index):
-    rootElem = ET.Element("node")
-    rootElem.attrib["xPos"] = "0"
-    rootElem.attrib["yPos"] = str(index * 50)
-    if hasattr(node, "value") and node.value is not None:
-        if type(node.value) is not list:
-            rootElem.attrib["value"] = node.value
-        else:
-            valuesElem = ET.Element("values")
-            for v in node.value:
-                valueElem = ET.Element("value")
-                valueElem.text = v
-                valuesElem.append(valueElem)
-            rootElem.append(valuesElem)
-    for attrib in node.attributes:
-        rootElem.attrib[attrib] = node.attributes[attrib]
-    terminalsElem = ET.Element("terminals")
-    for term in node.terminals:
-        termElem = ET.Element("terminal")
-        termElem.attrib["id"] = node.terminals[term].uuid
-        termElem.attrib["name"] = node.terminals[term].name
-        terminalsElem.append(termElem)
-    rootElem.append(terminalsElem)
-    return rootElem
+    elif node.tag == "SwitchStmt":
+        caseSelector = CaseSelector(lvGraph.getAvailableNodeName("case"))
+        processSwitchBody(node.find("body"), caseSelector)
+        lvGraph.setDiagram(blockUUID)
+        lvGraph.addNode(caseSelector)
+        tagNode = node.find("tag")
+        if tagNode[0].tag == "Ident":
+            varName = tagNode.find("Ident/name").text
+            caseTerminalUUID = lvGraph.getTerminalFromSymbolTable(varName)
+            lvGraph.addTerminalEdge(caseTerminalUUID, caseSelector.getCaseSelectorExternal().uuid)
+        processCaseSelectorPrintTerminals(caseSelector)
+        
+                                    
 
 def writeWireToXML(wire):
     rootElem = ET.Element("wire")
@@ -484,11 +502,12 @@ if len(funcDecls) > 0:
         ident = funcDecl.find("Ident/name").text
         if ident == "main":
             bdUUID = str(uuid.uuid4())
+            bdNode.attrib["diagramUUID"] = bdUUID
             mainBlockStmt = funcDecl.find("BlockStmt")
             for node in mainBlockStmt:
                 processBlockStmtChild(node, bdUUID)
             for i, n in enumerate(lvGraph.graph["nodes"]):
-                outputNodesElem.append(writeNodeToXML(lvGraph.graph["nodes"][n], i))
+                outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
             for w in lvGraph.getWires():
                 outputWiresElem.append(writeWireToXML(w))
 bdNode.append(outputNodesElem)

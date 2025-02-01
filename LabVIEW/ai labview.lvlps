@@ -1,2 +1,10 @@
 [ProjectWindow_Data]
+<<<<<<< HEAD
 ProjectExplorer.ClassicPosition[String] = "133,1406,1027,1954"
+=======
+<<<<<<< HEAD
+ProjectExplorer.ClassicPosition[String] = "137,651,987,1375"
+=======
+ProjectExplorer.ClassicPosition[String] = "133,1406,1027,1954"
+>>>>>>> origin/main
+>>>>>>> 268269e (Fixing mixed up labview versions)

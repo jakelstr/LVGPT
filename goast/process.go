@@ -221,16 +221,7 @@ func processNode(n ast.Node) string {
 		retString += fmt.Sprintf("<values>\n")
 		for _, value := range x.Values {
 			retString += fmt.Sprintf("<value>\n")
-			if _, ok := value.(*ast.BinaryExpr); ok {
-				visited[value] = true
-				retString += findBottomBinaryExpr(value)
-				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
-			}
-			if basicLit, ok := value.(*ast.BasicLit); ok {
-				visited[value] = true
-				retString += fmt.Sprintf("<BasicLit>%s</BasicLit>", processBasicLit(*basicLit))
-				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
-			}
+			retString += walkNode(value)
 			retString += fmt.Sprintf("</value>\n")
 		}
 		retString += fmt.Sprintf("</values>\n")

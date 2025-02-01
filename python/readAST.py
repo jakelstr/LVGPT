@@ -247,15 +247,22 @@ def processSwitchBody(bodyTag, caseNode):
     return caseNode
 
 def processCaseSelectorPrintTerminals(caseNode):
-    createdOutputNodes = []
-    for x in caseNode.printTunnels:
+    innerTerms = {}
+    for n, x in enumerate(caseNode.printTunnels):
         tunnels = caseNode.printTunnels[x]
-        while len(tunnels) > len(createdOutputNodes):
+        while len(tunnels) > len(innerTerms):
+            innerTermList = []
             newNode = getIndicatorNodeByVarType(lvGraph.getAvailableNodeName("output"), "STRING")
             lvGraph.addNode(newNode)
-            createdOutputNodes.append(newNode.getTerminal().uuid)
+            tunnelName = "tunnel" + str(len(innerTerms))
+            for it in range(len(caseNode.printTunnels)):
+                innerTermUUID = lvGraph.addTerminalToNode(caseNode.uuid, tunnelName + "InnerTerminal" + str(it))
+                innerTermList.append(innerTermUUID)
+            outerTermUUID = lvGraph.addTerminalToNode(caseNode.uuid, tunnelName + "OuterTerminal")
+            lvGraph.addTerminalEdge(outerTermUUID, newNode.getTerminal().uuid)
+            innerTerms[len(innerTerms)] = innerTermList
         for i, t in enumerate(tunnels):
-            lvGraph.addTerminalEdge(t, createdOutputNodes[i])
+            lvGraph.addTerminalEdge(t, innerTerms[i][n])
 
 def processBlockStmtChild(node, blockUUID):
     lvGraph.diagramUUID = blockUUID
@@ -272,6 +279,8 @@ def processBlockStmtChild(node, blockUUID):
                     arrayType = readArrayType(varTypeNode[0])
                     arrayNode = getArrayControlNodeByVarType(name, arrayType)
                     lvGraph.addNode(arrayNode)
+                elif varTypeNode[0].tag == "Ident":
+                    varType = varTypeNode.find("Ident/name").text
     
             value = None
             varNode = None
@@ -289,6 +298,16 @@ def processBlockStmtChild(node, blockUUID):
                         binExpNode = valueTag.find("BinaryExpr")
                         if binExpNode is not None:
                             addBinaryNodeToLVGraph(binExpNode, name)
+                    case "Ident":
+                        varNode = getConstantNodeByVarType(name, varType)
+                        value = valueTag.find("Ident/name").text
+                        varNode.setValue(value)
+                        lvGraph.addNode(varNode)
+                        lvGraph.addSymbolTableEntry(name, varNode.getTerminal().uuid)
+            else:
+                varNode = getControlNodeByVarType(name, varType)
+                lvGraph.addNode(varNode)
+                lvGraph.addSymbolTableEntry(name, varNode.getTerminal().uuid)
     elif node.tag == "AssignStmt":
         lhsDict = {}
         token = node.find("token").text
@@ -385,8 +404,6 @@ def processBlockStmtChild(node, blockUUID):
                                             lvGraph.setTerminalVarType(inputTerm.uuid, lvGraph.getTerminalVarType(incomingArrayTerminalUUID))
                                             lvGraph.setTerminalVarType(outputTerm.uuid, lvGraph.getTerminalVarType(inputTerm.uuid))
 
-
-
                             
     elif node.tag == "ExprStmt":
         callExpr = node.find("CallExpr")
@@ -461,6 +478,16 @@ def processBlockStmtChild(node, blockUUID):
             outNode = getIndicatorNodeByVarType("output", "STRING")
             lvGraph.addNode(outNode)
             lvGraph.addTerminalEdge(outTerm.uuid, outNode.getTerminal().uuid)
+        else:
+            caseSelector = CaseSelector(lvGraph.getAvailableNodeName("case"))
+            trueCaseUUID = caseSelector.addSubdiagram("True")
+            falseCaseUUID = caseSelector.addSubdiagram("False")
+            lvGraph.addNode(caseSelector)
+            lvGraph.addSubSymbolTable(trueCaseUUID)
+
+            blockStmtTag = node.find("body/BlockStmt")
+            for child in blockStmtTag:
+                processBlockStmtChild(child, trueCaseUUID)
 
     elif node.tag == "SwitchStmt":
         caseSelector = CaseSelector(lvGraph.getAvailableNodeName("case"))
@@ -501,7 +528,7 @@ if len(funcDecls) > 0:
     for funcDecl in funcDecls:
         ident = funcDecl.find("Ident/name").text
         if ident == "main":
-            bdUUID = str(uuid.uuid4())
+            bdUUID = lvGraph.diagramUUID
             bdNode.attrib["diagramUUID"] = bdUUID
             mainBlockStmt = funcDecl.find("BlockStmt")
             for node in mainBlockStmt:

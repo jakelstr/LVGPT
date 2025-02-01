@@ -5,7 +5,9 @@ class LVGraph:
     def __init__(self):
         #nodes is nodeUUID->LVNode, terminals is terminalUUID->nodeUUID, nodeNames is nodeName->nodeUUID
         self.graph = {"nodes":{}, "terminals":{}, "nodeNames":{}, "symbolTable":{}}
-        self.diagramUUID = ""
+        self.diagramUUID = str(uuid.uuid4())
+        self.baseDiagram = self.diagramUUID
+        self.symbolTable = SymbolTable()
 
     def addNode(self, node):
         if node.name in self.graph["nodeNames"]:
@@ -68,18 +70,45 @@ class LVGraph:
                 foreignNode.terminals[e].edges.remove(t.uuid)
         del self.graph["nodes"][nodeUUID]
 
-    def addTerminalToNode(self, nodeUUID):
+    def addTerminalToNode(self, nodeUUID, terminalName=None):
         node = self.graph["nodes"][nodeUUID]
-        termUUID = node.addTerminal()
+        termUUID = None
+        if terminalName is not None:
+            termUUID = node.addTerminal(terminalName)
+        else:
+            termUUID = node.addTerminal()
         self.graph["terminals"][termUUID] = nodeUUID
+        return termUUID
 
     def addSymbolTableEntry(self, symbolName, terminalUUID):
-        if self.diagramUUID not in self.graph["symbolTable"]:
-            self.graph["symbolTable"][self.diagramUUID] = {}
-        self.graph["symbolTable"][self.diagramUUID][symbolName] = terminalUUID
+        if self.diagramUUID == self.baseDiagram:
+            self.symbolTable.children[symbolName] = terminalUUID
+        else:
+            if self.diagramUUID in self.symbolTable.children:
+                subTable = self.symbolTable.children[self.diagramUUID]
+                subTable.children[symbolName] = terminalUUID
+
+    def addSubSymbolTable(self, subDiagramUUID, parentTable=None):
+        if parentTable is None:
+            parentTable = self.symbolTable
+        self.symbolTable.children[subDiagramUUID] = SymbolTable(parentTable)
     
     def getTerminalFromSymbolTable(self, symbolName):
-        return self.graph["symbolTable"][self.diagramUUID][symbolName]
+        symbolObj = None
+        #is there a subtable for this diagramUUID?
+        if self.diagramUUID in self.symbolTable.children:
+            subTable = self.symbolTable.children[self.diagramUUID]
+            if symbolName in subTable.children:
+                symbolObj = subTable.children[symbolName]
+            else:
+                #if the symbol doesn't exist in the subtable, look upward
+                parentTable = subTable.parentTable
+                if symbolName in parentTable.children:
+                    symbolObj = parentTable.children[symbolName]
+        else:
+            if symbolName in self.symbolTable.children:
+                symbolObj = self.symbolTable.children[symbolName]
+        return symbolObj
     
     def setTerminalVarType(self, terminalUUID, varType):
         parentNode = self.getNodeByUUID(self.getTerminalOwner(terminalUUID))
@@ -88,6 +117,12 @@ class LVGraph:
     def getTerminalVarType(self, terminalUUID):
         parentNode = self.getNodeByUUID(self.getTerminalOwner(terminalUUID))
         return parentNode.terminals[terminalUUID].varType
+    
+
+class SymbolTable:
+    def __init__(self, parentTable=None):
+        self.parentTable = parentTable
+        self.children= {}
 
 
 class terminal:

@@ -1,1 +1,1173 @@
-2125, Generic
+.NET Container|Generic,GObject,Control,ActiveXContainer
+.NET Refnum|Generic,GObject,Control,RefNum
+2D Picture|Generic,GObject,Control,Picture
+3D Picture|Generic,GObject,Control,SceneGraphDisplay
+Absolute Value|Generic,GObject,Node,Function
+Accept TLS|Generic,GObject,Node,Function
+Access Rights|Generic,GObject,Node,Function
+ActiveX Container|Generic,GObject,Control,ActiveXContainer
+Add|Generic,GObject,Node,Function
+Add (with error terminals)|Generic,GObject,Node,Function
+Add Array Elements|Generic,GObject,Node,Function
+Add Entropy|Generic,GObject,Node,Function
+Add Private Key To TLS Configuration|Generic,GObject,Node,Function
+Add Trusted Certificate To TLS Configuration|Generic,GObject,Node,Function
+Agitator|Generic,GObject,Decoration
+AllSpoll|Generic,GObject,Node,Function
+Always Copy|Generic,GObject,Node,Function
+And|Generic,GObject,Node,Function
+And Array Elements|Generic,GObject,Node,Function
+Append True/False String|Generic,GObject,Node,Function
+Application Refnum|Generic,GObject,Control,RefNum,LVObjectRefNum
+Array (block diagram constant)|Generic,GObject,Constant,ArrayConstant
+Array (classic)|Generic,GObject,Control,Array
+Array (modern)|Generic,GObject,Control,Array
+Array Interface Control|Generic,GObject,Control,Array
+Array Max & Min|Generic,GObject,Node,Function
+Array of Strings to Path|Generic,GObject,Node,Function
+Array Size|Generic,GObject,Node,Function
+Array Subset|Generic,GObject,Node,GrowableFunction
+Array To Cluster|Generic,GObject,Node,Function,ArrayToCluster
+Array To Spreadsheet String|Generic,GObject,Node,Function
+ArrayMemInfo|Generic,GObject,Node,Function
+Assert Structural Type Match|Generic,GObject,Node,Function
+Assert Structural Type Mismatch|Generic,GObject,Node,GrowableFunction,AssertStructuralTypeMismatchNode
+Atmospheric Tank (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Atmospheric Tank (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Automation Close|Generic,GObject,Node,Function
+Automation Open|Generic,GObject,Node,Function
+Automation Refnum|Generic,GObject,Control,RefNum
+Avogadro Constant (1/mol)|Generic,GObject,Constant,FixedConstant
+Base 10 Logarithm Of e|Generic,GObject,Constant,FixedConstant
+Bin #1|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Bin #2|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Bitpack to Array|Generic,GObject,Node,Function
+Bluetooth Close Connection|Generic,GObject,Node,Function
+Bluetooth Create Listener|Generic,GObject,Node,Function
+Bluetooth Discover|Generic,GObject,Node,Function
+Bluetooth Network Connection Refnum|Generic,GObject,Control,RefNum
+Bluetooth Open Connection|Generic,GObject,Node,Function
+Bluetooth Read|Generic,GObject,Node,Function
+Bluetooth Wait On Listener|Generic,GObject,Node,Function
+Bluetooth Write|Generic,GObject,Node,Function
+Boolean Array To Number|Generic,GObject,Node,Function
+Boolean Constant|Generic,GObject,Constant,BooleanConstant
+Boolean To (0,1)|Generic,GObject,Node,Function
+Build Array|Generic,GObject,Node,GrowableFunction,Bundler,BuildArray
+Build Cluster Array|Generic,GObject,Node,GrowableFunction,BuildClusterArray
+Build Map|Generic,GObject,Node,GrowableFunction,BuildMapNode
+Build Matrix|Generic,GObject,Node,GrowableFunction,Bundler,BuildArray
+Build Path|Generic,GObject,Node,Function
+Build Set|Generic,GObject,Node,GrowableFunction,BuildSetNode
+Build Waveform|Generic,GObject,Node,GrowableFunction,Bundler,NamedBundler
+Bundle|Generic,GObject,Node,GrowableFunction,Bundler
+Bundle By Name|Generic,GObject,Node,GrowableFunction,Bundler,NamedBundler
+Byte Array To String|Generic,GObject,Node,Function
+Byte Array To UTF-8 String|
+Byte Stream File Refnum|Generic,GObject,Control,RefNum
+Call By Reference|Generic,GObject,Node,CallByRef
+Call Chain|Generic,GObject,Node,Function
+Call Library Function Node|Generic,GObject,Node,GrowableFunction,CallLibrary
+Call MATLAB Function|Generic,GObject,Node,GrowableFunction
+Call Parent Class Method|Generic,GObject,Node,SubVI,AbstractDynamicDispatch,CallParentNode
+CAN Channel (block diagram constant)|Generic,GObject,Constant,IONameConstant
+CAN Channel (classic)|Generic,GObject,Control,IOName
+CAN Channel (modern)|Generic,GObject,Control,IOName
+CAN Channel (system)|Generic,GObject,Control,IOName
+CAN Interface (block diagram constant)|Generic,GObject,Constant,IONameConstant
+CAN Interface (classic)|Generic,GObject,Control,IOName
+CAN Interface (modern)|Generic,GObject,Control,IOName
+CAN Interface (system)|Generic,GObject,Control,IOName
+CAN Task (block diagram constant)|Generic,GObject,Constant,IONameConstant,GenClassTagRefConstant
+CAN Task (classic)|Generic,GObject,Control,IOName,GenClassTagRef
+CAN Task (modern)|Generic,GObject,Control,IOName,GenClassTagRef
+CAN Task (system)|Generic,GObject,Control,IOName,GenClassTagRef
+Cancel Button (modern)|Generic,GObject,Control,Boolean
+Cancel Button (system)|Generic,GObject,Control,Boolean
+Cancel Notification|Generic,GObject,Node,Function
+Carriage Return Constant|Generic,GObject,Constant,FixedConstant
+Case Structure|Generic,GObject,Node,Structure,MultiFrameStructure,CaseStructure
+Cast Unit Bases|Generic,GObject,Node,Function
+Check Valve|Generic,GObject,Decoration
+Checkbox (classic)|Generic,GObject,Control,Boolean
+CheckBox (modern)|Generic,GObject,Control,Boolean
+Checkbox (system)|Generic,GObject,Control,Boolean
+Class Specifier Constant|Generic,GObject,Constant,RefNumConstant,ClassSpecifierConstant
+Classic Color Box|Generic,GObject,Control,ColorBox
+Classic Color Ramp|Generic,GObject,Control,Numeric,ColorRamp
+Classic Horizontal Slide Switch|Generic,GObject,Control,Boolean
+Classic Vertical Slide|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Clear Fixed-Point Overflow Status|Generic,GObject,Node,Function
+Close File|Generic,GObject,Node,Function
+Close File (deprecated)|Generic,GObject,Node,Function
+Close MATLAB Session|Generic,GObject,Node,Function
+Close Python Session|Generic,GObject,Node,Function
+Close Reference|Generic,GObject,Node,Function
+Close TLS Configuration|Generic,GObject,Node,Function
+Close Variable Connection|Generic,GObject,Node,Function
+Closure Structure|Generic,GObject,Node,Structure,ClosureStructureNode
+Cluster (classic)|Generic,GObject,Control,Cluster
+Cluster (modern)|Generic,GObject,Control,Cluster
+Cluster Constant|Generic,GObject,Constant,ClusterConstant
+Cluster To Array|Generic,GObject,Node,Function
+Code Interface Node|Generic,GObject,Node,GrowableFunction,CIN
+Coerce To Type|Generic,GObject,Node,Function
+Collection Size|Generic,GObject,Node,Function
+Color Box Constant|Generic,GObject,Constant,ColorBoxConstant
+Color Box Thin Border|Generic,GObject,Control,ColorBox
+Colored Rectangle (broken?)|Generic,GObject,Decoration
+Combo Box (classic)|Generic,GObject,Control,String,ComboBox
+Combo Box (modern)|Generic,GObject,Control,String,ComboBox
+Combo Box (system)|Generic,GObject,Control,String,ComboBox
+Combo Box Constant|Generic,GObject,Constant,StringConstant,ComboBoxConstant
+Complex Conjugate|Generic,GObject,Node,Function
+Complex To Polar|Generic,GObject,Node,Function
+Complex To Re/Im|Generic,GObject,Node,Function
+Compound Arithmetic|Generic,GObject,Node,GrowableFunction,CompoundArithmetic
+Compressor|Generic,GObject,Decoration
+Concatenate Strings|Generic,GObject,Node,GrowableFunction,Bundler
+Conditional Disable Structure|Generic,GObject,Node,Structure,MultiFrameStructure,DisableStructure
+Constructor Node|Generic,GObject,Node,GrowableFunction,ObjectFunction,Constructor
+Control & Simulation Loop|
+Control Help Window|Generic,GObject,Node,Function
+Control Online Help|Generic,GObject,Node,Function
+Control Refnum|Generic,GObject,Control,RefNum,LVObjectRefNum
+Convert Unit|Generic,GObject,Node,UnitCast
+Conveyer|Generic,GObject,Decoration
+Copy|Generic,GObject,Node,Function
+Copy (deprecated)|Generic,GObject,Node,Function
+Cosecant|Generic,GObject,Node,Function
+Cosine|Generic,GObject,Node,Function
+Cotangent|Generic,GObject,Node,Function
+CPU Information|Generic,GObject,Node,Function
+Create Folder|Generic,GObject,Node,Function
+Create Network Stream Endpoint|Generic,GObject,Node,Function
+Create Network Stream Reader Endpoint|Generic,GObject,Node,Function
+Create Network Stream Writer Endpoint|Generic,GObject,Node,Function
+Create Stream|Generic,GObject,Node,SharedVariableDynamicOpen
+Create Unique Network Stream Endpoint|Generic,GObject,Node,Function
+Create Unique Network Stream Reader Endpoint|Generic,GObject,Node,Function
+Create Unique Network Stream Writer Endpoint|Generic,GObject,Node,Function
+Create User Event|Generic,GObject,Node,Function
+Current Processor ID|Generic,GObject,Node,Function
+Current VI's Menubar|Generic,GObject,Node,Function
+Current VI's Path|Generic,GObject,Node,Function
+DAQmx Analog Trigger Source (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Analog Trigger Source (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Analog Trigger Source (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Analog Trigger Source (system)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Device Name (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Device Name (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Device Name (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Device Name (system)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Global Channel (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Global Channel (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Global Channel (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Global Channel (system)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Physical Channel (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Physical Channel (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Physical Channel (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Physical Channel (system)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Scale Name (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Scale Name (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Scale Name (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Scale Name (system)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Switch (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Switch (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Switch (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Switch (system)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Task Name (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Task Name (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Task Name (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Task Name (system)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Terminal (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQmxNameConstant
+DAQmx Terminal (classic)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Terminal (modern)|Generic,GObject,Control,IOName,DAQmxName
+DAQmx Terminal (system)|Generic,GObject,Control,IOName,DAQmxName
+Data Cache Size|Generic,GObject,Node,Function
+Data Log File Refnum|Generic,GObject,Control,RefNum
+Data Value Reference|Generic,GObject,Control,RefNum,TypedRefNum,DataValRefNum
+Data Value Reference Constant|Generic,GObject,Constant,RefNumConstant,TypedRefNumConstant,DataValRefNumConstant
+DataSocket Close|Generic,GObject,Node,Function
+DataSocket Open|Generic,GObject,Node,Function
+DataSocket Read|Generic,GObject,Node,Function
+DataSocket Refnum|Generic,GObject,Control,RefNum
+DataSocket Write|Generic,GObject,Node,Function
+Date/Time To Seconds|Generic,GObject,Node,Function
+Decimal Digit?|Generic,GObject,Node,Function
+Decimal String To Number|Generic,GObject,Node,Function
+Decimate 1D Array|Generic,GObject,Node,GrowableFunction,Unbundler
+DecomposeLockDataValRef|
+DecomposeVariant|
+Decrement|Generic,GObject,Node,Function
+Default Directory|Generic,GObject,Node,Function
+Delete|Generic,GObject,Node,Function
+Delete (deprecated)|Generic,GObject,Node,Function
+Delete Data Value Reference|Generic,GObject,Node,Function
+Delete From Array|Generic,GObject,Node,GrowableFunction
+Delete Menu Items|Generic,GObject,Node,Function
+Delete Variant Attribute|Generic,GObject,Node,Function
+Delete Waveform Attribute|Generic,GObject,Node,Function
+Deny Access|Generic,GObject,Node,Function
+Dequeue Element|Generic,GObject,Node,Function
+Destroy Stream Endpoint|Generic,GObject,Node,Function
+Destroy User Event|Generic,GObject,Node,Function
+DevClear|Generic,GObject,Node,Function
+DevClearList|Generic,GObject,Node,Function
+Device Control/Status|Generic,GObject,Node,Function
+Device Refnum|Generic,GObject,Control,RefNum
+Diagram Disable Structure|Generic,GObject,Node,Structure,MultiFrameStructure,DisableStructure
+Dial (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Dial (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Digital Data (classic)|Generic,GObject,Control,DigitalTable
+Digital Data (modern)|Generic,GObject,Control,DigitalTable
+Digital Waveform Graph (classic)|Generic,GObject,Control,GraphChart,WaveformGraph,DigitalGraph
+Digital Waveform Graph (modern)|Generic,GObject,Control,GraphChart,WaveformGraph,DigitalGraph
+Direct Variable Read|Generic,GObject,Node,SharedVariableDynamicRead
+Direct Variable Write|Generic,GObject,Node,SharedVariableDynamicWrite
+Divide|Generic,GObject,Node,Function
+Divide (with error terminals)|Generic,GObject,Node,Function
+Dlg Horiz Scrollbar|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Dlg Mac Group Box|Generic,GObject,Decoration
+Dlg Numeric #1|Generic,GObject,Control,Numeric,Digital
+Dlg Numeric #2|Generic,GObject,Control,Numeric,Digital
+Dlg String|Generic,GObject,Control,String
+Dlg Vert Scrollbar|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Down Arrow|Generic,GObject,Decoration
+Down Bow Valve (flat)|Generic,GObject,Decoration
+Down Bow Valve (outline)|Generic,GObject,Decoration
+Down Bow Valve (shaded)|Generic,GObject,Decoration
+Down Rect Valve (flat)|Generic,GObject,Decoration
+Down Rect Valve (outline)|Generic,GObject,Decoration
+Down Rect Valve (shaded)|Generic,GObject,Decoration
+Down Tee (flat)|Generic,GObject,Decoration
+Down Tee (shaded)|Generic,GObject,Decoration
+Dynamic FPGA Interface Cast|Generic,GObject,Node,Function
+Eased Corner Rectangle|Generic,GObject,Decoration
+Element of Set?|Generic,GObject,Node,Function
+Elementary Charge (C)|Generic,GObject,Constant,FixedConstant
+Empty Array?|Generic,GObject,Node,Function
+Empty Collection?|Generic,GObject,Node,Function
+Empty Path Constant|Generic,GObject,Constant,FixedConstant
+Empty String Constant|Generic,GObject,Constant,FixedConstant
+Empty String/Path?|Generic,GObject,Node,Function
+Enable Menu Tracking|Generic,GObject,Node,Function
+EnableLocal|Generic,GObject,Node,Function
+EnableRemote|Generic,GObject,Node,Function
+End of Line Constant|Generic,GObject,Constant,FixedConstant
+Enqueue Element|Generic,GObject,Node,Function
+Enqueue Element At Opposite End|Generic,GObject,Node,Function
+Enum (classic)|Generic,GObject,Control,Numeric,NamedNumeric,Enum
+Enum (modern)|Generic,GObject,Control,Numeric,NamedNumeric,Enum
+Enum (system)|Generic,GObject,Control,Numeric,NamedNumeric,Enum
+Enum Constant|Generic,GObject,Constant,NumericConstant,NamedNumericConstant,EnumConstant
+EOF|Generic,GObject,Node,Function
+Equal To 0?|Generic,GObject,Node,Function
+Equal?|Generic,GObject,Node,Function,Comparison
+Error Ring Constant|
+Event Callback Refnum|Generic,GObject,Control,RefNum
+Event Data Node|
+Event Structure|Generic,GObject,Node,Structure,MultiFrameStructure,EventStructure
+Exchanger|Generic,GObject,Decoration
+Exclusive Or|Generic,GObject,Node,Function
+Exponential|Generic,GObject,Node,Function
+Exponential (Arg) -1|Generic,GObject,Node,Function
+Expression Node|Generic,GObject,Node,TextBaseNode,ExpressionNode
+Feedback Node|Generic,GObject,Node,FeedbackNode
+FieldPoint IO Point (block diagram constant)|Generic,GObject,Constant,IONameConstant,GenClassTagRefConstant
+FieldPoint IO Point (classic)|Generic,GObject,Control,IOName,GenClassTagRef
+FieldPoint IO Point (modern)|Generic,GObject,Control,IOName,GenClassTagRef
+FIFO Refnum|Generic,GObject,Control,RefNum
+File Dialog|Generic,GObject,Node,Function,FileDialog
+File Dialog (deprecated)|Generic,GObject,Node,Function
+File Path Control (classic)|Generic,GObject,Control,Path
+File Path Control (modern)|Generic,GObject,Control,Path
+File Path Control (system)|Generic,GObject,Control,Path
+File Path Indicator (classic)|Generic,GObject,Control,Path
+File Path Indicator (modern)|Generic,GObject,Control,Path
+File/Directory Info|Generic,GObject,Node,Function
+File/Directory Info (deprecated)|Generic,GObject,Node,Function
+FindLstn|Generic,GObject,Node,Function
+FindRQS|Generic,GObject,Node,Function
+First Call?|Generic,GObject,Node,Function
+Fixed-Point Overflow?|Generic,GObject,Node,Function
+Fixed-Point to Integer Cast|Generic,GObject,Node,Function
+Flat Box|Generic,GObject,Decoration
+Flat Circle|Generic,GObject,Decoration
+Flat Down Triangle|Generic,GObject,Decoration
+Flat Frame|Generic,GObject,Decoration
+Flat Left Triangle|Generic,GObject,Decoration
+Flat Right Triangle|Generic,GObject,Decoration
+Flat Round Button|Generic,GObject,Control,Boolean
+Flat Rounded Box|Generic,GObject,Decoration
+Flat Sequence Structure|Generic,GObject,FlatSequence
+Flat Square Button|Generic,GObject,Control,Boolean
+Flat Up Triangle|Generic,GObject,Decoration
+Flatten To JSON|Generic,GObject,Node,Function
+Flatten To String|Generic,GObject,Node,Function,FlattenUnflattenString,FlattenString
+Flatten To XML|Generic,GObject,Node,Function
+Flattened String To Variant|Generic,GObject,Node,Function
+Floating Point Equal?|Generic,GObject,Node,Function
+Flush Event Queue|Generic,GObject,Node,Function
+Flush File|Generic,GObject,Node,Function
+Flush File (deprecated)|Generic,GObject,Node,Function
+Flush Queue|Generic,GObject,Node,Function
+Flush Stream|Generic,GObject,Node,Function
+For Loop|Generic,GObject,Node,Structure,Loop,ForLoop
+Fork|
+Format Date/Time String|Generic,GObject,Node,Function
+Format Into File|Generic,GObject,Node,GrowableFunction,FormatScanString
+Format Into String|Generic,GObject,Node,GrowableFunction,FormatScanString
+Format Value|Generic,GObject,Node,Function
+Formula Node|Generic,GObject,Node,Formula
+FPGA Refnum to Session|Generic,GObject,Node,Function
+Fract/Exp String To Number|Generic,GObject,Node,Function
+Framed Color Box (classic)|Generic,GObject,Control,ColorBox
+Framed Color Box (modern)|Generic,GObject,Control,ColorBox
+Free Label|Generic,GObject,Decoration,Text
+Furnace|Generic,GObject,Decoration
+Gauge (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Gauge (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Gauge for Simon|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Generate Front Panel Activity|Generic,GObject,Node,Function
+Generate Occurrence|Generic,GObject,Node,Function
+Generate User Event|Generic,GObject,Node,Function
+Generate User-Defined Trace Event|Generic,GObject,Node,Function
+Get Control Values by Index|Generic,GObject,Node,Function
+Get Datalog Position|Generic,GObject,Node,Function
+Get Date/Time In Seconds|Generic,GObject,Node,Function
+Get Date/Time String|Generic,GObject,Node,Function
+Get Drag Drop Data|Generic,GObject,Node,Function
+Get File Position|Generic,GObject,Node,Function
+Get File Size|Generic,GObject,Node,Function
+Get Fixed-Point Components|Generic,GObject,Node,GrowableFunction
+Get Help Window Status|Generic,GObject,Node,Function
+Get Matrix Diagonal|Generic,GObject,Node,GrowableFunction,IndexArray
+Get Matrix Elements|Generic,GObject,Node,GrowableFunction,IndexArray
+Get Menu Item Info|Generic,GObject,Node,Function
+Get Menu Selection|Generic,GObject,Node,Function
+Get Menu Short Cut Info|Generic,GObject,Node,Function
+Get Notifier Status|Generic,GObject,Node,Function
+Get Number of Records|Generic,GObject,Node,Function
+Get Permissions|Generic,GObject,Node,Function
+Get Queue Status|Generic,GObject,Node,Function
+Get Submatrix|Generic,GObject,Node,GrowableFunction
+Get Type and Creator|Generic,GObject,Node,Function
+Get Variant Attribute|Generic,GObject,Node,Function
+Get Volume Info|Generic,GObject,Node,Function
+Get Waveform Attribute|Generic,GObject,Node,Function
+Get Waveform Components|Generic,GObject,Node,GrowableFunction,Unbundler,NamedUnbundler
+Global Variable|Generic,GObject,Node,Global
+GPIB Clear|Generic,GObject,Node,Function
+GPIB Initialization|Generic,GObject,Node,Function
+GPIB Misc|Generic,GObject,Node,Function
+GPIB Read|Generic,GObject,Node,Function
+GPIB Serial Poll|Generic,GObject,Node,Function
+GPIB Status|Generic,GObject,Node,Function
+GPIB Trigger|Generic,GObject,Node,Function
+GPIB Wait|Generic,GObject,Node,Function
+GPIB Write|Generic,GObject,Node,Function
+Gravitational Constant (N m2/kg2)|Generic,GObject,Constant,FixedConstant
+Greater Or Equal To 0?|Generic,GObject,Node,Function
+Greater Or Equal?|Generic,GObject,Node,Function,Comparison
+Greater Than 0?|Generic,GObject,Node,Function
+Greater?|Generic,GObject,Node,Function,Comparison
+Handle Peek|Generic,GObject,Node,Function
+Handle Poke|Generic,GObject,Node,Function
+Hex Digit?|Generic,GObject,Node,Function
+Hexadecimal String To Number|Generic,GObject,Node,Function
+Hopper #1|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Hopper #2|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horiz Line|Generic,GObject,Decoration
+Horiz Pipe (flat)|Generic,GObject,Decoration
+Horiz Pipe (shaded)|Generic,GObject,Decoration
+Horizontal Button Box|Generic,GObject,Decoration
+Horizontal Fill Slide (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Fill Slide (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Gradient Oval|Generic,GObject,Decoration
+Horizontal Gradient Rectangle|Generic,GObject,Decoration
+Horizontal Gradient Rounded Rectangle|Generic,GObject,Decoration
+Horizontal Graduated Bar|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Pointer Slide (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Pointer Slide (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Pointer Slide (system)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Progress Bar (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Progress Bar (system)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Scrollbar|Generic,GObject,Control,Scrollbar
+Horizontal Slide (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Slide (system)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Smooth Box|Generic,GObject,Decoration
+Horizontal Splitter Bar|Generic,GObject,Splitter
+Horizontal Splitter Bar (Classic)|Generic,GObject,Splitter
+Horizontal Splitter Bar (Fuse Design System)|Generic,GObject,Splitter
+Horizontal Splitter Bar (System)|Generic,GObject,Splitter
+Horizontal Switch|Generic,GObject,Control,Boolean
+Horizontal Tank|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Horizontal Toggle Switch (classic)|Generic,GObject,Control,Boolean
+Horizontal Toggle Switch (modern)|Generic,GObject,Control,Boolean
+Hyperbolic Cosecant|Generic,GObject,Node,Function
+Hyperbolic Cosine|Generic,GObject,Node,Function
+Hyperbolic Cotangent|Generic,GObject,Node,Function
+Hyperbolic Secant|Generic,GObject,Node,Function
+Hyperbolic Sine|Generic,GObject,Node,Function
+Hyperbolic Tangent|Generic,GObject,Node,Function
+IMAQ Session|Generic,GObject,Control,RefNum
+Implies|Generic,GObject,Node,Function
+In Place Element Structure|Generic,GObject,Node,Structure,InPlaceElementStructure
+In Range and Coerce|Generic,GObject,Node,Function,Comparison,InRangeAndCoerce
+Include Fixed-Point Overflow Status|Generic,GObject,Node,Function
+Increment|Generic,GObject,Node,Function
+Index & Bundle Cluster Array|Generic,GObject,Node,GrowableFunction,BuildClusterArray
+Index Array|Generic,GObject,Node,GrowableFunction,IndexArray
+Index String Array|Generic,GObject,Node,Function
+Initialize Array|Generic,GObject,Node,GrowableFunction
+Inline C Node|
+Insert Into Array|Generic,GObject,Node,GrowableFunction
+Insert Into Map|Generic,GObject,Node,Function
+Insert Into Set|Generic,GObject,Node,Function
+Insert Menu Items|Generic,GObject,Node,Function
+Integer to Fixed-Point Cast|Generic,GObject,Node,Function
+Intensity Chart (classic)|Generic,GObject,Control,GraphChart,IntensityChart
+Intensity Chart (modern)|Generic,GObject,Control,GraphChart,IntensityChart
+Intensity Graph (classic)|Generic,GObject,Control,GraphChart,IntensityGraph
+Intensity Graph (modern)|Generic,GObject,Control,GraphChart,IntensityGraph
+Interleave 1D Arrays|Generic,GObject,Node,GrowableFunction,Bundler
+Interpolate 1D Array|Generic,GObject,Node,Function
+Inverse Cosecant|Generic,GObject,Node,Function
+Inverse Cosine|Generic,GObject,Node,Function
+Inverse Cotangent|Generic,GObject,Node,Function
+Inverse Hyperbolic Cosecant|Generic,GObject,Node,Function
+Inverse Hyperbolic Cosine|Generic,GObject,Node,Function
+Inverse Hyperbolic Cotangent|Generic,GObject,Node,Function
+Inverse Hyperbolic Secant|Generic,GObject,Node,Function
+Inverse Hyperbolic Sine|Generic,GObject,Node,Function
+Inverse Hyperbolic Tangent|Generic,GObject,Node,Function
+Inverse Secant|Generic,GObject,Node,Function
+Inverse Sine|Generic,GObject,Node,Function
+Inverse Tangent|Generic,GObject,Node,Function
+Inverse Tangent (2 Input)|Generic,GObject,Node,Function
+Invoke Node|Generic,GObject,Node,GrowableFunction,ObjectFunction,Invoke
+IP To String|Generic,GObject,Node,Function
+IrDA Close Connection|Generic,GObject,Node,Function
+IrDA Create Listener|Generic,GObject,Node,Function
+IrDA Discover|Generic,GObject,Node,Function
+IrDA Network Connection Refnum|Generic,GObject,Control,RefNum
+IrDA Open Connection|Generic,GObject,Node,Function
+IrDA Read|Generic,GObject,Node,Function
+IrDA Wait On Listener|Generic,GObject,Node,Function
+IrDA Write|Generic,GObject,Node,Function
+IsDebuggingActive|Generic,GObject,Node,Function
+IVI Delete Session|Generic,GObject,Node,Function
+IVI Logical Name (block diagram constant)|Generic,GObject,Constant,IONameConstant,IVILogicalNameConstant
+IVI Logical Name (classic)|Generic,GObject,Control,IOName,IVILogicalName
+IVI Logical Name (modern)|Generic,GObject,Control,IOName,IVILogicalName
+IVI New Session|Generic,GObject,Node,Function
+Join|
+Join Numbers|Generic,GObject,Node,Function
+Junction|
+Knob (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Knob (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Label (modern)|Generic,GObject,Decoration,Text
+Label (system)|Generic,GObject,Decoration,Text
+Labeled Oblong Button|Generic,GObject,Control,Boolean
+Labeled Rectangular Button|Generic,GObject,Control,Boolean
+Labeled Round Button|Generic,GObject,Control,Boolean
+Labeled Square Button|Generic,GObject,Control,Boolean
+LabVIEW Object|Generic,GObject,Control,LabVIEWClassControl
+Leak Variant Value Reference|Generic,GObject,Node,Function
+LED Button|Generic,GObject,Control,Boolean
+Left Arrow|Generic,GObject,Decoration
+Left Bow Valve (flat)|Generic,GObject,Decoration
+Left Bow Valve (outline)|Generic,GObject,Decoration
+Left Bow Valve (shaded)|Generic,GObject,Decoration
+Left Down Elbow (flat)|Generic,GObject,Decoration
+Left Down Elbow (shaded)|Generic,GObject,Decoration
+Left Pump (flat)|Generic,GObject,Decoration
+Left Pump (shaded)|Generic,GObject,Decoration
+Left Rect Valve (flat)|Generic,GObject,Decoration
+Left Rect Valve (outline)|Generic,GObject,Decoration
+Left Rect Valve (shaded)|Generic,GObject,Decoration
+Left Tee (flat)|Generic,GObject,Decoration
+Left Tee (shaded)|Generic,GObject,Decoration
+Left Up Elbow (flat)|Generic,GObject,Decoration
+Left Up Elbow (shaded)|Generic,GObject,Decoration
+Less Or Equal To 0?|Generic,GObject,Node,Function
+Less Or Equal?|Generic,GObject,Node,Function,Comparison
+Less Than 0?|Generic,GObject,Node,Function
+Less?|Generic,GObject,Node,Function,Comparison
+Lexical Class|Generic,GObject,Node,Function
+Line (chiseled, system)|Generic,GObject,Decoration
+Line (chiseled, thick)|Generic,GObject,Decoration
+Line (chiseled, thin)|Generic,GObject,Decoration
+Line (thick)|Generic,GObject,Decoration
+Line (thin)|Generic,GObject,Decoration
+Line Feed Constant|Generic,GObject,Constant,FixedConstant
+Line with Arrow (thick)|Generic,GObject,Decoration
+Line with Arrow (thin)|Generic,GObject,Decoration
+List Directory|Generic,GObject,Node,Function
+List Folder|Generic,GObject,Node,Function
+Listbox (classic)|Generic,GObject,Control,ListBox
+Listbox (modern)|Generic,GObject,Control,ListBox
+Listbox (system)|Generic,GObject,Control,ListBox
+Listbox Symbol Ring Constant|Generic,GObject,Constant,NumericConstant,NamedNumericConstant,RingConstant
+Load Certificates Into Memory|Generic,GObject,Node,Function
+Load Private Key Into Memory|Generic,GObject,Node,Function
+Local Variable|Generic,GObject,Node,Local
+Lock Range|Generic,GObject,Node,Function
+Logarithm Base 10|Generic,GObject,Node,Function
+Logarithm Base 2|Generic,GObject,Node,Function
+Logarithm Base X|Generic,GObject,Node,Function
+Logical Shift|Generic,GObject,Node,Function
+Look In Map|Generic,GObject,Node,Function
+Lookup Channel Probe|Generic,GObject,Node,Function
+Lossy Enqueue Element|Generic,GObject,Node,Function
+Lowered Box (thick)|Generic,GObject,Decoration
+Lowered Rounded Box|Generic,GObject,Decoration
+Machine Epsilon|Generic,GObject,Constant,FixedConstant
+Make TLS Configuration Immutable|Generic,GObject,Node,Function
+MakeAddr|Generic,GObject,Node,Function
+Mantissa & Exponent|Generic,GObject,Node,Function
+Map|Generic,GObject,Control,Map
+Map Constant|Generic,GObject,Constant,MapConstant
+Match First String|Generic,GObject,Node,Function
+Match Pattern|Generic,GObject,Node,Function
+Match True/False String|Generic,GObject,Node,Function
+MathScript Call By Reference|
+MathScript Node|
+MATLAB script|Generic,GObject,Node,Formula,ScriptNode
+MATLAB Session Refnum|Generic,GObject,Control,RefNum
+Matrix Size|Generic,GObject,Node,Function
+Max & Min|Generic,GObject,Node,Function,Comparison
+Menu Refnum|Generic,GObject,Control,RefNum
+Menu Ring (classic)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Menu Ring (modern)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Menu-Popup Ring|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Merge Errors|Generic,GObject,Node,GrowableFunction,Bundler
+Merge Signals|Generic,GObject,Node,GrowableFunction,Bundler
+Meter (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Meter (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Knob
+Mixed Checkbox (system)|Generic,GObject,Control,MixedCheckbox
+Mixed Signal Graph|Generic,GObject,Control,GraphChart,MixedSignalGraph
+Molar Gas Constant (J/(mol K))|Generic,GObject,Constant,FixedConstant
+Motion Resource (block diagram constant)|Generic,GObject,Constant,IONameConstant,GenClassTagRefConstant
+Motion Resource (classic)|Generic,GObject,Control,IOName,GenClassTagRef
+Motion Resource (modern)|Generic,GObject,Control,IOName,GenClassTagRef
+Motor (flat)|Generic,GObject,Decoration
+Motor (shaded)|Generic,GObject,Decoration
+Move|Generic,GObject,Node,Function
+Move (deprecated)|Generic,GObject,Node,Function
+Multi-Segment Pipe|Generic,GObject,Control,MultiSegmentPipe
+Multicolumn Listbox (classic)|Generic,GObject,Control,MulticolumnListbox
+Multicolumn Listbox (modern)|Generic,GObject,Control,MulticolumnListbox
+Multicolumn Listbox (system)|Generic,GObject,Control,MulticolumnListbox
+Multiply|Generic,GObject,Node,Function
+Multiply (with error terminals)|Generic,GObject,Node,Function
+Multiply Array Elements|Generic,GObject,Node,Function
+Multirate Structure|
+Natural Logarithm|Generic,GObject,Node,Function
+Natural Logarithm (Arg +1)|Generic,GObject,Node,Function
+Natural Logarithm Base|Generic,GObject,Constant,FixedConstant
+Natural Logarithm Of 10|Generic,GObject,Constant,FixedConstant
+Natural Logarithm Of 2|Generic,GObject,Constant,FixedConstant
+Natural Logarithm Of Pi|Generic,GObject,Constant,FixedConstant
+Negate|Generic,GObject,Node,Function
+Negative Infinity|Generic,GObject,Constant,FixedConstant
+New Data Value Reference|Generic,GObject,Node,Function
+New Directory|Generic,GObject,Node,Function
+New File|Generic,GObject,Node,Function
+New TLS Configuration|Generic,GObject,Node,Function
+New VI|Generic,GObject,Node,Function
+New VI Object|Generic,GObject,Node,Function
+Not|Generic,GObject,Node,Function
+Not A Number/Path/Refnum?|Generic,GObject,Node,Function
+Not A Path Constant|Generic,GObject,Constant,FixedConstant
+Not a Refnum Constant|Generic,GObject,Constant,FixedConstant
+Not a Shared Variable|Generic,GObject,Constant,FixedConstant
+Not And|Generic,GObject,Node,Function
+Not Equal To 0?|Generic,GObject,Node,Function
+Not Equal?|Generic,GObject,Node,Function,Comparison
+Not Exclusive Or|Generic,GObject,Node,Function
+Not Or|Generic,GObject,Node,Function
+Notifier Refnum|Generic,GObject,Control,RefNum
+Number of Cache Levels|Generic,GObject,Node,Function
+Number To Boolean Array|Generic,GObject,Node,Function
+Number To Decimal String|Generic,GObject,Node,Function
+Number To Engineering String|Generic,GObject,Node,Function
+Number To Exponential String|Generic,GObject,Node,Function
+Number To Fractional String|Generic,GObject,Node,Function
+Number To Hexadecimal String|Generic,GObject,Node,Function
+Number To Octal String|Generic,GObject,Node,Function
+Numeric Constant|Generic,GObject,Constant,NumericConstant,DigitalNumericConstant
+Numeric Control (classic)|Generic,GObject,Control,Numeric,Digital
+Numeric Control (modern)|Generic,GObject,Control,Numeric,Digital
+Numeric Control (system)|Generic,GObject,Control,Numeric,Digital
+Numeric Indicator (classic)|Generic,GObject,Control,Numeric,Digital
+Numeric Indicator (modern)|Generic,GObject,Control,Numeric,Digital
+Obtain Notifier|Generic,GObject,Node,Function
+Obtain Queue|Generic,GObject,Node,Function
+Occurrence Refnum|Generic,GObject,Control,RefNum
+Octal Digit?|Generic,GObject,Node,Function
+Octal String To Number|Generic,GObject,Node,Function
+OK Button (modern)|Generic,GObject,Control,Boolean
+OK Button (system)|Generic,GObject,Control,Boolean
+Old VISA Open|Generic,GObject,Node,Function
+OLE Variant|Generic
+One Button Dialog|Generic,GObject,Node,Function
+Open and Verify Variable Connection|Generic,GObject,Node,SharedVariableDynamicOpen
+Open Application Reference|Generic,GObject,Node,Function
+Open Device|Generic,GObject,Node,Function
+Open Dynamic Bitfile Reference|Generic,GObject,Node,Function
+Open File|Generic,GObject,Node,Function
+Open MATLAB Session|Generic,GObject,Node,Function
+Open Python Session|Generic,GObject,Node,Function
+Open Tank (flat classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Open Tank (shaded classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Open Variable Connection|Generic,GObject,Node,SharedVariableDynamicOpen
+Open Variable Connection in Background|Generic,GObject,Node,SharedVariableDynamicOpen
+Open VI Object Reference|Generic,GObject,Node,Function
+Open VI Reference|Generic,GObject,Node,Function
+Open/Create/Replace Datalog|Generic,GObject,Node,Function
+Open/Create/Replace File|Generic,GObject,Node,Function
+Or|Generic,GObject,Node,Function
+Or Array Elements|Generic,GObject,Node,Function
+Oval with Shadow|Generic,GObject,Decoration
+Package Matrix|Generic,GObject,Node,Function
+PassControl|Generic,GObject,Node,Function
+Path Constant|Generic,GObject,Constant,PathConstant
+Path to Array of Strings|Generic,GObject,Node,Function
+Path To String|Generic,GObject,Node,Function
+Path Type|Generic,GObject,Node,Function
+Pi|Generic,GObject,Constant,FixedConstant
+Pi Divided By 2|Generic,GObject,Constant,FixedConstant
+Pi Multiplied By 2|Generic,GObject,Constant,FixedConstant
+Pick Line|Generic,GObject,Node,Function
+Pict Ring (classic)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Pict Ring (modern)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Pict Ring (system)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+PixMap|Generic,GObject,Control,Pixmap
+PixMap (warning: dangerous)|Generic,GObject,Control,Pixmap
+Planck's Constant (J/Hz)|Generic,GObject,Constant,FixedConstant
+Platform Flat Square Button|Generic,GObject,Control,Boolean
+Plug-In Control|Generic,GObject,Control,PlugInControl
+Polar To Complex|Generic,GObject,Node,Function
+Polar To Re/Im|Generic,GObject,Node,Function
+Positive Infinity|Generic,GObject,Constant,FixedConstant
+Power Of 10|Generic,GObject,Node,Function
+Power Of 2|Generic,GObject,Node,Function
+Power Of X|Generic,GObject,Node,Function
+PPoll|Generic,GObject,Node,Function
+PPollConfig|Generic,GObject,Node,Function
+PPollUnconfig|Generic,GObject,Node,Function
+Preallocated Read from Binary File|Generic,GObject,Node,Function
+Preserve Run-Time Class|Generic,GObject,Node,Function
+Pressure Tank (flat)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Pressure Tank (shaded)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Preview Queue Element|Generic,GObject,Node,Function
+Printable?|Generic,GObject,Node,Function
+Property Node|Generic,GObject,Node,GrowableFunction,ObjectFunction,Property
+Pulldown Menu Ring|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Push Button|Generic,GObject,Control,Boolean
+Python Node|Generic,GObject,Node,GrowableFunction
+Python Object Refnum|Generic,GObject,Control,RefNum
+Python Object Refnum (block diagram constant)|Generic,GObject,Constant
+Python Session Refnum|Generic,GObject,Control,RefNum
+Queue Refnum|Generic,GObject,Control,RefNum
+Quit LabVIEW|Generic,GObject,Node,Function
+Quotient & Remainder|Generic,GObject,Node,Function
+Race Structure|Generic,GObject,Node,Structure,MultiFrameStructure,RaceStructureNode
+Radio Button (system)|Generic,GObject,Control,Boolean
+Radio Buttons (classic)|Generic,GObject,Control,Cluster,RadioButtonsControl
+Radio Buttons (modern)|Generic,GObject,Control,Cluster,RadioButtonsControl
+Radio Buttons (system)|Generic,GObject,Control,Cluster,RadioButtonsControl
+Raised Box (classic)|Generic,GObject,Decoration
+Raised Box (modern)|Generic,GObject,Decoration
+Raised Circle|Generic,GObject,Decoration
+Raised Down Triangle|Generic,GObject,Decoration
+Raised Frame|Generic,GObject,Decoration
+Raised Left Triangle|Generic,GObject,Decoration
+Raised Right Triangle|Generic,GObject,Decoration
+Raised Rounded Box|Generic,GObject,Decoration
+Raised Up Triangle|Generic,GObject,Decoration
+Random Number (0-1)|Generic,GObject,Node,Function
+RcvRespMsg|Generic,GObject,Node,Function
+Re-accept TLS|Generic,GObject,Node,Function
+Re/Im To Complex|Generic,GObject,Node,Function
+Re/Im To Polar|Generic,GObject,Node,Function
+Read Datalog|Generic,GObject,Node,Function
+Read Device|Generic,GObject,Node,Function
+Read File|Generic,GObject,Node,Function,GPIBReadWrite
+Read from Binary File|Generic,GObject,Node,Function,ReadWriteFile
+Read from Text File|Generic,GObject,Node,Function
+Read Map Max & Min Keys|Generic,GObject,Node,Function
+Read Multiple Elements from Stream|Generic,GObject,Node,SharedVariableDynamicRead
+Read Set Max & Min|Generic,GObject,Node,Function
+Read Single Element from Stream|Generic,GObject,Node,SharedVariableDynamicRead
+Read Variable|Generic,GObject,Node,SharedVariableDynamicRead
+Read Variable with Timeout|Generic,GObject,Node,SharedVariableDynamicRead
+ReadStatus|Generic,GObject,Node,Function
+Receive|Generic,GObject,Node,Function
+ReceiveSetup|Generic,GObject,Node,Function
+Recessed Box|Generic,GObject,Decoration
+Recessed Circle|Generic,GObject,Decoration
+Recessed Down Triangle|Generic,GObject,Decoration
+Recessed Frame (modern)|Generic,GObject,Decoration
+Recessed Frame (system)|Generic,GObject,Decoration
+Recessed Left Triangle|Generic,GObject,Decoration
+Recessed Menu Ring|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Recessed Right Triangle|Generic,GObject,Decoration
+Recessed Rounded Box|Generic,GObject,Decoration
+Recessed Up Triangle|Generic,GObject,Decoration
+Reciprocal|Generic,GObject,Node,Function
+Reciprocal Of e|Generic,GObject,Constant,FixedConstant
+Reciprocal Of Pi|Generic,GObject,Constant,FixedConstant
+RecomposeUnlockDataValRef (warning: dangerous)|
+RecomposeVariant (warning: dangerous)|
+Rectangular Stop Button|Generic,GObject,Control,Boolean
+Refnum to Path|Generic,GObject,Node,Function
+Refnum to Session|Generic,GObject,Node,Function
+Region|
+Register Event Callback|Generic,GObject,Node,GrowableFunction
+Register For Events|Generic,GObject,Node,GrowableFunction,RegisterForEvents
+Register Session|Generic,GObject,Node,Function
+Release Notifier|Generic,GObject,Node,Function
+Release Queue|Generic,GObject,Node,Function
+Remove Fixed-Point Overflow Status|Generic,GObject,Node,Function
+Remove From Map|Generic,GObject,Node,Function
+Remove From Set|Generic,GObject,Node,Function
+Replace Array Subset|Generic,GObject,Node,GrowableFunction
+Replace Substring|Generic,GObject,Node,Function
+Request Deallocation|Generic,GObject,Node,Function
+ResetSys|Generic,GObject,Node,Function
+Reshape Array|Generic,GObject,Node,GrowableFunction
+Resize Matrix|Generic,GObject,Node,Function
+Resource Index|Generic,GObject,Node,Function
+Reverse 1D Array|Generic,GObject,Node,Function
+Reverse String|Generic,GObject,Node,Function
+Right Arrow|Generic,GObject,Decoration
+Right Bow Valve (flat)|Generic,GObject,Decoration
+Right Bow Valve (outline)|Generic,GObject,Decoration
+Right Bow Valve (shaded)|Generic,GObject,Decoration
+Right Down Elbow (flat)|Generic,GObject,Decoration
+Right Down Elbow (shaded)|Generic,GObject,Decoration
+Right Pump (flat)|Generic,GObject,Decoration
+Right Pump (shaded)|Generic,GObject,Decoration
+Right Rect Valve (flat)|Generic,GObject,Decoration
+Right Rect Valve (outline)|Generic,GObject,Decoration
+Right Rect Valve (shaded)|Generic,GObject,Decoration
+Right Tee (flat)|Generic,GObject,Decoration
+Right Tee (shaded)|Generic,GObject,Decoration
+Right Up Elbow (flat)|Generic,GObject,Decoration
+Right Up Elbow (shaded)|Generic,GObject,Decoration
+Rocker|Generic,GObject,Control,Boolean
+Rotary Feeder|Generic,GObject,Decoration
+Rotate|Generic,GObject,Node,Function
+Rotate 1D Array|Generic,GObject,Node,Function
+Rotate Left With Carry|Generic,GObject,Node,Function
+Rotate Right With Carry|Generic,GObject,Node,Function
+Rotate String|Generic,GObject,Node,Function
+Round Button|Generic,GObject,Control,Boolean
+Round LED (classic)|Generic,GObject,Control,Boolean
+Round LED (modern)|Generic,GObject,Control,Boolean
+Round Light|Generic,GObject,Control,Boolean
+Round Push Button|Generic,GObject,Control,Boolean
+Round Push Button (profile)|Generic,GObject,Control,Boolean
+Round Radio Button|Generic,GObject,Control,Boolean
+Round Stop Button|Generic,GObject,Control,Boolean
+Round To Nearest|Generic,GObject,Node,Function
+Round Toward +Infinity|Generic,GObject,Node,Function
+Round Toward -Infinity|Generic,GObject,Node,Function
+Rounded Rectangle with Shadow|Generic,GObject,Decoration
+RT FIFO Create|Generic,GObject,Node,Function
+RT FIFO Delete|Generic,GObject,Node,Function
+RT FIFO Read|Generic,GObject,Node,Function
+RT FIFO Write|Generic,GObject,Node,Function
+Rydberg Constant (1/m)|Generic,GObject,Constant,FixedConstant
+Scale By Power Of 2|Generic,GObject,Node,Function
+Scan From File|Generic,GObject,Node,GrowableFunction,FormatScanString
+Scan From String|Generic,GObject,Node,GrowableFunction,FormatScanString
+Scan String For Tokens|Generic,GObject,Node,Function
+Scan Value|Generic,GObject,Node,Function
+Scanned Variable Read|Generic,GObject,Node,SharedVariableDynamicRead
+Scanned Variable Write|Generic,GObject,Node,SharedVariableDynamicWrite
+Search 1D Array|Generic,GObject,Node,Function
+Search and Replace String|Generic,GObject,Node,Function
+Search Variable Container|Generic,GObject,Node,Function
+Search/Split String|Generic,GObject,Node,Function
+Secant|Generic,GObject,Node,Function
+Seconds To Date/Time|Generic,GObject,Node,Function
+Seek|Generic,GObject,Node,Function
+Select|Generic,GObject,Node,Function
+Send|Generic,GObject,Node,Function
+Send Notification|Generic,GObject,Node,Function
+SendCmds|Generic,GObject,Node,Function
+SendDataBytes|Generic,GObject,Node,Function
+SendIFC|Generic,GObject,Node,Function
+SendList|Generic,GObject,Node,Function
+SendLLO|Generic,GObject,Node,Function
+SendSetup|Generic,GObject,Node,Function
+Session to Refnum|Generic,GObject,Node,Function
+Set|Generic,GObject,Control,Set
+Set Constant|Generic,GObject,Constant,SetConstant
+Set Control Values by Index|Generic,GObject,Node,Function
+Set Datalog Position|Generic,GObject,Node,Function
+Set File Position|Generic,GObject,Node,Function
+Set File Size|Generic,GObject,Node,Function
+Set Matrix Diagonal|Generic,GObject,Node,GrowableFunction
+Set Matrix Elements|Generic,GObject,Node,GrowableFunction
+Set Menu Item Info|Generic,GObject,Node,Function
+Set Number of Records|Generic,GObject,Node,Function
+Set Occurrence|Generic,GObject,Node,Function
+Set Permissions|Generic,GObject,Node,Function
+Set Submatrix|Generic,GObject,Node,GrowableFunction
+Set Type and Creator|Generic,GObject,Node,Function
+Set Variant Attribute|Generic,GObject,Node,Function
+Set Waveform Attribute|Generic,GObject,Node,Function
+SetRWLS|Generic,GObject,Node,Function
+SetTimeOut|Generic,GObject,Node,Function
+Shared Variable|Generic,GObject,Node,SharedVariableNode
+Shared Variable Constant|Generic,GObject,Constant,IONameConstant,GenClassTagRefConstant
+Shared Variable Control (classic)|Generic,GObject,Control,IOName,GenClassTagRef
+Shared Variable Control (modern)|Generic,GObject,Control,IOName,GenClassTagRef
+Shared Variable to String|Generic,GObject,Node,Function
+Sign|Generic,GObject,Node,Function
+Simple Horizontal Slide|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Simple Numeric|Generic,GObject,Control,Numeric,Digital
+Simple String|Generic,GObject,Control,String
+Simple Vertical Slide|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Sinc|Generic,GObject,Node,Function
+Sine|Generic,GObject,Node,Function
+Sine & Cosine|Generic,GObject,Node,Function
+Size Handle|Generic,GObject,Node,Function
+Slide Switch|Generic,GObject,Control,Boolean
+Smoothed Oval|Generic,GObject,Decoration
+Smoothed Rounded Rectangle|Generic,GObject,Decoration
+Sort 1D Array|Generic,GObject,Node,Function
+Sort Array of String|Generic,GObject,Node,Function
+Speed Of Light In Vacuum (m/sec)|Generic,GObject,Constant,FixedConstant
+Spin Control (system)|Generic,GObject,Control,Numeric,Digital
+Split 1D Array|Generic,GObject,Node,Function
+Split Button|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Split Number|Generic,GObject,Node,Function
+Split Signals|Generic,GObject,Node,GrowableFunction,Unbundler
+Spreadsheet String To Array|Generic,GObject,Node,Function
+Square|Generic,GObject,Node,Function
+Square Button|Generic,GObject,Control,Boolean
+Square LED (classic)|Generic,GObject,Control,Boolean
+Square LED (modern)|Generic,GObject,Control,Boolean
+Square Light|Generic,GObject,Control,Boolean
+Square Push Button|Generic,GObject,Control,Boolean
+Square Push Button (profile)|Generic,GObject,Control,Boolean
+Square Radio Button|Generic,GObject,Control,Boolean
+Square Root|Generic,GObject,Node,Function
+Stacked Sequence Structure|Generic,GObject,Node,Structure,MultiFrameStructure,Sequence
+Start TLS|Generic,GObject,Node,Function
+State|
+State Diagram|
+Static VI Reference|Generic,GObject,Node,StaticVIReference
+Stop|Generic,GObject,Node,Function
+Stop Button|Generic,GObject,Control,Boolean
+String Constant|Generic,GObject,Constant,StringConstant
+String Control (classic)|Generic,GObject,Control,String
+String Control (modern)|Generic,GObject,Control,String
+String Control (system)|Generic,GObject,Control,String
+String Indicator (classic)|Generic,GObject,Control,String
+String Indicator (modern)|Generic,GObject,Control,String
+String Length|Generic,GObject,Node,Function
+String Subset|Generic,GObject,Node,Function
+String To Byte Array|Generic,GObject,Node,Function
+String To IP|Generic,GObject,Node,Function
+String To Path|Generic,GObject,Node,Function
+String to Shared Variable|Generic,GObject,Node,Function
+Strip Path|Generic,GObject,Node,Function
+SubPanel|Generic,GObject,Control,SubPanel
+SubPanel (Classic)|Generic,GObject,Control,SubPanel
+SubPanel (Fuse Design System)|Generic,GObject,Control,SubPanel
+SubPanel (System)|Generic,GObject,Control,SubPanel
+Subtract|Generic,GObject,Node,Function
+Subtract (with error terminals)|Generic,GObject,Node,Function
+Swap Bytes|Generic,GObject,Node,Function
+Swap Values|Generic,GObject,Node,Function
+Swap Vector Element|Generic,GObject,Node,Function
+Swap Words|Generic,GObject,Node,Function
+Tab Constant|Generic,GObject,Constant,FixedConstant
+Tab Control (classic)|Generic,GObject,Control,PageSelector,TabControl
+Tab Control (Fuse Design System)|Generic,GObject,Control,PageSelector,TabControl
+Tab Control (modern)|Generic,GObject,Control,PageSelector,TabControl
+Tab Control (system)|Generic,GObject,Control,PageSelector,TabControl
+Table (classic)|Generic,GObject,Control,Table
+Table (modern)|Generic,GObject,Control,Table
+Table (system)|Generic,GObject,Control,Table
+Tag Attribute Ring|
+Tangent|Generic,GObject,Node,Function
+Tank (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Tank (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Target Structure|Generic,GObject,Node,Structure,TargetStructureNode
+TCP Close Connection|Generic,GObject,Node,Function
+TCP Create Listener|Generic,GObject,Node,Function
+TCP Flattened Read|Generic,GObject,Node,Function
+TCP Flattened Write|Generic,GObject,Node,Function
+TCP Flex Read|Generic,GObject,Node,Function
+TCP Flex Write|Generic,GObject,Node,Function
+TCP Network Connection Refnum|Generic,GObject,Control,RefNum
+TCP Open Connection|Generic,GObject,Node,Function
+TCP Read|Generic,GObject,Node,Function
+TCP Wait On Listener|Generic,GObject,Node,Function
+TCP Write|Generic,GObject,Node,Function
+TDMS Advanced Asynchronous Read (Data Ref)|Generic,GObject,Node,Function
+TDMS Advanced Asynchronous Write (Data Ref)|Generic,GObject,Node,Function
+TDMS Close|Generic,GObject,Node,Function
+TDMS Configure Asynchronous Reads (Data Ref)|Generic,GObject,Node,Function
+TDMS Configure Asynchronous Writes (Data Ref)|Generic,GObject,Node,Function
+TDMS Defragment|Generic,GObject,Node,Function
+TDMS Delete Data|Generic,GObject,Node,Function
+TDMS File|Generic,GObject,Control,RefNum
+TDMS Flush|Generic,GObject,Node,Function
+TDMS Get Asynchronous Read Status (Data Ref)|Generic,GObject,Node,Function
+TDMS Get Asynchronous Write Status (Data Ref)|Generic,GObject,Node,Function
+TDMS Get Properties|Generic,GObject,Node,Function
+TDMS In Memory Close|Generic,GObject,Node,Function
+TDMS In Memory Open|Generic,GObject,Node,Function
+TDMS In Memory Read Bytes|Generic,GObject,Node,Function
+TDMS List Contents|Generic,GObject,Node,Function
+TDMS Open|Generic,GObject,Node,Function
+TDMS Read|Generic,GObject,Node,Function
+TDMS Refnum To File ID|Generic,GObject,Node,Function
+TDMS Set Properties|Generic,GObject,Node,Function
+TDMS Write|Generic,GObject,Node,Function
+TDMS Write IP|Generic,GObject,Node,Function
+Temporary Directory|Generic,GObject,Node,Function
+TestSRQ|Generic,GObject,Node,Function
+TestSys|Generic,GObject,Node,Function
+Text & Pict Ring (classic)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Text & Pict Ring (modern)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Text Button|Generic,GObject,Control,Boolean
+Text Ring (block diagram constant)|Generic,GObject,Constant,NumericConstant,NamedNumericConstant,RingConstant
+Text Ring (classic)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Text Ring (modern)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Text Ring (system)|Generic,GObject,Control,Numeric,NamedNumeric,Ring
+Text to UTF-8|Generic,GObject,Node,Function
+Thermometer (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Thermometer (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Threshold 1D Array|Generic,GObject,Node,Function
+Tick Count (ms)|Generic,GObject,Node,Function
+Time Stamp (block diagram constant)|Generic,GObject,Constant,AbsTimeConstant
+Time Stamp Control (classic)|Generic,GObject,Control,AbsTime
+Time Stamp Control (modern)|Generic,GObject,Control,AbsTime
+Time Stamp Control (system)|Generic,GObject,Control,AbsTime
+Time Stamp Indicator (classic)|Generic,GObject,Control,AbsTime
+Time Stamp Indicator (modern)|Generic,GObject,Control,AbsTime
+Timed Loop|
+Timed Sequence|
+TLS configuration|Generic,GObject,Control,RefNum
+TLS Connection?|Generic,GObject,Node,Function
+To Byte Integer|Generic,GObject,Node,Function
+To Double Precision Complex|Generic,GObject,Node,Function
+To Double Precision Float|Generic,GObject,Node,Function
+To Extended Precision Complex|Generic,GObject,Node,Function
+To Extended Precision Float|Generic,GObject,Node,Function
+To Fixed-Point|Generic,GObject,Node,Function
+To Long Integer|Generic,GObject,Node,Function
+To Lower Case|Generic,GObject,Node,Function
+To More Generic Class|Generic,GObject,Node,Function
+To More Specific Class|Generic,GObject,Node,Function
+To OLE Variant|Generic,GObject,Node,Function
+To Probe String|Generic,GObject,Node,Function
+To Quad Integer|Generic,GObject,Node,Function
+To Single Precision Complex|Generic,GObject,Node,Function
+To Single Precision Float|Generic,GObject,Node,Function
+To Time Stamp|Generic,GObject,Node,Function
+To Unsigned Byte Integer|Generic,GObject,Node,Function
+To Unsigned Long Integer|Generic,GObject,Node,Function
+To Unsigned Quad Integer|Generic,GObject,Node,Function
+To Unsigned Word Integer|Generic,GObject,Node,Function
+To Upper Case|Generic,GObject,Node,Function
+To Variant|Generic,GObject,Node,Function
+To Word Integer|Generic,GObject,Node,Function
+Traditional DAQ Channel (block diagram constant)|Generic,GObject,Constant,IONameConstant,DAQChannelNameConstant
+Traditional DAQ Channel (classic)|Generic,GObject,Control,IOName,DAQChannelName
+Traditional DAQ Channel (modern)|Generic,GObject,Control,IOName,DAQChannelName
+Transpose 1D Array|Generic,GObject,Node,Function
+Transpose 2D Array|Generic,GObject,Node,Function
+Transpose Matrix|Generic,GObject,Node,Function
+Tree (classic)|Generic,GObject,Control,TreeControl
+Tree (modern)|Generic,GObject,Control,TreeControl
+Tree (system)|Generic,GObject,Control,TreeControl
+Trigger|Generic,GObject,Node,Function
+TriggerList|Generic,GObject,Node,Function
+Two Button Dialog|Generic,GObject,Node,Function
+Type and Creator|Generic,GObject,Node,Function
+Type Cast|Generic,GObject,Node,Function,TypeCast
+Type Error|Generic,GObject,Node,Function
+Type Must Be Array|Generic,GObject,Node,Function
+Type Must Be Cluster|Generic,GObject,Node,Function
+Type Of|Generic,GObject,Node,Function
+Type Specialization Structure|Generic,GObject,Node,Structure,MultiFrameStructure,DisableStructure
+UDP Close|Generic,GObject,Node,Function
+UDP Multicast Open|Generic,GObject,Node,Function
+UDP Network Connection Refnum|Generic,GObject,Control,RefNum
+UDP Open|Generic,GObject,Node,Function
+UDP Read|Generic,GObject,Node,Function
+UDP Write|Generic,GObject,Node,Function
+Unbitpack from Array|Generic,GObject,Node,Function
+Unbundle|Generic,GObject,Node,GrowableFunction,Unbundler
+Unbundle By Name|Generic,GObject,Node,GrowableFunction,Unbundler,NamedUnbundler
+Unflatten From JSON|Generic,GObject,Node,Function
+Unflatten From String|Generic,GObject,Node,Function,FlattenUnflattenString
+Unflatten From XML|Generic,GObject,Node,Function
+Unleak Variant Value Reference|Generic,GObject,Node,Function
+Unpackage Matrix|Generic,GObject,Node,Function
+Unregister For Events|Generic,GObject,Node,Function
+Unregister Session|Generic,GObject,Node,Function
+Up Arrow|Generic,GObject,Decoration
+Up Bow Valve (flat)|Generic,GObject,Decoration
+Up Bow Valve (outline)|Generic,GObject,Decoration
+Up Bow Valve (shaded)|Generic,GObject,Decoration
+Up Rect Valve (flat)|Generic,GObject,Decoration
+Up Rect Valve (outline)|Generic,GObject,Decoration
+Up Rect Valve (shaded)|Generic,GObject,Decoration
+Up Tee (flat)|Generic,GObject,Decoration
+Up Tee (shaded)|Generic,GObject,Decoration
+User Defined Refnum|Generic,GObject,Control,RefNum,GenClassRef
+User Defined Refnum Tag (block diagram constant)|Generic,GObject,Constant,IONameConstant,GenClassTagRefConstant
+User Defined Refnum Tag (classic)|Generic,GObject,Control,IOName,GenClassTagRef
+User Defined Refnum Tag (modern)|Generic,GObject,Control,IOName,GenClassTagRef
+User Defined Refnum Tag Flatten (classic)|Generic,GObject,Control,IOName,GenClassTagFlatRef
+User Defined Refnum Tag Flatten (modern)|Generic,GObject,Control,IOName,GenClassTagFlatRef
+User Defined Tag (block diagram constant)|Generic,GObject,Constant,IONameConstant
+User Defined Tag (classic)|Generic,GObject,Control,IOName
+User Defined Tag (modern)|Generic,GObject,Control,IOName
+User Item|Generic,GObject,Control
+UTF-8 String To Byte Array|
+UTF-8 to Text|Generic,GObject,Node,Function
+Variable Class Specifier Constant|Generic,GObject,Constant
+Variable Name Constant|Generic,GObject,Constant,IONameConstant,GenClassTagRefConstant
+Variant|Generic,GObject,Control,LVVariant
+Variant To Data|Generic,GObject,Node,Function
+Variant To Flattened String|Generic,GObject,Node,Function
+Vert Line|Generic,GObject,Decoration
+Vert Pipe (flat)|Generic,GObject,Decoration
+Vert Pipe (shaded)|Generic,GObject,Decoration
+Vert Rocker|Generic,GObject,Control,Boolean
+Vertical Fill Slide (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Fill Slide (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Gradient Oval|Generic,GObject,Decoration
+Vertical Gradient Rectangle|Generic,GObject,Decoration
+Vertical Gradient Rounded Rectangle|Generic,GObject,Decoration
+Vertical Graduated Bar|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Pointer Slide (classic)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Pointer Slide (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Pointer Slide (system)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Progress Bar (modern)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Progress Bar (system)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Scrollbar|Generic,GObject,Control,Scrollbar
+Vertical Slide (system)|Generic,GObject,Control,Numeric,NumericWithScale,Slide
+Vertical Slide Switch (classic)|Generic,GObject,Control,Boolean
+Vertical Slide Switch (modern)|Generic,GObject,Control,Boolean
+Vertical Smooth Box|Generic,GObject,Decoration
+Vertical Splitter Bar|Generic,GObject,Splitter
+Vertical Splitter Bar (Classic)|Generic,GObject,Splitter
+Vertical Splitter Bar (Fuse Design System)|Generic,GObject,Splitter
+Vertical Splitter Bar (System)|Generic,GObject,Splitter
+Vertical Switch|Generic,GObject,Control,Boolean
+Vertical Toggle Switch (classic)|Generic,GObject,Control,Boolean
+Vertical Toggle Switch (modern)|Generic,GObject,Control,Boolean
+VI Library|Generic,GObject,Node,Function
+VI Refnum|Generic,GObject,Control,RefNum,LVObjectRefNum,VIRefNum
+VI Server Reference|Generic,GObject,Node,ControlReferenceConstant
+VISA Assert Interrupt Signal|Generic,GObject,Node,Function
+VISA Assert Trigger|Generic,GObject,Node,Function
+VISA Assert Utility Signal|Generic,GObject,Node,Function
+VISA Clear|Generic,GObject,Node,Function
+VISA Close|Generic,GObject,Node,Function
+VISA Disable Event|Generic,GObject,Node,Function
+VISA Discard Events|Generic,GObject,Node,Function
+VISA Enable Event|Generic,GObject,Node,Function
+VISA Find Resource|Generic,GObject,Node,Function
+VISA Flush I/O Buffer|Generic,GObject,Node,Function
+VISA GPIB Command|Generic,GObject,Node,Function
+VISA GPIB Control ATN|Generic,GObject,Node,Function
+VISA GPIB Control REN|Generic,GObject,Node,Function
+VISA GPIB Pass Control|Generic,GObject,Node,Function
+VISA GPIB Send IFC|Generic,GObject,Node,Function
+VISA In 16|Generic,GObject,Node,Function
+VISA In 32|Generic,GObject,Node,Function
+VISA In 64|Generic,GObject,Node,Function
+VISA In 8|Generic,GObject,Node,Function
+VISA Lock|Generic,GObject,Node,Function
+VISA Map Address|Generic,GObject,Node,Function
+VISA Map Trigger|Generic,GObject,Node,Function
+VISA Memory Allocation|Generic,GObject,Node,Function
+VISA Memory Allocation Ex|Generic,GObject,Node,Function
+VISA Memory Free|Generic,GObject,Node,Function
+VISA Move|Generic,GObject,Node,Function
+VISA Move In 16|Generic,GObject,Node,Function
+VISA Move In 32|Generic,GObject,Node,Function
+VISA Move In 64|Generic,GObject,Node,Function
+VISA Move In 8|Generic,GObject,Node,Function
+VISA Move Out 16|Generic,GObject,Node,Function
+VISA Move Out 32|Generic,GObject,Node,Function
+VISA Move Out 64|Generic,GObject,Node,Function
+VISA Move Out 8|Generic,GObject,Node,Function
+VISA Open|Generic,GObject,Node,Function
+VISA Out 16|Generic,GObject,Node,Function
+VISA Out 32|Generic,GObject,Node,Function
+VISA Out 64|Generic,GObject,Node,Function
+VISA Out 8|Generic,GObject,Node,Function
+VISA Peek 16|Generic,GObject,Node,Function
+VISA Peek 32|Generic,GObject,Node,Function
+VISA Peek 64|Generic,GObject,Node,Function
+VISA Peek 8|Generic,GObject,Node,Function
+VISA Poke 16|Generic,GObject,Node,Function
+VISA Poke 32|Generic,GObject,Node,Function
+VISA Poke 64|Generic,GObject,Node,Function
+VISA Poke 8|Generic,GObject,Node,Function
+VISA Read|Generic,GObject,Node,Function
+VISA Read STB|Generic,GObject,Node,Function
+VISA Read To File|Generic,GObject,Node,Function
+VISA Refnum to Session|Generic,GObject,Node,Function
+VISA Resource Name|Generic,GObject,Constant,IONameConstant,VISAResourceNameConstant
+VISA resource name (classic)|Generic,GObject,Control,IOName,VISAResourceName
+VISA resource name (modern)|Generic,GObject,Control,IOName,VISAResourceName
+VISA Set I/O Buffer Size|Generic,GObject,Node,Function
+VISA Status Description|Generic,GObject,Node,Function
+VISA Unlock|Generic,GObject,Node,Function
+VISA Unmap Address|Generic,GObject,Node,Function
+VISA Unmap Trigger|Generic,GObject,Node,Function
+VISA USB Control In|Generic,GObject,Node,Function
+VISA USB Control Out|Generic,GObject,Node,Function
+VISA VXI Cmd or Query|Generic,GObject,Node,Function
+VISA Wait on Event|Generic,GObject,Node,Function
+VISA Write|Generic,GObject,Node,Function
+VISA Write From File|Generic,GObject,Node,Function
+Volume Info|Generic,GObject,Node,Function
+Wait (ms)|Generic,GObject,Node,Function
+Wait For Activity|Generic,GObject,Node,Function
+Wait For Front Panel Activity|Generic,GObject,Node,Function
+Wait for GPIB RQS|Generic,GObject,Node,Function
+Wait on Notification|Generic,GObject,Node,Function
+Wait on Notification from Multiple|Generic,GObject,Node,Function
+Wait on Notification from Multiple with Notifier History|Generic,GObject,Node,Function
+Wait on Notification with Notifier History|Generic,GObject,Node,Function
+Wait on Occurrence|Generic,GObject,Node,Function
+Wait Until Next ms Multiple|Generic,GObject,Node,Function
+WaitSRQ|Generic,GObject,Node,Function
+Waveform Chart|
+Waveform Chart (classic)|Generic,GObject,Control,GraphChart,WaveformChart
+Waveform Chart (modern)|Generic,GObject,Control,GraphChart,WaveformChart
+Waveform Graph (classic)|Generic,GObject,Control,GraphChart,WaveformGraph
+Waveform Graph (modern)|Generic,GObject,Control,GraphChart,WaveformGraph
+While Loop #1|Generic,GObject,Node,Structure,Loop,WhileLoop
+While Loop #2|Generic,GObject,Node,Structure,Loop,WhileLoop
+White Space?|Generic,GObject,Node,Function
+Write Datalog|Generic,GObject,Node,Function
+Write Device|Generic,GObject,Node,Function
+Write File|Generic,GObject,Node,Function,GPIBReadWrite
+Write Multiple Elements to Stream|Generic,GObject,Node,SharedVariableDynamicWrite
+Write Single Element to Stream|Generic,GObject,Node,SharedVariableDynamicWrite
+Write to Binary File|Generic,GObject,Node,Function,ReadWriteFile
+Write to Text File|Generic,GObject,Node,Function
+Write Variable|Generic,GObject,Node,SharedVariableDynamicWrite
+Write Variable with Timeout|Generic,GObject,Node,SharedVariableDynamicWrite
+XY Graph (classic)|Generic,GObject,Control,GraphChart,WaveformGraph,XYGraph
+XY Graph (modern)|Generic,GObject,Control,GraphChart,WaveformGraph,XYGraph
+Y-th Root of X|Generic,GObject,Node,Function

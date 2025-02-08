@@ -15,7 +15,7 @@
 	<Property Name="NI.LVClass.IsTransferClass" Type="Bool">false</Property>
 	<Property Name="NI.LVClass.LowestCompatibleVersion" Type="Str">1.0.0.1</Property>
 	<Item Name="Parent Libraries" Type="Parent Libraries">
-		<Item Name="Node.lvclass" Type="Parent" URL="../../Node/Node.lvclass"/>
+		<Item Name="Node.lvclass" Type="Parent" URL="../../Node.lvclass"/>
 	</Item>
 	<Item Name="Constant.ctl" Type="Class Private Data" URL="Constant.ctl">
 		<Property Name="NI.LibItem.Scope" Type="Int">2</Property>

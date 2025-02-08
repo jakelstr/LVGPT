@@ -1,8 +1,11 @@
 import xml.etree.ElementTree as ET
-import uuid
 from lvgptGraph import *
-
+import logging
 lvGraph = LVGraph()
+
+# Configure logging for better debugging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def determineBinaryDictOpUniform(binaryDict):
     left = binaryDict["left"]
@@ -42,6 +45,79 @@ def convertBinaryDictToConcatStrings(binaryDict, blockLevel):
             lvGraph.addTerminalEdge(varNode.getTerminal().uuid, stringTerms[x].uuid)
     
     return (binaryDict, "STRING")
+
+def processForStmt(node):
+    """
+    Process a traditional for loop in Go.
+    """
+    init = node.find("init")
+    cond = node.find("cond")
+    post = node.find("post")
+    body = node.find("body")
+
+    # Process initialization
+    if init is not None:
+        logger.info("Processing for loop initialization")
+        processBlockStmtChild(init, lvGraph.diagramUUID)
+
+    # Process condition
+    condUUID = None
+    if cond is not None:
+        logger.info("Processing for loop condition")
+        if cond[0].tag == "BinaryExpr":
+            condUUID = addBinaryNodeToLVGraph(cond[0], None, False)
+        elif cond[0].tag == "Ident":
+            identName = cond[0].find("name").text
+            condUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
+
+    # Process post statement
+    if post is not None:
+        logger.info("Processing for loop post statement")
+        processBlockStmtChild(post, lvGraph.diagramUUID)
+
+    # Process loop body
+    bodyNode = body.find("BlockStmt")
+    for child in bodyNode:
+        processBlockStmtChild(child, lvGraph.diagramUUID)
+
+    # Optionally, add a loop node in LabVIEW to represent the iteration
+    loopNode = LoopNode()  # To be defined in lvgptGraph.py
+    lvGraph.addNode(loopNode)
+    if condUUID:
+        lvGraph.addTerminalEdge(condUUID, loopNode.getConditionTerminal().uuid)
+
+def processRangeStmt(node):
+    """
+    Process a for range loop in Go.
+    """
+    key = node.find("key")
+    value = node.find("value")
+    iterable = node.find("iterable")
+    body = node.find("body")
+
+    # Process key and value assignments
+    if key is not None:
+        processBlockStmtChild(key, lvGraph.diagramUUID)
+    if value is not None:
+        processBlockStmtChild(value, lvGraph.diagramUUID)
+
+    # Process iterable
+    iterableUUID = None
+    if iterable is not None:
+        if iterable[0].tag == "Ident":
+            identName = iterable[0].find("name").text
+            iterableUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
+
+    # Process loop body
+    bodyNode = body.find("BlockStmt")
+    for child in bodyNode:
+        processBlockStmtChild(child, lvGraph.diagramUUID)
+
+    # Add range loop node in LabVIEW
+    rangeLoopNode = RangeLoopNode()  # To be defined in lvgptGraph.py
+    lvGraph.addNode(rangeLoopNode)
+    if iterableUUID:
+        lvGraph.addTerminalEdge(iterableUUID, rangeLoopNode.getIterableTerminal().uuid)
 
 def processBinaryExpr(node):
     returnDict = {}
@@ -489,6 +565,13 @@ def processBlockStmtChild(node, blockUUID):
             for child in blockStmtTag:
                 processBlockStmtChild(child, trueCaseUUID)
 
+    elif node.tag == "ForStmt":
+        logger.info("Processing ForStmt")
+        processForStmt(node)
+    elif node.tag == "RangeStmt":
+        logger.info("Processing RangeStmt")
+        processRangeStmt(node)
+
     elif node.tag == "SwitchStmt":
         caseSelector = CaseSelector(lvGraph.getAvailableNodeName("case"))
         processSwitchBody(node.find("body"), caseSelector)
@@ -500,6 +583,9 @@ def processBlockStmtChild(node, blockUUID):
             caseTerminalUUID = lvGraph.getTerminalFromSymbolTable(varName)
             lvGraph.addTerminalEdge(caseTerminalUUID, caseSelector.getCaseSelectorExternal().uuid)
         processCaseSelectorPrintTerminals(caseSelector)
+
+    else:
+        logger.warning(f"Unhandled block statement type: {node.tag}")
         
                                     
 
@@ -510,38 +596,121 @@ def writeWireToXML(wire):
     rootElem.attrib["to"] = wire.toUUID
     return rootElem
 
+def process():
+    tree = ET.parse('goast/goast1.txt')
+    with open("python/goast2.xml", "wb") as writeBack:
+        ET.indent(tree, space="\t", level=0)
+        tree.write(writeBack)
+    root = tree.getroot()
+    propNode = PropertyNode()
+    propNode.addProperty("prop1")
+    propNode.addProperty("prop2")
+    lvGraph.addNode(propNode)
+    funcDecls = root.findall(".//FuncDecl")
+    visNode = ET.Element("vis")
+    viNode = ET.Element("vi")
+    bdNode = ET.Element("bd")
+    bdNode.attrib["name"] = "test"
+    outputNodesElem = ET.Element("nodes")
+    outputWiresElem = ET.Element("wires")
+    if len(funcDecls) > 0:
+        for funcDecl in funcDecls:
+            ident = funcDecl.find("Ident/name").text
+            if ident == "main":
+                bdUUID = lvGraph.diagramUUID
+                bdNode.attrib["diagramUUID"] = bdUUID
+                mainBlockStmt = funcDecl.find("BlockStmt")
+                for node in mainBlockStmt:
+                    processBlockStmtChild(node, bdUUID)
+                for i, n in enumerate(lvGraph.graph["nodes"]):
+                    outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
+                for w in lvGraph.getWires():
+                    outputWiresElem.append(writeWireToXML(w))
+    bdNode.append(outputNodesElem)
+    bdNode.append(outputWiresElem)
+    viNode.append(bdNode)
+    visNode.append(viNode)
+    tree = ET.ElementTree(visNode)
+    with open("python/ai.xml", "wb") as files:
+        ET.indent(tree, space="\t", level=0)
+        tree.write(files)
 
-tree = ET.parse('goast/goast1.txt')
-with open("python/goast2.xml", "wb") as writeBack:
-    ET.indent(tree, space="\t", level=0)
-    tree.write(writeBack)
-root = tree.getroot()
+def test_property_node_wiring():
 
-funcDecls = root.findall(".//FuncDecl")
-visNode = ET.Element("vis")
-viNode = ET.Element("vi")
-bdNode = ET.Element("bd")
-bdNode.attrib["name"] = "test"
-outputNodesElem = ET.Element("nodes")
-outputWiresElem = ET.Element("wires")
-if len(funcDecls) > 0:
-    for funcDecl in funcDecls:
-        ident = funcDecl.find("Ident/name").text
-        if ident == "main":
-            bdUUID = lvGraph.diagramUUID
-            bdNode.attrib["diagramUUID"] = bdUUID
-            mainBlockStmt = funcDecl.find("BlockStmt")
-            for node in mainBlockStmt:
-                processBlockStmtChild(node, bdUUID)
-            for i, n in enumerate(lvGraph.graph["nodes"]):
-                outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
-            for w in lvGraph.getWires():
-                outputWiresElem.append(writeWireToXML(w))
-bdNode.append(outputNodesElem)
-bdNode.append(outputWiresElem)
-viNode.append(bdNode)
-visNode.append(viNode)
-tree = ET.ElementTree(visNode)
-with open("python/ai.xml", "wb") as files:
-    ET.indent(tree, space="\t", level=0)
-    tree.write(files)
+    visNode = ET.Element("vis")
+    viNode = ET.Element("vi")
+    bdNode = ET.Element("bd")
+    bdNode.attrib["name"] = "test"
+    outputNodesElem = ET.Element("nodes")
+    outputWiresElem = ET.Element("wires")
+    # Create the Class Specifier Constant node.
+    # (Here, the id_string is set to "NumericConstant" as specified.)
+    stringControl = StringControl("input 1")
+    lvGraph.addNode(stringControl)
+    
+    # Create a Property Node.
+    propNode = PropertyNode()
+    propNode.setLinkUUID(stringControl.uuid)
+    classPropTerminalUUID = propNode.addProperty("Value")
+    lvGraph.addNode(propNode)
+    
+    # Wire the constant's main output to the Property Node's reference terminal.
+    # We assume that classSpecConst.getTerminal() returns its primary terminal.
+    
+    # Create a String Indicator.
+    strIndicator = StringIndicator("MyStringIndicator")
+    lvGraph.addNode(strIndicator)
+    
+    # Now wire the constant's "Class" property terminal to the String Indicator's terminal.
+    # For the constant, retrieve the "Class" property terminal. Here we assume that
+    # getTerminalByName can be used to look it up by the terminal name "Class".
+    strIndTerm = strIndicator.getTerminal()
+    lvGraph.addTerminalEdge(classPropTerminalUUID, strIndTerm.uuid)
+
+    for i, n in enumerate(lvGraph.graph["nodes"]):
+        outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
+    for w in lvGraph.getWires():
+        outputWiresElem.append(writeWireToXML(w))
+    bdNode.append(outputNodesElem)
+    bdNode.append(outputWiresElem)
+    viNode.append(bdNode)
+    visNode.append(viNode)
+    tree = ET.ElementTree(visNode)
+    with open("python/ai-test.xml", "wb") as files:
+        ET.indent(tree, space="\t", level=0)
+        tree.write(files)
+
+def test_VI_From_File_wiring(path):
+
+    visNode = ET.Element("vis")
+    viNode = ET.Element("vi")
+    bdNode = ET.Element("bd")
+    bdNode.attrib["name"] = "test"
+    outputNodesElem = ET.Element("nodes")
+    outputWiresElem = ET.Element("wires")
+    # Create the Class Specifier Constant node.
+    # (Here, the id_string is set to "NumericConstant" as specified.)
+    # subVI = SubVIFromPath("subvi", path)
+    # lvGraph.addNode(subVI)
+
+    tc = ToMoreSpecificClass("test")
+    lvGraph.addNode(tc)
+
+    for i, n in enumerate(lvGraph.graph["nodes"]):
+        outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
+    for w in lvGraph.getWires():
+        outputWiresElem.append(writeWireToXML(w))
+    bdNode.append(outputNodesElem)
+    bdNode.append(outputWiresElem)
+    viNode.append(bdNode)
+    visNode.append(viNode)
+    tree = ET.ElementTree(visNode)
+    with open("python/ai-test.xml", "wb") as files:
+        ET.indent(tree, space="\t", level=0)
+        tree.write(files)
+
+
+# Optionally, call the test function if this file is run directly.
+if __name__ == "__main__":
+    test_VI_From_File_wiring("Get Pos Data.vi")
+

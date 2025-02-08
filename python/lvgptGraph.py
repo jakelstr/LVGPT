@@ -167,6 +167,7 @@ class LVNode:
         rootElem = ET.Element("node")
         rootElem.attrib["xPos"] = "0"
         rootElem.attrib["yPos"] = str(index * 50)
+        rootElem.attrib["uuid"] = self.uuid
         if hasattr(self, "value") and self.value is not None:
             rootElem.attrib["value"] = self.value
         for attrib in self.attributes:
@@ -180,6 +181,37 @@ class LVNode:
         rootElem.append(terminalsElem)
         return rootElem
 
+class LoopNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "loop")
+        self.attributes["type"] = "While Loop"
+        LVNode.addTerminal(self, "condition", varType="BOOL")
+        LVNode.addTerminal(self, "loop body")
+        LVNode.addTerminal(self, "output", False, "VOID")
+    
+    def getConditionTerminal(self):
+        return self.terminals["condition"]
+    
+    def getBodyTerminal(self):
+        return self.terminals["loop body"]
+
+class RangeLoopNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "range_loop")
+        self.attributes["type"] = "For Loop"
+        LVNode.addTerminal(self, "iterable", varType="ARRAY")
+        LVNode.addTerminal(self, "loop variable")
+        LVNode.addTerminal(self, "loop body")
+        self.varType = "ARRAY"
+    
+    def getIterableTerminal(self):
+        return self.terminals["iterable"]
+    
+    def getLoopVariableTerminal(self):
+        return self.terminals["loop variable"]
+    
+    def getBodyTerminal(self):
+        return self.terminals["loop body"]
 
 class NumericControl(LVNode):
     def __init__(self, name, numType):
@@ -220,6 +252,7 @@ class StringControl(LVNode):
     def __init__(self, name):
         LVNode.__init__(self, name)
         self.attributes["type"] = "String Control"
+        self.attributes["style"] = "String Control (modern)"
         self.varType = "STRING"
         LVNode.addTerminal(self, name, False)
     def setValue(self, val):
@@ -237,16 +270,49 @@ class StringConstant(LVNode):
         self.value = val
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
+    
+class ClassSpecifierConstant(LVNode):
+    def __init__(self, name, id_string):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "Class Specifier Constant"
+        self.attributes["id_string"] = id_string
+        LVNode.addTerminal(self, name, False)
+    def getTerminal(self):
+        return LVNode.getTerminalByName(self, self.name)
+    
+class ToMoreSpecificClass(LVNode):
+    def __init__(self, name):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "To More Specific Class"
+        LVNode.addTerminal(self, "specific class reference", varType="reference", isInput=False)
+        LVNode.addTerminal(self, "reference", varType="reference")
+        LVNode.addTerminal(self, "target class", varType="reference")
+        LVNode.addTerminal(self, "error in", varType="error")
+        LVNode.addTerminal(self, "error out", varType="error", isInput=False)
+    def getTerms(self):
+        targetClass = LVNode.getTerminalByName(self, "target class")
+        reference = LVNode.getTerminalByName(self, "reference")
+        specificClass = LVNode.getTerminalByName(self, "specific class reference")
+        errorIn = LVNode.getTerminalByName(self, "error in")
+        errorOut = LVNode.getTerminalByName(self, "error out")
+        return (targetClass, reference, specificClass, errorIn, errorOut)
 
 class StringIndicator(LVNode):
     def __init__(self, name):
         LVNode.__init__(self, name)
         self.attributes["type"] = "String Indicator"
+        self.attributes["style"] = "String Indicator (modern)"
         self.isIndicator = True
         self.varType = "STRING"
         LVNode.addTerminal(self, name)
     def getTerminal(self):
         return LVNode.getTerminalByName(self, self.name)
+    
+class SubVIFromPath(LVNode):
+    def __init__(self, name, path):
+        LVNode.__init__(self, name)
+        self.attributes["type"] = "SubVIFromPath"
+        self.attributes["path"] = path
     
 class BoolConstant(LVNode):
     def __init__(self, name):
@@ -344,6 +410,75 @@ class GreaterOrEqualNode(LVNode):
         leftTerm = LVNode.getTerminalByName(self, "x")
         rightTerm = LVNode.getTerminalByName(self, "y")
         return (leftTerm, rightTerm, outputTerm)
+class EqualNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "equal")
+        LVNode.addTerminal(self, "x")
+        LVNode.addTerminal(self, "y")
+        LVNode.addTerminal(self, "x == y?", False, "BOOL")
+        self.attributes["type"] = "Equal"
+    
+    def getTerms(self):
+        outputTerm = self.getTerminalByName("x == y?")
+        leftTerm = self.getTerminalByName("x")
+        rightTerm = self.getTerminalByName("y")
+        return (leftTerm, rightTerm, outputTerm)
+
+class NotEqualNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "not_equal")
+        LVNode.addTerminal(self, "x")
+        LVNode.addTerminal(self, "y")
+        LVNode.addTerminal(self, "x != y?", False, "BOOL")
+        self.attributes["type"] = "Not Equal"
+    
+    def getTerms(self):
+        outputTerm = self.getTerminalByName("x != y?")
+        leftTerm = self.getTerminalByName("x")
+        rightTerm = self.getTerminalByName("y")
+        return (leftTerm, rightTerm, outputTerm)
+
+class GreaterThanNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "greater_than")
+        LVNode.addTerminal(self, "x")
+        LVNode.addTerminal(self, "y")
+        LVNode.addTerminal(self, "x > y?", False, "BOOL")
+        self.attributes["type"] = "Greater Than"
+    
+    def getTerms(self):
+        outputTerm = self.getTerminalByName("x > y?")
+        leftTerm = self.getTerminalByName("x")
+        rightTerm = self.getTerminalByName("y")
+        return (leftTerm, rightTerm, outputTerm)
+
+class LessThanNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "less_than")
+        LVNode.addTerminal(self, "x")
+        LVNode.addTerminal(self, "y")
+        LVNode.addTerminal(self, "x < y?", False, "BOOL")
+        self.attributes["type"] = "Less Than"
+    
+    def getTerms(self):
+        outputTerm = self.getTerminalByName("x < y?")
+        leftTerm = self.getTerminalByName("x")
+        rightTerm = self.getTerminalByName("y")
+        return (leftTerm, rightTerm, outputTerm)
+
+class LessOrEqualNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "less_or_equal")
+        LVNode.addTerminal(self, "x")
+        LVNode.addTerminal(self, "y")
+        LVNode.addTerminal(self, "x <= y?", False, "BOOL")
+        self.attributes["type"] = "Less Or Equal"
+    
+    def getTerms(self):
+        outputTerm = self.getTerminalByName("x <= y?")
+        leftTerm = self.getTerminalByName("x")
+        rightTerm = self.getTerminalByName("y")
+        return (leftTerm, rightTerm, outputTerm)
 
 class ConcatenateStringsNode(LVNode):
     def  __init__(self):
@@ -378,6 +513,102 @@ class FormatIntoStringsNode(LVNode):
         return LVNode.addTerminal(self, "input " + str(int(self.attributes["nodes"])))
     def getInputTerms(self):
         return [item for item in self.terminals.values() if "input" in item.name]
+    
+class PropertyNode(LVNode):
+    def __init__(self):
+        LVNode.__init__(self, "prop")
+        # Add the standard terminals for a PropertyNode
+        LVNode.addTerminal(self, "reference")
+        LVNode.addTerminal(self, "error in (no error)")
+        LVNode.addTerminal(self, "reference out", isInput=False)
+        LVNode.addTerminal(self, "error out", isInput=False)
+        self.attributes["type"] = "Property Node"
+        self.attributes["linkUUID"] = ""
+        # Dictionary mapping property names to the corresponding property terminal's UUID.
+        self.properties = {}  # e.g., {"prop1": "uuid1", "prop2": "uuid2"}
+
+    def getTerms(self):
+        # Return the standard terminals used for wiring the PropertyNode.
+        ref = LVNode.getTerminalByName(self, "reference")
+        error_in = LVNode.getTerminalByName(self, "error in (no error)")
+        ref_out = LVNode.getTerminalByName(self, "reference out")
+        error_out = LVNode.getTerminalByName(self, "error out")
+        return (ref, error_in, ref_out, error_out)
+    
+    def setLinkUUID(self, linkUUID):
+        self.attributes["linkUUID"] = linkUUID
+
+    def addProperty(self, property_name, terminal_name=None):
+        """
+        Adds a new property to the node.
+        
+        Args:
+            property_name (str): The name of the property.
+            terminal_name (str, optional): The name of the terminal that will be created.
+                                           If not provided, the property name is used.
+        """
+        if terminal_name is None:
+            terminal_name = property_name
+
+        # Only add the property if it isn't already present.
+        if property_name not in self.properties:
+            # Create a new terminal for this property.
+            # Note: addTerminal() is inherited from LVNode. It creates a terminal,
+            # adds it to self.terminals, and returns its UUID.
+            terminal_uuid = self.addTerminal(terminal_name)
+            self.properties[property_name] = terminal_uuid
+            return terminal_uuid
+
+            # Update a node attribute that lists visible properties.
+            # (Here we store a comma-separated list of property names.)
+            # self.attributes["properties"] = ",".join(self.properties.keys())
+
+    def setVisibleProperties(self, properties):
+        """
+        Sets which properties are visible on the node.
+        
+        Args:
+            properties (list): A list of property definitions. Each entry can be either:
+                - A string (in which case the property name and terminal name are the same), or
+                - A tuple of (property_name, terminal_name) if they differ.
+        """
+        # Clear any existing properties.
+        self.properties = {}
+        for prop in properties:
+            if isinstance(prop, tuple):
+                self.addProperty(prop[0], prop[1])
+            else:
+                self.addProperty(prop)
+
+    def writeNodeToXML(self, index):
+        rootElem = ET.Element("node")
+        rootElem.attrib["xPos"] = "0"
+        rootElem.attrib["yPos"] = str(index * 50)
+        rootElem.attrib["uuid"] = self.uuid
+        
+        # Create an XML element for properties.
+        propertiesElem = ET.Element("properties")
+        for property_name, terminal_uuid in self.properties.items():
+            propertyElem = ET.Element("property")
+            propertyElem.attrib["name"] = property_name
+            # Include the terminal UUID so that downstream tools know which terminal represents this property.
+            propertyElem.attrib["terminalUUID"] = terminal_uuid
+            propertiesElem.append(propertyElem)
+        rootElem.append(propertiesElem)
+        
+        # Append the node's attributes as XML attributes.
+        for attrib in self.attributes:
+            rootElem.attrib[attrib] = self.attributes[attrib]
+        
+        # Append terminals to the XML.
+        terminalsElem = ET.Element("terminals")
+        for term in self.terminals:
+            termElem = ET.Element("terminal")
+            termElem.attrib["id"] = self.terminals[term].uuid
+            termElem.attrib["name"] = self.terminals[term].name
+            terminalsElem.append(termElem)
+        rootElem.append(terminalsElem)
+        return rootElem
     
 class SelectNode(LVNode):
     def __init__(self):
@@ -431,6 +662,7 @@ class StringArrayControl(LVNode):
         rootElem = ET.Element("node")
         rootElem.attrib["xPos"] = "0"
         rootElem.attrib["yPos"] = str(index * 50)
+        rootElem.attrib["uuid"] = self.uuid
         
         valuesElem = ET.Element("values")
         for v in self.value:
@@ -464,6 +696,7 @@ class StringArrayIndicator(LVNode):
         rootElem = ET.Element("node")
         rootElem.attrib["xPos"] = "0"
         rootElem.attrib["yPos"] = str(index * 50)
+        rootElem.attrib["uuid"] = self.uuid
         
         valuesElem = ET.Element("values")
         for v in self.value:
@@ -509,6 +742,7 @@ class CaseSelector(LVNode):
         rootElem = ET.Element("node")
         rootElem.attrib["xPos"] = "0"
         rootElem.attrib["yPos"] = str(index * 50)
+        rootElem.attrib["uuid"] = self.uuid
         
         casesElem = ET.Element("cases")
         for subD in self.subdiagrams:

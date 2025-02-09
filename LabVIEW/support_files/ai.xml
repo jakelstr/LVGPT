@@ -1,0 +1,86 @@
+<vis>
+	<vi>
+		<bd name="test">
+			<nodes>
+				<node xPos="0" yPos="0" uuid="6269d71a-df3d-4688-9099-bf7654c7cd16" name="csc1" type="Class Specifier Constant" id_string="Control" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="ce776116-6cb7-40b3-bfc5-64e142ce4754" name="csc1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="50" uuid="b639f076-02d9-4c4d-903c-4e3e8a48dbde" name="csc2" type="Class Specifier Constant" id_string="Boolean" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="c817812d-fadc-4bff-9241-6facc3eb168d" name="csc2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="100" uuid="f0aff991-960f-4450-839a-6e2b96b83a3e" name="varToData" type="Variant To Data" genclass="Function" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="fb9bfc76-797e-4864-b9ce-be62f1fc5d1e" name="variant" />
+						<terminal id="fdb899e2-e4a6-45f0-96c6-0dc5065b22f4" name="type" />
+						<terminal id="984c6899-cd4d-4093-8328-4c5d24efab2c" name="data" />
+						<terminal id="fab4a059-0807-4301-aea4-edec33e05b4b" name="error in" />
+						<terminal id="fc1aeaf9-3f1a-4d30-8469-941dd211646b" name="error out" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="150" uuid="79aa91e6-7540-4bdc-8166-b3eb08b6eec3" name="tsc" type="To More Specific Class" genclass="Function" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="775a83ba-6775-4683-86b1-7b5bd4250b6e" name="specific class reference" />
+						<terminal id="bcc031d9-a340-47a8-945b-d885af73161a" name="reference" />
+						<terminal id="1b03b704-fa38-4303-8fe4-25656507680b" name="target class" />
+						<terminal id="5e5e18d3-4bba-41f3-90eb-292f3d5af140" name="error in" />
+						<terminal id="5bd623ea-08d1-41e6-9404-aee57220126a" name="error out" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="200" uuid="e9606656-ab49-4f09-a3c8-9427daf0d61a" name="prop" type="Property Node" linkUUID="" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<properties>
+						<property name="Value" terminalUUID="c76452b6-df9f-4737-a743-b9d6d5701dc4" direction="write" />
+					</properties>
+					<terminals>
+						<terminal id="692086d7-0260-43d0-845d-9afce13b8c68" name="reference" />
+						<terminal id="9b0bb062-e1ae-4936-8659-41178a937cbe" name="error in (no error)" />
+						<terminal id="4d4fedb5-0291-4240-a379-f55e5d67aefa" name="reference out" />
+						<terminal id="cdb8fd76-7e8a-4dc7-b975-e526f7400495" name="error out" />
+						<terminal id="c76452b6-df9f-4737-a743-b9d6d5701dc4" name="Value" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="250" uuid="1a7e35ac-dc39-4259-86c8-da3471a33ffd" name="lookInMap" type="Look In Map" genclass="Function" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="416a96ae-1f21-4363-8bf6-f4fb1d36ba72" name="map" />
+						<terminal id="2ebe2fb5-5637-43aa-b932-12eaaac5350b" name="key" />
+						<terminal id="cbc0a3bd-0515-455b-9a41-49a90e440755" name="default value" />
+						<terminal id="8c77f5b1-499f-4117-ba58-b1bb10ae0743" name="key not found?" />
+						<terminal id="800c4c2e-4b93-4c2b-b540-4c50dfc18d50" name="value" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="300" uuid="a0ff1e35-d4ac-4595-bf16-0da6679adb19" value="value" name="valueConst" type="String Constant" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="b8411c89-c6f6-4f95-8a7b-0c70bc79650a" name="valueConst" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="350" uuid="333c8393-7af2-4337-b09d-1a2d913bd3dd" value="true" name="compareConst" type="String Constant" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="dd9cafe3-6716-4107-84bf-994a28fe42bc" name="compareConst" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="400" uuid="d0e274fd-bc23-4dc0-8680-e99b3662167a" name="equal" type="Equal?" genclass="Function" parentDiagram="b75392c8-3d94-4c31-bd69-560a5c2687de">
+					<terminals>
+						<terminal id="ac1f4d88-26a2-41a1-8e7b-b4b6d13bbbc4" name="x" />
+						<terminal id="fc5b6bbb-57a3-4b92-8f1e-68ae3596413b" name="y" />
+						<terminal id="6df447be-11d0-4207-a7e8-dfb6648ca80b" name="x = y?" />
+					</terminals>
+				</node>
+			</nodes>
+			<wires>
+				<wire id="303a893e-2d11-40a3-9f5f-def091c24574" from="ce776116-6cb7-40b3-bfc5-64e142ce4754" to="fdb899e2-e4a6-45f0-96c6-0dc5065b22f4" />
+				<wire id="bc925648-a068-4e97-9102-d9b1e1ab7635" from="c817812d-fadc-4bff-9241-6facc3eb168d" to="1b03b704-fa38-4303-8fe4-25656507680b" />
+				<wire id="208ba44c-8e31-4ab5-8e2f-6774e278dd54" from="984c6899-cd4d-4093-8328-4c5d24efab2c" to="bcc031d9-a340-47a8-945b-d885af73161a" />
+				<wire id="098c1dfe-3f81-4092-bc57-aa2895352ab3" from="fc1aeaf9-3f1a-4d30-8469-941dd211646b" to="5e5e18d3-4bba-41f3-90eb-292f3d5af140" />
+				<wire id="da208453-11dc-4fe2-b041-f75a6ae5b83f" from="775a83ba-6775-4683-86b1-7b5bd4250b6e" to="692086d7-0260-43d0-845d-9afce13b8c68" />
+				<wire id="72f815c6-660f-4adc-ac01-36313984440b" from="5bd623ea-08d1-41e6-9404-aee57220126a" to="9b0bb062-e1ae-4936-8659-41178a937cbe" />
+				<wire id="9b194852-0c56-4a21-87af-35229439431d" from="c76452b6-df9f-4737-a743-b9d6d5701dc4" to="6df447be-11d0-4207-a7e8-dfb6648ca80b" />
+				<wire id="3ff7ac43-d471-4da1-a5ec-940d027e09ce" from="2ebe2fb5-5637-43aa-b932-12eaaac5350b" to="b8411c89-c6f6-4f95-8a7b-0c70bc79650a" />
+				<wire id="68bccf47-300a-4122-90a2-d7cf60b58307" from="800c4c2e-4b93-4c2b-b540-4c50dfc18d50" to="ac1f4d88-26a2-41a1-8e7b-b4b6d13bbbc4" />
+				<wire id="27f9edfb-1620-4ad0-8c13-a246062f51fd" from="dd9cafe3-6716-4107-84bf-994a28fe42bc" to="fc5b6bbb-57a3-4b92-8f1e-68ae3596413b" />
+			</wires>
+		</bd>
+	</vi>
+</vis>

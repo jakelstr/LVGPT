@@ -2,41 +2,415 @@
 	<vi>
 		<bd name="test">
 			<nodes>
-				<node xPos="0" yPos="0" uuid="1b2ee6d5-6b4c-405e-a385-7f40fdd09a56" name="boolean control" type="Bool Control" style="Push Button" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+				<node xPos="0" yPos="0" uuid="bdbf4c8d-73b0-48f8-8cb2-535218bb0619" value="True" name="boolean control" type="Bool Control" style="Push Button" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
 					<terminals>
-						<terminal id="b8719fe6-95d4-4069-b367-4b9bcb7720e6" name="boolean control" />
+						<terminal id="629ab971-57d3-43d6-9c35-c1ce95c79772" name="boolean control" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="50" uuid="658aca3c-a8b0-4cec-bd85-3bbdd1afea0c" name="boolean indicator" type="Bool Control" style="LED Button" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+				<node xPos="0" yPos="50" uuid="e0bda8f2-d727-491e-9a1b-7a059e59cd46" name="boolean indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
 					<terminals>
-						<terminal id="91f6b0e2-f2dd-4865-8c95-c66637a9b3b5" name="boolean indicator" />
+						<terminal id="08e0b2de-731f-44e6-b613-76a72136e3ba" name="boolean indicator" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="100" uuid="5e4bbe9e-e224-4a97-b71c-bf44c46dcc25" value="test" name="string control" type="String Control" style="String Control (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+				<node xPos="0" yPos="100" uuid="255587a2-2a5e-47e1-9ac0-889188eb59cc" value="test" name="string control" type="String Control" style="String Control (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
 					<terminals>
-						<terminal id="68abf2bb-2831-4168-ac3b-d2847ce7516e" name="string control" />
+						<terminal id="cd970bd8-0baf-4c84-b050-8c64a96570d8" name="string control" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="150" uuid="423ce6b9-64b1-4a83-b039-a266aa0524e4" name="string indicator" type="String Control" style="String Indicator (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+				<node xPos="0" yPos="150" uuid="26301f15-0749-498e-b1ce-c9219e84ef9b" name="string indicator" type="String Control" style="String Indicator (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
 					<terminals>
-						<terminal id="d6955dd1-6424-4884-a46d-59463689d4dd" name="string indicator" />
+						<terminal id="9587656f-9d36-4fa6-b069-67734fa49530" name="string indicator" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="200" uuid="450de48e-095f-4ed4-8063-ffd763342d05" value="33" name="numeric control" type="Numeric Control" numericType="Long" style="Numeric Control (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+				<node xPos="0" yPos="200" uuid="bef10f85-17f9-4bed-b8e0-6c59440b5822" value="Const" name="string constant" type="String Constant" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
 					<terminals>
-						<terminal id="7fc56234-2cc6-426f-8318-bd90e9886ec0" name="numeric control" />
+						<terminal id="4d8ae11a-c118-4b34-a909-c6ff26c5cf12" name="string constant" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="250" uuid="c33c3fd3-28ad-4e88-8669-fcb9331941b3" name="numeric indicator" type="Numeric Control" numericType="Long" style="Numeric Indicator (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+				<node xPos="0" yPos="250" uuid="2ca533a9-cf09-4ea9-a382-3c2a79f89963" name="concat" type="Concatenate Strings" nodes="2" defaultNodeCount="2" genclass="Growable Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
 					<terminals>
-						<terminal id="787c96b8-2bb5-4e27-ad69-80bc46290420" name="numeric indicator" />
+						<terminal id="e1dbde71-b9a5-4608-9230-621164c5e68f" name="string" />
+						<terminal id="052bd304-d4a9-4594-8d1e-5a21b037ac8f" name="string" />
+						<terminal id="489107a5-05e8-4e04-b8b1-c725fb44f53b" name="concatenated string" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="300" uuid="5053f9f4-3a58-4807-9af8-935b8c714b9c" value="33" name="numeric control" type="Numeric Control" numericType="Long" style="Numeric Control (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="654e6c8f-cf4c-45af-bd12-42c6b08bc2f3" name="numeric control" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="350" uuid="9cd49749-27bc-48ba-b779-c86ae746b5f5" name="numeric indicator" type="Numeric Control" numericType="Long" style="Numeric Indicator (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="36813296-a16f-47dc-ad95-0c9893bee01f" name="numeric indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="400" uuid="7bfb2e8c-637a-4382-a4e9-ce7f21a8bec3" name="select" type="Select" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="403c9d25-7443-4f14-8ab7-37220af9df57" name="t" />
+						<terminal id="1df14331-c459-4142-abab-911a23a66f90" name="s" />
+						<terminal id="4c76d156-d9f4-4fed-8b02-53a06f7d4ac5" name="f" />
+						<terminal id="a3adcdef-9873-4305-8efa-b390dc1a0652" name="s? t:f" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="450" uuid="c188d714-fcbd-4fea-bcfc-005db539e969" value="100" name="true_val" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="ac3c4914-9d95-44ce-aa91-7016bb02328c" name="true_val" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="500" uuid="e45daea7-041c-42b1-a898-6aace0fcf4c7" value="200" name="false_val" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="578b6014-64b4-4a96-ab67-0d16883aad1f" name="false_val" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="550" uuid="ac7c52d2-6217-4392-b626-97e057cd7f04" name="select_ind" type="Numeric Control" numericType="Long" style="Numeric Indicator (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="5a305521-537f-426d-b34d-980c47fe6954" name="select_ind" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="600" uuid="b01c6d1d-6c1f-4e98-a5bd-4e17ea606398" name="add" type="Add" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="5650828f-5ae8-465b-8bdb-d05f77a60a0b" name="x" />
+						<terminal id="74d7028e-6334-4c09-853f-17b4c57f129e" name="y" />
+						<terminal id="bc53efdf-79b4-4961-9d0f-efe9263b29d8" name="x+y" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="650" uuid="4052eeac-f05c-4792-baff-4ce9eebee240" value="10" name="add_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="0ac7569a-fa39-46f6-a4a8-fa8b7204acb2" name="add_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="700" uuid="5fef99a0-63e0-428e-b348-1e3b22cdd605" value="20" name="add_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="d15eb42c-591d-440c-b4b0-af03dd24e6eb" name="add_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="750" uuid="650673ea-f28d-4342-ae65-e0aeaba4ea3c" name="add_indicator" type="Numeric Control" numericType="Long" style="Numeric Indicator (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="3fef8ea4-b9a9-49bf-ada6-4e6bed6968a7" name="add_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="800" uuid="27f09e13-1f79-49f3-9817-060b3074b2f4" name="subtract" type="Subtract" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="5c32b0cc-ecd8-4422-bf5e-737af3fefce6" name="x" />
+						<terminal id="49909bc1-fa18-4eb6-927c-5e0cad777d28" name="y" />
+						<terminal id="85f409a5-55f7-46ca-80e8-ba3103b3efd3" name="x-y" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="850" uuid="868e2d0a-560b-4c87-9a12-5b083f9d134d" value="30" name="sub_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="8afd4833-9724-452b-92d2-d3d91f238888" name="sub_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="900" uuid="db4f97de-cffc-46dc-8b7b-794357ed7cc0" value="5" name="sub_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="f467d5a9-7ba2-48fe-ae55-d16ebab99291" name="sub_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="950" uuid="4e492ff1-0877-4a14-a202-922b5025facc" name="sub_indicator" type="Numeric Control" numericType="Long" style="Numeric Indicator (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="77ec6901-83fd-4448-a9eb-3f8ca825236b" name="sub_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1000" uuid="90ce512b-c637-4543-998f-895ab0b5f22e" name="mult" type="Multiply" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="bfc8cac2-0cc7-4eee-b263-9c5776065477" name="x" />
+						<terminal id="a2e1aeda-c0ff-4649-b82c-70829c26ebb0" name="y" />
+						<terminal id="a0024afd-d1bc-47f3-9f18-edb0ce5ce0f5" name="x*y" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1050" uuid="dd4bc3aa-c763-48f6-a084-25dd13681307" value="7" name="mult_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="80f043d3-640d-4d24-b790-c922e04536b5" name="mult_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1100" uuid="2abba739-5929-4516-b8c4-69b33311755f" value="6" name="mult_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="48c0a535-392f-4b9f-b4f3-d780704cf2ae" name="mult_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1150" uuid="d5f2ad7f-c791-4ebb-b91f-a3aaeda899f6" name="mult_indicator" type="Numeric Control" numericType="Long" style="Numeric Indicator (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="2609a1a8-9230-4598-a42d-85b99a06c1ab" name="mult_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1200" uuid="a5208641-cc6c-43e1-a665-81b9ec714276" name="divide" type="Divide" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="84b72368-4a29-4f68-8e0b-42f5214ec6ab" name="x" />
+						<terminal id="9bc78782-6ef8-4b5b-91e4-e96510e48d87" name="y" />
+						<terminal id="d3e6bee8-1f52-47ca-9550-2f897bddbf10" name="x/y" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1250" uuid="20e95e24-c702-42fd-ae3b-d511f700fe12" value="100" name="div_input1" type="Numeric Constant" numericType="Double Precision" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="e5a610b9-8cdc-450c-97f0-d6b840e7c1cc" name="div_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1300" uuid="7f97bb1a-20fa-4db3-bfa5-7f25226e7427" value="4" name="div_input2" type="Numeric Constant" numericType="Double Precision" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="e3b713c7-d393-42c3-b193-9b5d61d15de0" name="div_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1350" uuid="5299dc84-ad17-4ab8-9ce4-3dc8c1cb4a33" name="div_indicator" type="Numeric Control" numericType="Double Precision" style="Numeric Indicator (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="20a7cd25-3f2b-401d-ac66-415431ef04f9" name="div_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1400" uuid="ef750d61-3900-4d17-9c4b-144da76d7673" name="divide" type="Greater Or Equal?" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="ac96d3ce-c845-4f4e-9ca2-dd5bd8816ff7" name="x" />
+						<terminal id="c0e5dfe6-f8fb-41f3-b9ae-75cafc2007ef" name="y" />
+						<terminal id="c6bdf6e4-edbf-47be-bdf0-ebabc38b9ec9" name="x &gt;= y?" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1450" uuid="4e59a4f5-b9b5-4994-b4b8-e815bd67404f" value="50" name="ge_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="403314b1-c790-4075-9b69-388066ea4927" name="ge_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1500" uuid="716ec849-d717-4f86-ba90-24b7df39ed36" value="40" name="ge_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="17d910d7-7975-4040-956f-4cff538db1d7" name="ge_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1550" uuid="03904ffa-62f7-452a-80a7-6dddb01f58f7" name="ge_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="56bb0cdc-8d45-4677-81ef-f31f24788ecc" name="ge_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1600" uuid="3df55548-0e2f-40eb-8f30-e299e4b9afbc" name="equal" type="Equal?" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="1aa0d62b-4b03-466b-86f4-f7e6f4b38a15" name="x" />
+						<terminal id="4808da47-de69-4422-8944-de137963cbc1" name="y" />
+						<terminal id="879e4e61-fec3-4f99-a940-180413a48d63" name="x = y?" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1650" uuid="ef0288eb-f2a6-4f2e-8829-488fd1bb2260" value="50" name="eq_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="7cb4fcdd-60dd-4e2d-8300-62fb80900fec" name="eq_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1700" uuid="c00e9b8a-99da-411d-a1a9-0eb1e705e807" value="50" name="eq_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="5c894edf-7b9f-4553-ae51-8674697d8421" name="eq_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1750" uuid="1da82e8f-76b8-4d2c-83b4-27fcbeae57a0" name="eq_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="f9b3f758-25c4-48f4-b55e-e25af7571190" name="eq_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1800" uuid="cac35c54-130d-4d1e-ae78-02b3a71c1b7d" name="not_equal" type="Not Equal?" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="6ef1246b-9edc-4c66-ae50-8c9d13cff5aa" name="x" />
+						<terminal id="7757ac9c-002a-4775-a540-37f37a6fe8ee" name="y" />
+						<terminal id="df7de6f0-5215-42bf-88a6-a3966bb053ef" name="x != y?" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1850" uuid="3021c962-e6d6-4eca-853a-e1be39077934" value="50" name="neq_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="99ae4b5c-2524-4a07-b9a4-093740951985" name="neq_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1900" uuid="463f0a46-812c-4f0c-b789-ee1f7a69bf07" value="40" name="neq_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="f5908334-4234-42bf-bb7b-f886f451e0b2" name="neq_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="1950" uuid="eca9d865-ffb0-4426-aed7-3dae94a36994" name="neq_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="d35b09b9-ce35-4ce2-96d5-91dc27c88c11" name="neq_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2000" uuid="fff3c4d5-5aef-43df-a534-e64abca00c9c" name="greater_than" type="Greater?" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="96e50239-77ec-4400-9167-7e2fd4ba906b" name="x" />
+						<terminal id="5aed3233-31e5-48be-9438-fa6505373eae" name="y" />
+						<terminal id="e69f0269-302b-4f53-90d0-3c8683258922" name="x &gt; y?" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2050" uuid="f71d45f8-34cd-49f8-bb68-b70537d5bd5c" value="50" name="gt_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="1051db48-fb2e-499e-9000-0df738cdaf14" name="gt_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2100" uuid="bca4ef93-1239-4c53-870c-59bce153b9ce" value="40" name="gt_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="7693536c-2fb4-4a42-90f4-cbd2ea869faa" name="gt_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2150" uuid="dfcd419a-d3df-4a5a-88ff-f1d11228b0d7" name="gt_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="bd806689-10e3-4807-a3a4-c5063735b748" name="gt_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2200" uuid="c46cd4ad-97ef-42d9-8bc1-6ab5ec72c362" name="less_than" type="Less?" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="ce06095a-6244-44b0-916a-9fb26d0a513d" name="x" />
+						<terminal id="80722faa-2422-442b-bacd-25c7ac0b0ba9" name="y" />
+						<terminal id="ce86e8ba-d320-45a6-bbdf-3cce1a0da5a0" name="x &lt; y?" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2250" uuid="39df99f0-0b52-4cf6-86d6-d46317feacb7" value="40" name="lt_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="b1a2765b-7e10-40ee-a7be-7caa5e8ecddc" name="lt_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2300" uuid="e92885fe-63cf-4f5a-bc98-a88cb815e7e3" value="50" name="lt_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="b2038c2d-c1e8-4b3a-9dbc-b18f23240bf5" name="lt_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2350" uuid="cb5d72a2-87cf-43a4-a8ad-e823b20e7db0" name="lt_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="1ceacd4c-8dfb-48fd-9e54-5147e0b91914" name="lt_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2400" uuid="666dde26-9e5b-4af9-9c26-a0e6fee7aab1" name="less_or_equal" type="Less Or Equal?" genclass="Function" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="add4b7fc-fda4-44f6-be69-bd4cc9117b64" name="x" />
+						<terminal id="8559ecc9-7f43-4d34-b230-615e49711981" name="y" />
+						<terminal id="146af869-db11-471e-8256-a43c04495505" name="x &lt;= y?" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2450" uuid="eb53fcae-996f-4b69-af6e-f9e8722532ff" value="40" name="loe_input1" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="77edd2ff-21d5-4620-af04-661841a1859c" name="loe_input1" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2500" uuid="4f0d874d-08d2-4f86-a1be-3c8e5e9f2f93" value="50" name="loe_input2" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="b710e8b3-e8f1-4ee1-b942-527111310fda" name="loe_input2" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2550" uuid="35e8ccf5-10c9-49cc-b87f-a3f2e539736e" name="loe_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="edec946c-676f-499a-a2b5-38140af1e6d3" name="loe_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2600" uuid="a3af8e1a-b3d0-4f94-9d56-ded6b1f0506c" name="insert_into_array" type="Insert Into Array" genclass="Growable Function" nodes="1" defaultNodeCount="1" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="55e116b4-e761-4fe9-99d3-6b00ad7417ec" name="array" />
+						<terminal id="a20da2f7-27ab-4e42-9c53-ebfbb1c3876a" name="index" />
+						<terminal id="5938ca9f-3222-4060-86b9-811243380800" name="new element/subarray" />
+						<terminal id="1e3eee7c-a3e8-44a9-ba6e-fd81c8303822" name="output array" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2650" uuid="7fd08a57-d812-4587-aceb-1023fbc8573d" name="input_array" type="Array Control" style="Array (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<values>
+						<value>First</value>
+						<value>Second</value>
+					</values>
+					<child>
+						<node xPos="0" yPos="0" uuid="b8a0e417-c4d7-4cf8-8a92-8823a0647db4" name="String" type="String Control" style="String Control (modern)">
+							<terminals />
+						</node>
+					</child>
+					<terminals>
+						<terminal id="9faab423-9608-4596-8a13-b4802850ce47" name="input_array" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2700" uuid="1c8e2db0-c39c-4a3d-9ecc-4e956953fc71" value="1" name="index_to_insert" type="Numeric Constant" numericType="Long" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="f5e81fce-5d72-4793-a920-5616b68ccab9" name="index_to_insert" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2750" uuid="0f691dc3-e8dd-4a51-ac09-1c051be1720e" value="Inserted" name="new_item" type="String Constant" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="7dfacc67-a157-49c2-b49b-604748a8ff56" name="new_item" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2800" uuid="c3bcdb75-0cdc-483f-aa31-12df23f8da98" name="output_array" type="Array Control" style="Array (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<values />
+					<child>
+						<node xPos="0" yPos="0" uuid="34c8d182-c671-444c-9a0d-b17536071684" name="String" type="String Control" style="String Indicator (modern)">
+							<terminals />
+						</node>
+					</child>
+					<terminals>
+						<terminal id="d09d9b40-a2a0-4f6e-8719-084aa69feb1e" name="output_array" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2850" uuid="3a12b1b1-eefb-4fb2-9af9-62c405d3f98c" name="case_structure" type="Case Structure" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<cases>
+						<case caseName="0" caseUUID="ac688cc4-7ff5-4c01-a419-88be60bfa7c2" />
+						<case caseName="1" caseUUID="42f6c780-ab00-479f-b4d7-be3dee924a0c" />
+					</cases>
+					<terminals>
+						<terminal id="850a12be-b671-4b15-b07c-dd1e9f7ae57e" name="case selector external" />
+						<terminal id="c21dc547-8230-472e-aa23-a0085243259d" name="case selector internal" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2900" uuid="58e469c1-8bb8-4f5c-8633-e476f1e8f071" value="1" name="case_selector" type="Numeric Control" numericType="Long" style="Numeric Control (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="8086b95c-0ba7-4604-b74f-d30b69f15f05" name="case_selector" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="2950" uuid="6ed7d38e-34a1-43cc-ab77-37abcb2ee44a" value="True" name="true_constant" type="Bool Constant" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="10874329-ea74-4800-8ff6-eea62e9bff4a" name="true_constant" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="3000" uuid="c73484d6-0265-4680-90ce-b632247e3abe" name="case_0_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="cb7ca0da-b912-4401-a14d-575350e57e3c" name="case_0_indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="3050" uuid="3bc12636-9346-48db-b7ab-732051a5cbe7" value="False" name="false_constant" type="Bool Constant" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="bd5ee245-6837-4d2f-b0c8-8b8bda2a7332" name="false_constant" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="3100" uuid="6875cfa4-a7c5-41bc-ad4c-55b3fa901c48" name="case_1_indicator" type="Bool Control" style="Round LED (modern)" parentDiagram="a81c7918-900d-4fed-beed-8d440165af71">
+					<terminals>
+						<terminal id="3a7fd044-5172-4060-bc13-64b8868f015f" name="case_1_indicator" />
 					</terminals>
 				</node>
 			</nodes>
 			<wires>
-				<wire id="7f0a7159-6708-4f8b-90ec-15f18043df0a" from="b8719fe6-95d4-4069-b367-4b9bcb7720e6" to="91f6b0e2-f2dd-4865-8c95-c66637a9b3b5" />
-				<wire id="d362a8ec-8a60-46e3-bfa5-ba89d6a1cc93" from="68abf2bb-2831-4168-ac3b-d2847ce7516e" to="d6955dd1-6424-4884-a46d-59463689d4dd" />
-				<wire id="a8b5400f-a368-4844-bf10-64762c4ffc1f" from="7fc56234-2cc6-426f-8318-bd90e9886ec0" to="787c96b8-2bb5-4e27-ad69-80bc46290420" />
+				<wire id="d37bfb83-64dc-496c-94f2-862ff4dc9993" from="629ab971-57d3-43d6-9c35-c1ce95c79772" to="08e0b2de-731f-44e6-b613-76a72136e3ba" />
+				<wire id="a9e3b2fd-8a49-4a52-b27e-cdeaa59b7cc9" from="629ab971-57d3-43d6-9c35-c1ce95c79772" to="1df14331-c459-4142-abab-911a23a66f90" />
+				<wire id="bfc0a342-539b-4361-9b50-f38701e677d6" from="cd970bd8-0baf-4c84-b050-8c64a96570d8" to="e1dbde71-b9a5-4608-9230-621164c5e68f" />
+				<wire id="f57ca9af-2a94-44e5-9483-e3af71f4f0cd" from="9587656f-9d36-4fa6-b069-67734fa49530" to="489107a5-05e8-4e04-b8b1-c725fb44f53b" />
+				<wire id="e577b8f6-6f5a-4eb3-8732-648e7623520a" from="4d8ae11a-c118-4b34-a909-c6ff26c5cf12" to="052bd304-d4a9-4594-8d1e-5a21b037ac8f" />
+				<wire id="1303fa33-c391-473b-b300-f7321d4a5b0d" from="654e6c8f-cf4c-45af-bd12-42c6b08bc2f3" to="36813296-a16f-47dc-ad95-0c9893bee01f" />
+				<wire id="d6de1576-2e03-4d0f-af0b-782bd1980b1d" from="403c9d25-7443-4f14-8ab7-37220af9df57" to="ac3c4914-9d95-44ce-aa91-7016bb02328c" />
+				<wire id="898cfd06-b91d-4681-9da6-2f593531200a" from="4c76d156-d9f4-4fed-8b02-53a06f7d4ac5" to="578b6014-64b4-4a96-ab67-0d16883aad1f" />
+				<wire id="17fef4a8-0378-4111-be29-7bf2816c5554" from="a3adcdef-9873-4305-8efa-b390dc1a0652" to="5a305521-537f-426d-b34d-980c47fe6954" />
+				<wire id="ec7ffa56-fe7f-4582-8d9c-46431e6b4a1a" from="5650828f-5ae8-465b-8bdb-d05f77a60a0b" to="0ac7569a-fa39-46f6-a4a8-fa8b7204acb2" />
+				<wire id="82763456-2669-4ab8-8bad-a6e022c073b1" from="74d7028e-6334-4c09-853f-17b4c57f129e" to="d15eb42c-591d-440c-b4b0-af03dd24e6eb" />
+				<wire id="05fddcab-ca58-48f6-b860-57bb23e900bf" from="bc53efdf-79b4-4961-9d0f-efe9263b29d8" to="3fef8ea4-b9a9-49bf-ada6-4e6bed6968a7" />
+				<wire id="452b53b7-a8d0-49f8-95c7-aa9e04b6f3ab" from="5c32b0cc-ecd8-4422-bf5e-737af3fefce6" to="8afd4833-9724-452b-92d2-d3d91f238888" />
+				<wire id="70ca5677-05e7-46c4-a9bb-bd484135dcde" from="49909bc1-fa18-4eb6-927c-5e0cad777d28" to="f467d5a9-7ba2-48fe-ae55-d16ebab99291" />
+				<wire id="1bd115b6-b109-44ae-a728-46358c1ca8e9" from="85f409a5-55f7-46ca-80e8-ba3103b3efd3" to="77ec6901-83fd-4448-a9eb-3f8ca825236b" />
+				<wire id="0f9df470-dfae-45b2-bfd0-9f1af3cb5618" from="bfc8cac2-0cc7-4eee-b263-9c5776065477" to="80f043d3-640d-4d24-b790-c922e04536b5" />
+				<wire id="c4dde147-86cc-4f63-ad9c-224f768a7ffa" from="a2e1aeda-c0ff-4649-b82c-70829c26ebb0" to="48c0a535-392f-4b9f-b4f3-d780704cf2ae" />
+				<wire id="7fae937a-c9cd-42eb-a81e-716553d2e23e" from="a0024afd-d1bc-47f3-9f18-edb0ce5ce0f5" to="2609a1a8-9230-4598-a42d-85b99a06c1ab" />
+				<wire id="4e3460f2-ecad-451c-93ac-6000f4ee9f67" from="84b72368-4a29-4f68-8e0b-42f5214ec6ab" to="e5a610b9-8cdc-450c-97f0-d6b840e7c1cc" />
+				<wire id="7d0542bc-b024-4bfe-b343-a197e8cecd17" from="9bc78782-6ef8-4b5b-91e4-e96510e48d87" to="e3b713c7-d393-42c3-b193-9b5d61d15de0" />
+				<wire id="0a965f23-cb99-4d05-9c6d-f35977287133" from="d3e6bee8-1f52-47ca-9550-2f897bddbf10" to="20a7cd25-3f2b-401d-ac66-415431ef04f9" />
+				<wire id="9705a8cc-c3c1-4090-88f7-950dcf1921a7" from="ac96d3ce-c845-4f4e-9ca2-dd5bd8816ff7" to="403314b1-c790-4075-9b69-388066ea4927" />
+				<wire id="3eb269e7-6490-4bf7-9e30-a6fc8132ee61" from="c0e5dfe6-f8fb-41f3-b9ae-75cafc2007ef" to="17d910d7-7975-4040-956f-4cff538db1d7" />
+				<wire id="3a046297-3b74-4169-afbb-9a80bc1b36a9" from="c6bdf6e4-edbf-47be-bdf0-ebabc38b9ec9" to="56bb0cdc-8d45-4677-81ef-f31f24788ecc" />
+				<wire id="2856ef92-77f4-47a5-a601-9bc799b3d930" from="1aa0d62b-4b03-466b-86f4-f7e6f4b38a15" to="7cb4fcdd-60dd-4e2d-8300-62fb80900fec" />
+				<wire id="4ad3eca9-4adf-4c47-9dd6-1d636fbdb36b" from="4808da47-de69-4422-8944-de137963cbc1" to="5c894edf-7b9f-4553-ae51-8674697d8421" />
+				<wire id="d580c78c-9eef-4e24-8200-8eea49f7b51d" from="879e4e61-fec3-4f99-a940-180413a48d63" to="f9b3f758-25c4-48f4-b55e-e25af7571190" />
+				<wire id="17e1dd17-d1f5-4c27-abf2-f2f553a62c7c" from="6ef1246b-9edc-4c66-ae50-8c9d13cff5aa" to="99ae4b5c-2524-4a07-b9a4-093740951985" />
+				<wire id="a8348f94-4750-406d-8845-f649b49a8a94" from="7757ac9c-002a-4775-a540-37f37a6fe8ee" to="f5908334-4234-42bf-bb7b-f886f451e0b2" />
+				<wire id="f4941d6a-c8da-4ffd-839d-d7f360a28777" from="df7de6f0-5215-42bf-88a6-a3966bb053ef" to="d35b09b9-ce35-4ce2-96d5-91dc27c88c11" />
+				<wire id="9ca923e9-c4f6-4935-9326-a464bd97937f" from="96e50239-77ec-4400-9167-7e2fd4ba906b" to="1051db48-fb2e-499e-9000-0df738cdaf14" />
+				<wire id="1c6af50e-f088-49af-a02d-e07ebc6ef31c" from="5aed3233-31e5-48be-9438-fa6505373eae" to="7693536c-2fb4-4a42-90f4-cbd2ea869faa" />
+				<wire id="8e84fbe4-29dc-4383-970d-02a5ad5ebcab" from="e69f0269-302b-4f53-90d0-3c8683258922" to="bd806689-10e3-4807-a3a4-c5063735b748" />
+				<wire id="f95e7b97-d294-45bb-8c1c-f16d17c025b4" from="ce06095a-6244-44b0-916a-9fb26d0a513d" to="b1a2765b-7e10-40ee-a7be-7caa5e8ecddc" />
+				<wire id="452477c1-5b1d-4074-b384-b32587955d2c" from="80722faa-2422-442b-bacd-25c7ac0b0ba9" to="b2038c2d-c1e8-4b3a-9dbc-b18f23240bf5" />
+				<wire id="2589069e-1e9e-4ecf-95af-a3e108ac2082" from="ce86e8ba-d320-45a6-bbdf-3cce1a0da5a0" to="1ceacd4c-8dfb-48fd-9e54-5147e0b91914" />
+				<wire id="bce29656-b3b3-41cc-87c3-904a841bba71" from="add4b7fc-fda4-44f6-be69-bd4cc9117b64" to="77edd2ff-21d5-4620-af04-661841a1859c" />
+				<wire id="04eea396-8214-42bf-b0ff-98154725b68d" from="8559ecc9-7f43-4d34-b230-615e49711981" to="b710e8b3-e8f1-4ee1-b942-527111310fda" />
+				<wire id="e4674e92-7efe-4fe3-b8bb-a2ecbb64bb11" from="146af869-db11-471e-8256-a43c04495505" to="edec946c-676f-499a-a2b5-38140af1e6d3" />
+				<wire id="d5da21dd-3024-4864-847f-8e8177d47b7f" from="55e116b4-e761-4fe9-99d3-6b00ad7417ec" to="9faab423-9608-4596-8a13-b4802850ce47" />
+				<wire id="642efc2e-bd33-4a2d-ab0f-96981ba90ed8" from="a20da2f7-27ab-4e42-9c53-ebfbb1c3876a" to="f5e81fce-5d72-4793-a920-5616b68ccab9" />
+				<wire id="4f22b56a-b49e-4cf8-9038-bfc4cc43f43c" from="5938ca9f-3222-4060-86b9-811243380800" to="7dfacc67-a157-49c2-b49b-604748a8ff56" />
+				<wire id="cae69413-0f61-4f26-bb74-1a4ddc9f7924" from="1e3eee7c-a3e8-44a9-ba6e-fd81c8303822" to="d09d9b40-a2a0-4f6e-8719-084aa69feb1e" />
+				<wire id="2eb25fca-c6f8-49d6-a047-8bb0ad7be00c" from="850a12be-b671-4b15-b07c-dd1e9f7ae57e" to="8086b95c-0ba7-4604-b74f-d30b69f15f05" />
 			</wires>
 		</bd>
 	</vi>

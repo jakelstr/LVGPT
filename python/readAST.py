@@ -645,27 +645,30 @@ def test_property_node_wiring():
     outputWiresElem = ET.Element("wires")
     # Create the Class Specifier Constant node.
     # (Here, the id_string is set to "NumericConstant" as specified.)
-    stringControl = StringControl("input 1")
-    lvGraph.addNode(stringControl)
+    # stringControl = StringControl("input 1")
+    # lvGraph.addNode(stringControl)
     
-    # Create a Property Node.
-    propNode = PropertyNode()
-    propNode.setLinkUUID(stringControl.uuid)
-    classPropTerminalUUID = propNode.addProperty("Value")
-    lvGraph.addNode(propNode)
+    # # Create a Property Node.
+    # propNode = PropertyNode()
+    # propNode.setLinkUUID(stringControl.uuid)
+    # classPropTerminalUUID = propNode.addProperty("Value")
+    # lvGraph.addNode(propNode)
     
     # Wire the constant's main output to the Property Node's reference terminal.
     # We assume that classSpecConst.getTerminal() returns its primary terminal.
     
     # Create a String Indicator.
-    strIndicator = StringIndicator("MyStringIndicator")
+
+    stringInd = StringIndicator("string indicator")
+
+    strIndicator = StringArrayIndicator("string array")
+    strIndicator.setChildNode(stringInd)
     lvGraph.addNode(strIndicator)
     
     # Now wire the constant's "Class" property terminal to the String Indicator's terminal.
     # For the constant, retrieve the "Class" property terminal. Here we assume that
     # getTerminalByName can be used to look it up by the terminal name "Class".
     strIndTerm = strIndicator.getTerminal()
-    lvGraph.addTerminalEdge(classPropTerminalUUID, strIndTerm.uuid)
 
     for i, n in enumerate(lvGraph.graph["nodes"]):
         outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
@@ -680,6 +683,54 @@ def test_property_node_wiring():
         ET.indent(tree, space="\t", level=0)
         tree.write(files)
 
+def gen_unit_test_file():
+
+    visNode = ET.Element("vis")
+    viNode = ET.Element("vi")
+    bdNode = ET.Element("bd")
+    bdNode.attrib["name"] = "test"
+    outputNodesElem = ET.Element("nodes")
+    outputWiresElem = ET.Element("wires")
+
+    boolControl = BoolControl("boolean control")
+    lvGraph.addNode(boolControl)
+
+    boolInd = BoolIndicator("boolean indicator")
+    lvGraph.addNode(boolInd)
+
+    lvGraph.addTerminalEdge(boolControl.getTerminal().uuid, boolInd.getTerminal().uuid)
+
+    strControl = StringControl("string control")
+    strControl.setValue("test")
+    lvGraph.addNode(strControl)
+
+    strInd = StringIndicator("string indicator")
+    lvGraph.addNode(strInd)
+
+    lvGraph.addTerminalEdge(strControl.getTerminal().uuid, strInd.getTerminal().uuid)
+
+    numControl = NumericControl("numeric control", "Long")
+    numControl.setValue("33")
+    lvGraph.addNode(numControl)
+
+    numInd = NumericIndicator("numeric indicator", "Long")
+    lvGraph.addNode(numInd)
+
+    lvGraph.addTerminalEdge(numControl.getTerminal().uuid, numInd.getTerminal().uuid)
+
+    for i, n in enumerate(lvGraph.graph["nodes"]):
+        outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
+    for w in lvGraph.getWires():
+        outputWiresElem.append(writeWireToXML(w))
+    bdNode.append(outputNodesElem)
+    bdNode.append(outputWiresElem)
+    viNode.append(bdNode)
+    visNode.append(viNode)
+    tree = ET.ElementTree(visNode)
+    with open("LabVIEW/unit_tests/def.xml", "wb") as files:
+        ET.indent(tree, space="\t", level=0)
+        tree.write(files)
+
 def test_VI_From_File_wiring(path):
 
     visNode = ET.Element("vis")
@@ -688,13 +739,49 @@ def test_VI_From_File_wiring(path):
     bdNode.attrib["name"] = "test"
     outputNodesElem = ET.Element("nodes")
     outputWiresElem = ET.Element("wires")
-    # Create the Class Specifier Constant node.
-    # (Here, the id_string is set to "NumericConstant" as specified.)
-    # subVI = SubVIFromPath("subvi", path)
-    # lvGraph.addNode(subVI)
+    
+    csc1 = ClassSpecifierConstant("csc1", "Control")
+    csc1Term = csc1.getTerminal()
+    lvGraph.addNode(csc1)
+    csc2 = ClassSpecifierConstant("csc2", "Boolean")
+    csc2Term = csc2.getTerminal()
+    lvGraph.addNode(csc2)
+    varToData = VariantToData("varToData")
+    lvGraph.addNode(varToData)
+    lvGraph.addTerminalEdge(csc1Term.uuid, varToData["type"].uuid)
 
-    tc = ToMoreSpecificClass("test")
-    lvGraph.addNode(tc)
+    tsc = ToMoreSpecificClass("tsc")
+    lvGraph.addNode(tsc)
+    lvGraph.addTerminalEdge(csc2Term.uuid, tsc["target class"].uuid)
+    lvGraph.addTerminalEdge(varToData["data"].uuid, tsc["reference"].uuid)
+    lvGraph.addTerminalEdge(varToData["error out"].uuid, tsc["error in"].uuid)
+
+
+    propNode = PropertyNode()
+    classPropTerminalUUID = propNode.addProperty("Value")
+    lvGraph.addNode(propNode)
+
+    lvGraph.addTerminalEdge(tsc["error out"].uuid, propNode["error in (no error)"].uuid)
+    lvGraph.addTerminalEdge(tsc["specific class reference"].uuid, propNode["reference"].uuid)
+
+    lookInMap = LookInMap("lookInMap")
+    lvGraph.addNode(lookInMap)
+    valueConst = StringConstant("valueConst")
+    valueConstTerm = valueConst.getTerminal()
+    valueConst.setValue("value")
+    lvGraph.addNode(valueConst)
+    lvGraph.addTerminalEdge(valueConstTerm.uuid, lookInMap["key"].uuid)
+    # lvGraph.addTerminalEdge(lookInMap["value"].uuid, classPropTerminalUUID)
+    compareConst = StringConstant("compareConst")
+    compareConstTerm = compareConst.getTerminal()
+    compareConst.setValue("true")
+    lvGraph.addNode(compareConst)
+
+    eq = EqualNode()
+    lvGraph.addNode(eq)
+    lvGraph.addTerminalEdge(lookInMap["value"].uuid, eq["x"].uuid)
+    lvGraph.addTerminalEdge(compareConstTerm.uuid, eq["y"].uuid)
+    lvGraph.addTerminalEdge(eq["x = y?"].uuid, classPropTerminalUUID)
 
     for i, n in enumerate(lvGraph.graph["nodes"]):
         outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
@@ -712,5 +799,5 @@ def test_VI_From_File_wiring(path):
 
 # Optionally, call the test function if this file is run directly.
 if __name__ == "__main__":
-    test_VI_From_File_wiring("Get Pos Data.vi")
+    gen_unit_test_file()
 

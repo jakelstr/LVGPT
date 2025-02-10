@@ -1,0 +1,43 @@
+<vis>
+	<vi>
+		<bd name="test">
+			<nodes>
+				<node xPos="0" yPos="0" uuid="1b2ee6d5-6b4c-405e-a385-7f40fdd09a56" name="boolean control" type="Bool Control" style="Push Button" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+					<terminals>
+						<terminal id="b8719fe6-95d4-4069-b367-4b9bcb7720e6" name="boolean control" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="50" uuid="658aca3c-a8b0-4cec-bd85-3bbdd1afea0c" name="boolean indicator" type="Bool Control" style="LED Button" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+					<terminals>
+						<terminal id="91f6b0e2-f2dd-4865-8c95-c66637a9b3b5" name="boolean indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="100" uuid="5e4bbe9e-e224-4a97-b71c-bf44c46dcc25" value="test" name="string control" type="String Control" style="String Control (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+					<terminals>
+						<terminal id="68abf2bb-2831-4168-ac3b-d2847ce7516e" name="string control" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="150" uuid="423ce6b9-64b1-4a83-b039-a266aa0524e4" name="string indicator" type="String Control" style="String Indicator (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+					<terminals>
+						<terminal id="d6955dd1-6424-4884-a46d-59463689d4dd" name="string indicator" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="200" uuid="450de48e-095f-4ed4-8063-ffd763342d05" value="33" name="numeric control" type="Numeric Control" numericType="Long" style="Numeric Control (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+					<terminals>
+						<terminal id="7fc56234-2cc6-426f-8318-bd90e9886ec0" name="numeric control" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="250" uuid="c33c3fd3-28ad-4e88-8669-fcb9331941b3" name="numeric indicator" type="Numeric Control" numericType="Long" style="Numeric Indicator (modern)" parentDiagram="a64cef47-00b5-4259-9dfb-046b53f9653f">
+					<terminals>
+						<terminal id="787c96b8-2bb5-4e27-ad69-80bc46290420" name="numeric indicator" />
+					</terminals>
+				</node>
+			</nodes>
+			<wires>
+				<wire id="7f0a7159-6708-4f8b-90ec-15f18043df0a" from="b8719fe6-95d4-4069-b367-4b9bcb7720e6" to="91f6b0e2-f2dd-4865-8c95-c66637a9b3b5" />
+				<wire id="d362a8ec-8a60-46e3-bfa5-ba89d6a1cc93" from="68abf2bb-2831-4168-ac3b-d2847ce7516e" to="d6955dd1-6424-4884-a46d-59463689d4dd" />
+				<wire id="a8b5400f-a368-4844-bf10-64762c4ffc1f" from="7fc56234-2cc6-426f-8318-bd90e9886ec0" to="787c96b8-2bb5-4e27-ad69-80bc46290420" />
+			</wires>
+		</bd>
+	</vi>
+</vis>

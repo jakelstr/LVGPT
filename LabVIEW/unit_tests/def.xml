@@ -330,7 +330,7 @@
 						<terminal id="c3c8585c-3dbf-423c-86dd-fabfe970250c" name="output_array" />
 					</terminals>
 				</node>
-				<node xPos="0" yPos="2850" uuid="504dc04b-842a-4dc5-ba29-5ee1b5784331" name="case_structure" type="Case Structure" parentDiagram="f5dae4b6-ff19-453a-ac9e-54e03321114d">
+				<node xPos="0" yPos="2850" uuid="504dc04b-842a-4dc5-ba29-5ee1b5784331" name="case_structure" type="Case Structure" default_case="0" parentDiagram="f5dae4b6-ff19-453a-ac9e-54e03321114d">
 					<cases>
 						<case caseName="0" caseUUID="6663dff5-3e9f-4bb0-a8e9-9f6f47997ec7" />
 						<case caseName="1" caseUUID="1474a764-70e8-43e3-a94d-a8beb2321231" />

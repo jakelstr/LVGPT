@@ -1,1 +1,1 @@
-This is a project I am working on very slowly to attempt to have GPT-3 generate golang code that I then transpile into a custom markup I made up off the top of my head that can be used to generate LabVIEW VIs
+This project originated as an idea to have LLMs generate LabVIEW VIs by way of transpiling Go code. At the time, LLMs could only really generate code from existing languages. As LLMs have become more powerful, I now speculate that the structure I have developed could be used directly by the LLM to generate LabVIEW code, without the conversion from Go. 

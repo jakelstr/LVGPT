@@ -1,0 +1,55 @@
+<vis>
+	<vi>
+		<bd name="test">
+			<nodes>
+				<node xPos="0" yPos="0" uuid="ada5aad7-b566-44a8-97be-48f3e04641c1" value="Sunny" name="Weather Conditions" type="String Control" style="String Control (modern)" parentDiagram="df7ef775-715a-41ae-bcca-11328735b331">
+					<terminals>
+						<terminal id="45dbb617-ab20-450f-a408-563a93139f08" name="Weather Conditions" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="50" uuid="8d575b63-e012-4ea1-8f53-802a016fe00f" name="Bring Umbrella?" type="Bool Control" style="Round LED (modern)" parentDiagram="df7ef775-715a-41ae-bcca-11328735b331">
+					<terminals>
+						<terminal id="f0e08c65-1c64-4418-be20-97de21818589" name="Bring Umbrella?" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="100" uuid="f42e386e-c5cc-4bc4-bcc0-f55379a7aa99" name="Weather Check" type="Case Structure" default_case="2" parentDiagram="df7ef775-715a-41ae-bcca-11328735b331">
+					<cases>
+						<case caseName="Rain" caseUUID="5e9c3c92-efc3-44c8-9408-30310e071eb3" />
+						<case caseName="Snow" caseUUID="d6ccc7c3-7b95-419b-aa8c-a51881ea7c07" />
+						<case caseName="Default" caseUUID="db9a897c-c5c0-464a-98e1-d120365620df" />
+					</cases>
+					<terminals>
+						<terminal id="9ea0218f-2908-417c-8313-9a654818331b" name="case selector external" />
+						<terminal id="a63866d1-4661-4f1c-89e3-f3301ff5cfdc" name="case selector internal" />
+						<terminal id="f258bfaa-9565-496b-937a-ec8d9d9de33f" name="tunnel0 external" />
+						<terminal id="bc775f01-26ce-49f9-b53d-1a8a0eeadf66" name="tunnel0 internal 5e9c3c92-efc3-44c8-9408-30310e071eb3" />
+						<terminal id="7bfc3a98-6541-498e-9c8c-e321d631ea27" name="tunnel0 internal d6ccc7c3-7b95-419b-aa8c-a51881ea7c07" />
+						<terminal id="b9ef0ff9-fe4d-4f47-9fe4-7efa3370c583" name="tunnel0 internal db9a897c-c5c0-464a-98e1-d120365620df" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="150" uuid="28bf1d0e-440b-456c-a32d-5b6c663f5852" value="True" name="Rainy" type="Boolean Constant" parentDiagram="Rain">
+					<terminals>
+						<terminal id="f24cc1f0-c45c-42e5-a21f-cde4e5057886" name="Rainy" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="200" uuid="20b3f08d-8a00-4a0a-972a-251256d65727" value="True" name="Snowy" type="Boolean Constant" parentDiagram="Snow">
+					<terminals>
+						<terminal id="0541369d-9f52-4262-8786-c95029186587" name="Snowy" />
+					</terminals>
+				</node>
+				<node xPos="0" yPos="250" uuid="1158f6a3-2b5f-4c3a-addf-7720a9bc7ef6" value="False" name="Default" type="Boolean Constant" parentDiagram="Default">
+					<terminals>
+						<terminal id="e02e6848-2fc6-4172-9a27-df311ff8f06d" name="Default" />
+					</terminals>
+				</node>
+			</nodes>
+			<wires>
+				<wire id="af1385cd-a214-4311-a6e0-76b8d67d3e14" from="45dbb617-ab20-450f-a408-563a93139f08" to="9ea0218f-2908-417c-8313-9a654818331b" />
+				<wire id="e61c9422-9806-4d60-9ad9-4af99d00062a" from="f0e08c65-1c64-4418-be20-97de21818589" to="f258bfaa-9565-496b-937a-ec8d9d9de33f" />
+				<wire id="ced26950-df2b-4455-80c9-1455d640d470" from="bc775f01-26ce-49f9-b53d-1a8a0eeadf66" to="f24cc1f0-c45c-42e5-a21f-cde4e5057886" />
+				<wire id="8b59be2f-b49e-4a70-a887-b44e431e3a5a" from="7bfc3a98-6541-498e-9c8c-e321d631ea27" to="0541369d-9f52-4262-8786-c95029186587" />
+				<wire id="40134742-b353-40bb-8e6f-52e8d00b2876" from="b9ef0ff9-fe4d-4f47-9fe4-7efa3370c583" to="e02e6848-2fc6-4172-9a27-df311ff8f06d" />
+			</wires>
+		</bd>
+	</vi>
+</vis>

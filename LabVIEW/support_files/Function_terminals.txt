@@ -1,0 +1,585 @@
+Absolute Value|abs(x)	x
+Accept TLS|error out	client certificate chain	TLS connection	timeout ms (300000)	error in (no error)	immutable TLS configuration	TCP connection
+Access Rights|error out	permissions	group	owner	dup path	path	error in	new permissions	new group	new owner
+Add|x+y	y	x
+Add (with error terminals)|x+y	y	x	error out	error in (no error)
+Add Array Elements|sum	numeric array
+Add Entropy|error out	error in (no error)	entropy
+Add Private Key To TLS Configuration|error out	TLS configuration out	error in (no error)	certificate chain	private key	TLS configuration
+Add Trusted Certificate To TLS Configuration|error out	TLS configuration out	error in (no error)	certificate	TLS configuration
+AllSpoll|bus	address list	error in	serial poll byte list	status	byte count	error out
+Always Copy|Output	Input
+And|x .and. y?	y	x
+And Array Elements|logical AND	Boolean array
+Append True/False String|output string	selector	false string	true string	string ("")
+Array Max & Min|array	max value	max index (indices)	min value	min index (indices)
+Array of Strings to Path|array of strings	relative	path
+Array Size|size(s)	array
+Array To Cluster|cluster	array
+Array To Spreadsheet String|spreadsheet string	delimiter (Tab)	array	format string
+ArrayMemInfo|mem info out	array out	array in
+Assert Structural Type Match|reference	anything
+Automation Close|error out	error in(no error)	Automation Refnum
+Automation Open|error out	Automation Refnum	error in (no error)		machine name	Automation Refnum
+Bitpack to Array|bparray	data
+Bluetooth Close Connection|error out	connection ID out	error in (no error)	abort (F)	connection ID
+Bluetooth Create Listener|error out	channel	listener ID	service description	address	error in (no error)	uuid
+Bluetooth Discover|error out	device list	number of devices	error in (no error)	time limit ms (10000)
+Bluetooth Open Connection|error out	connection ID	uuid	error in (no error)	timeout ms (60000)	channel (0)	address
+Bluetooth Read|error out	data out	connection ID out	mode (standard)	error in (no error)	timeout ms (25000)	bytes to read	connection ID
+Bluetooth Wait On Listener|error out	remote channel	remote address	listener ID out	connection ID	error in (no error)	timeout ms (wait forever: -1)	resolve remote address (T)	listener ID in
+Bluetooth Write|error out	bytes written	connection ID out	error in (no error)	timeout ms (25000)	data in	connection ID
+Boolean Array To Number|number	Boolean array
+Boolean To (0,1)|0, 1	Boolean
+Build Path|appended path	name or relative path	base path
+Byte Array To String|string	unsigned byte array
+Call Chain|call chain
+Cancel Notification|notifier	error in (no error)	notifier out	canceled notifcation	error out
+Cast Unit Bases|x	unit (none)	x
+Clear Fixed-Point Overflow Status|overflow?	FXP with overflow cleared	FXP
+Close File|error out	path	error in	refnum
+Close File (deprecated)|error out	path	error in	refnum
+Close MATLAB Session|session in	error in	error out
+Close Python Session|session in	error in	error out
+Close Reference|error out	error in (no error)	reference
+Close TLS Configuration|error out	error in (no error)	TLS configuration
+Close Variable Connection|error out	error in (no error)	shared variable refnum in
+Cluster To Array|array	cluster
+Coerce To Type|x	type	coerced x
+Collection Size|size	collection
+Complex Conjugate|x - iy	x + iy
+Complex To Polar|r * e^(i*theta)	r	theta
+Complex To Re/Im|x + iy	x	y
+Control Help Window|Top Left Corner	Show
+Control Online Help|error out	error in (no error)	Path to the help file	String to search for	Operation
+Copy|error out	cancelled	new path	prompt (Choose or enter target path for copy)	error in	overwrite (F)	target path (use dialog)	source path
+Copy (deprecated)|error out	new path	error in	target path	source path
+Cosecant|1/sin(x)	x
+Cosine|cos(x)	x
+Cotangent|1/tan(x)	x
+CPU Information|# of logical processors	# of packages	# of cores per package	# of logical processors per core
+Create Folder|error out	cancelled	created path	prompt (Create Folder)	error in	path (use dialog)
+Create Network Stream Endpoint|error out	endpoint	timeout in ms (-1)	element allocation mode	buffer sizes	error in (no error)	data type	remote endpoint url	endpoint name
+Create Network Stream Reader Endpoint|error out	reader endpoint	timeout in ms (-1)	element allocation mode	reader buffer size	error in (no error)	data type	writer url	reader name
+Create Network Stream Writer Endpoint|error out	writer endpoint	timeout in ms (-1)	element allocation mode	writer buffer size	error in (no error)	data type	reader url	writer name
+Create Unique Network Stream Endpoint|error out	endpoint	max connections (-1)	timeout in ms (-1)	element allocation mode	buffer sizes	error in (no error)	data type	base endpoint name
+Create Unique Network Stream Reader Endpoint|error out	reader endpoint	max connections (-1)	timeout in ms (-1)	element allocation mode	reader buffer size	error in (no error)	data type	base reader name
+Create Unique Network Stream Writer Endpoint|error out	writer endpoint	max connections (-1)	timeout in ms (-1)	element allocation mode	writer buffer size	error in (no error)	data type	base writer name
+Create User Event|user event datatype	error in	user event	error out
+Current Processor ID|current processor ID
+Current VI's Menubar|menu reference
+Current VI's Path|path
+Data Cache Size|cache level (2)	total cache size (in bytes)	cache entry size (in bytes)
+DataSocket Close|error out	timed out	error in (no error)	ms timeout (0)	connection id
+DataSocket Open|error out	connection id	error in (no error)	ms timeout (10000)	mode	URL
+DataSocket Read|error out	timed out	data	connection out	timestamp	quality	wait for updated value (T)	status	error in (no error)	ms timeout (10000)	type (Variant)	connection in
+DataSocket Write|error out	timed out	connection out	error in (no error)	ms timeout (0)	data	connection in
+Date/Time To Seconds|time stamp	is UTC (F)	date time rec
+Decimal Digit?|digit?	char
+Decimal String To Number|number	offset past number	default (0L)	offset	string
+Decrement|x-1	x
+Default Directory|path
+Delete|error out	cancelled	deleted path	prompt (Delete)	error in	confirm (F)	entire hierarchy (F)	path (use dialog)
+Delete (deprecated)|error out	dup path	error in	path
+Delete Data Value Reference|error out	data value	error in	data value reference
+Delete Menu Items|error out	menu reference out	error in (no error)	items	menu tag	menu reference
+Delete Variant Attribute|error out	found	Variant out	error in	name (all attributes)	Variant
+Delete Waveform Attribute|error out	no found	waveform out	error in	name (all attributes)	waveform
+Deny Access|error out	refnum out	error in	deny mode (0:deny read/write)	refnum
+Dequeue Element|queue	timeout in ms (-1)	error in (no error)	queue out	element	timed out?	error out
+Destroy Stream Endpoint|error out	error in (no error)	endpoint in
+Destroy User Event|user event	error in	error out
+DevClear|error out	status	error in	address	bus
+DevClearList|error out	status	error in	address list	bus
+Device Control/Status|new param	err	spc reset (F)	async (T)	param (-)	code (-)	ctrl/stat (T:ctrl)	device refnum
+Divide|x/y	y	x
+Divide (with error terminals)|x/y	y	x	error out	error in (no error)
+Dynamic FPGA Interface Cast|Type	Session In	Session Out
+Element of Set?|found?	element	set
+Empty Array?|empty?	array
+Empty Collection?|empty?	collection
+Empty String/Path?|empty?	string/path
+Enable Menu Tracking|error out	menu reference out	error in (no error)	enable (T)	menu reference
+EnableLocal|error out	status	error in	address list	bus
+EnableRemote|error out	status	error in	address list	bus
+Enqueue Element|queue	element	timeout in ms (-1)	error in (no error)	queue out	timed out?	error out
+Enqueue Element At Opposite End|queue	element	timeout in ms (-1)	error in (no error)	queue out	timed out?	error out
+EOF|error out	offset	dup refnum	error in	pos offset (0)	pos mode (0:1)	refnum
+Equal To 0?|x = 0?	x
+Equal?|x = y?	y	x
+Exclusive Or|x .xor. y?	y	x
+Exponential|exp(x)	x
+Exponential (Arg) -1|exp(x) -1	x
+File Dialog|error out	cancelled	exists	selected path	pattern label	button label	pattern (all files)	prompt	error in	default name	start path
+File Dialog (deprecated)|cancelled	exists	path	pattern label	button label	datalog type	prompt	pattern	default name	select mode (2)	start path
+File/Directory Info|error out	last mod	size	path out	resolved path	directory	shortcut	error in	path
+File/Directory Info (deprecated)|error out	last mod	size	dup path	directory	error in	path
+FindLstn|error out	number of listeners	status	listener address list	error in	limit	address list	bus
+FindRQS|bus	address list	error in	requester status byte	status	requester index	error out
+First Call?|First Call?: T/F
+Fixed-Point Overflow?|overflow?	FXP
+Fixed-Point to Integer Cast|integer	fixed-point
+Flatten To JSON|anything	error in (no error)	enable LabVIEW extensions? (T)	JSON string	error out
+Flatten To String|error out	type string	data string	error in (no error)	byte order (0:big-endian, network order)	prepend array or string size? (T)	anything
+Flatten To XML|xml string	anything
+Flattened String To Variant|error out	Variant	error in	data string	type string
+Floating Point Equal?|x ~ y?	y	tolerance	x
+Flush Event Queue|event registration refnum	include static events? (T)	event type or object	error in (no error)	oldest event time	keep most recent	event reg refnum out	number of events discarded	error out
+Flush File|error out	refnum out	error in	refnum
+Flush File (deprecated)|error out	dup refnum	error in	refnum
+Flush Queue|queue	error in (no error)	queue out	remaining elements	error out
+Flush Stream|error out	timed out?	endpoint out	error in (no error)	timeout in ms (-1)	wait condition	endpoint in
+Format Date/Time String|date/time string	UTC format	seconds (now)	time format string (%c)
+Format Value|output string	value (0)	format string	string ("")
+FPGA Refnum to Session|error out	Session	error in(no error)	Refnum
+Fract/Exp String To Number|number	offset past number	use system decimal point (T)	default (0 dbl)	offset	string
+Generate Front Panel Activity|front panel (this VI's panel)
+Generate Occurrence|occurrence
+Generate User Event|user event	event data cluster	error in	priority (normal)	user event out	error out
+Generate User-Defined Trace Event|trace integer	trace string
+Get Control Values by Index|VI Refnum	control indexes	error in (no error)	data values	error out
+Get Datalog Position|error out	offset (in records)	refnum out	error in	refnum
+Get Date/Time In Seconds|seconds since 1Jan1904
+Get Date/Time String|time string	date string	want seconds? (F)	seconds (now)	date format (0)
+Get Drag Drop Data|error out	data	error in (no error)	type	data name
+Get File Position|error out	offset (in bytes)	refnum out	error in	refnum
+Get File Size|error out	size (in bytes)	refnum out	error in	file
+Get Help Window Status|Top Left Corner	Show
+Get Menu Item Info|error out	enabled	item name	menu reference out	checked	submenu tags	short cut	item tag	error in (no error)	menu reference
+Get Menu Selection|menu reference	ms timeout (200)	block menu (F)	error in (no error)	timed out	menu reference out	item tag	item path	error out
+Get Menu Short Cut Info|error out	item path	item tag	menu reference out	error in (no error)	short cut	menu reference
+Get Notifier Status|notifier	error in (no error)	notifier name	notifier out	current notification	# waiting	error out
+Get Number of Records|error out	# of records	refnum out	error in	refnum
+Get Permissions|error out	group	owner	path out	permissions	error in	path
+Get Queue Status|queue	return elements? (F)	error in (no error)	max queue size	elements	queue name	# elements in queue	queue out	# pending remove	# pending insert	error out
+Get Type and Creator|error out	creator	type	path out	error in	path
+Get Variant Attribute|error out	values	names	duplicate Variant	error in	default value (empty Variant)	name	Variant
+Get Volume Info|error out	free (bytes)	size (bytes)	path out		volume path	error in	path
+Get Waveform Attribute|error out	values	names	duplicate waveform	error in	default value (empty Variant)	name	waveform
+GPIB Clear|error out	status	error in	address string
+GPIB Initialization|error out	require re-addressing (T)	disallow DMA (F)	assert REN with IFC (T)	error in	IST bit sense (T)	address string	system controller (T)
+GPIB Misc|command string	error in	output string	status	error out
+GPIB Read|address string	byte count	mode (0)	error in	timeout ms (488.2 global)	data	status	error out
+GPIB Serial Poll|address string	error in	serial poll byte	status	error out
+GPIB Status|address string	error in	status	GPIB error	byte count	error out
+GPIB Trigger|error out	status	error in	address string
+GPIB Wait|error out	status	timeout ms (488.2 global)	error in	wait state vector	address string
+GPIB Write|address string	data	mode (0)	error in	timeout ms (488.2 global)	status	error out
+Greater Or Equal To 0?|x >= 0?	x
+Greater Or Equal?|x >= y?	y	x
+Greater Than 0?|x > 0?	x
+Greater?|x > y?	y	x
+Handle Peek|value	error	num type (long)	offset	handle
+Handle Poke|old value	handle	error	new value	offset	handle
+Hex Digit?|hex?	char
+Hexadecimal String To Number|number	offset past number	default (0uL)	offset	string
+Hyperbolic Cosecant|csch(x)	x
+Hyperbolic Cosine|cosh(x)	x
+Hyperbolic Cotangent|coth(x)	x
+Hyperbolic Secant|sech(x)	x
+Hyperbolic Sine|sinh(x)	x
+Hyperbolic Tangent|tanh(x)	x
+Implies|x .implies. y?	y	x
+In Range and Coerce|In Range?	coerced(x)	lower limit	x	upper limit
+Include Fixed-Point Overflow Status|FXP with overflow included	overflow	FXP
+Increment|x+1	x
+Index String Array|output string	index	string array	string ("")
+Insert Into Map|value unchanged?	key already included?	map out	value	key	map in
+Insert Into Set|already included?	set out	element	set in
+Insert Menu Items|error out	item tags out	menu reference out	after item	menu tag	error in (no error)	item tags	item names	menu reference
+Integer to Fixed-Point Cast|integer	fixed-point type	fixed-point
+Interpolate 1D Array|y value	fractional index or x	array of numbers or points
+Inverse Cosecant|arccsc(x)	x
+Inverse Cosine|arccos(x)	x
+Inverse Cotangent|arccot(x)	x
+Inverse Hyperbolic Cosecant|arccsch(x)	x
+Inverse Hyperbolic Cosine|argcosh(x)	x
+Inverse Hyperbolic Cotangent|arccoth(x)	x
+Inverse Hyperbolic Secant|arcsech(x)	x
+Inverse Hyperbolic Sine|argsinh(x)	x
+Inverse Hyperbolic Tangent|argtanh(x)	x
+Inverse Secant|arcsec(x)	x
+Inverse Sine|arcsin(x)	x
+Inverse Tangent|arctan(x)	x
+Inverse Tangent (2 Input)|atan2(y,x)	x	y
+IP To String|name	dot notation? (F)	net address
+IrDA Close Connection|error out	connection ID out	error in (no error)	abort (F)	connection ID
+IrDA Create Listener|error out	listener ID	error in (no error)	service name
+IrDA Discover|error out	device list	number of devices	error in (no error)
+IrDA Open Connection|error out	connection ID	error in (no error)	timeout ms (60000)	remote device id	service name
+IrDA Read|error out	data out	connection ID out	mode (standard)	error in (no error)	timeout ms (25000)	bytes to read	connection ID
+IrDA Wait On Listener|error out	remote device ID	remote LSAP-SEL	listener ID out	connection ID	error in (no error)	timeout ms (wait forever: -1)	resolve remote address (T)	listener ID in
+IrDA Write|error out	bytes written	connection ID out	error in (no error)	timeout ms (25000)	data in	connection ID
+IsDebuggingActive|debugging?
+IVI Delete Session|IVI session
+IVI New Session|IVI session	IVI session handle	resource name ("")	IVI session (for class)
+Join Numbers|(hi.lo)	lo	hi
+Leak Variant Value Reference|error out	variant value ref out	error in	variant value ref in
+Less Or Equal To 0?|x <= 0?	x
+Less Or Equal?|x <= y?	y	x
+Less Than 0?|x < 0?	x
+Less?|x < y?	y	x
+Lexical Class|class number	char
+List Directory|error out	folder names	file names	dup folder path	error in	datalog type	pattern	folder path
+List Folder|error out	folder names	filenames	path out	datalog type	pattern	error in	path
+Load Certificates Into Memory|error out	certificates	error in (no error)	format	path to certificates
+Load Private Key Into Memory|error out	private key	error in (no error)	password	format	path to private key
+Lock Range|error out	dup refnum	count	set lock (F)	error in	pos offset (0)	pos mode (0:2)	refnum
+Logarithm Base 10|log(x)	x
+Logarithm Base 2|log2(x)	x
+Logarithm Base X|logx(y)	x	y
+Logical Shift|x << y	x	y
+Look In Map|value	key not found?	default value	key	map
+Lookup Channel Probe|refnum to monitor	probe type specifier	force create?	probe VI refnum	type mismatched?
+Lossy Enqueue Element|queue	element	error in (no error)	queue out	overflow element	overflow?	error out
+Make TLS Configuration Immutable|error out	immutable TLS configuration	error in (no error)	TLS configuration
+MakeAddr|error out	packed address	error in	secondary address	primary address
+Mantissa & Exponent|number	mantissa	exponent
+Match First String|index	output string	string array	string
+Match Pattern|string	regular expression	offset (0)	before substring	match substring	after substring	offset past match
+Match True/False String|selection	output string	false string	true string	string
+Matrix Size|number of rows	number of columns	matrix
+Max & Min|min(x,y)	max(x,y)	y	x
+Move|error out	cancelled	new path	prompt (Choose or enter target path for move)	error in	overwrite (F)	target path (use dialog)	source path
+Move (deprecated)|error out	new path	error in	target path	source path
+Multiply|x*y	y	x
+Multiply (with error terminals)|x*y	y	x	error out	error in (no error)
+Multiply Array Elements|product	numeric array
+Natural Logarithm|ln(x)	x
+Natural Logarithm (Arg +1)|ln(x+1)	x
+Negate|-x	x
+New Data Value Reference|error out	data value reference	error in	data value
+New Directory|error out	dup directory path	error in	permissions	group	directory path
+New File|error out	refnum	datalog type	overwrite (F)	permissions	error in	deny mode (2)	group	file path
+New TLS Configuration|error out	TLS configuration out	error in (no error)	load OS trusted CAs?
+New VI|error out	vi refnum	type specifier VI Refnum (for type only)	password	not connected	error in (no error)	vi type (standard vi)	template	application refnum
+New VI Object|error out	object refnum	bounds	auto wire? (F)	path	vi object class	error in (no error)	position/next to	style	owner refnum
+Not|.not. x?	x
+Not A Number/Path/Refnum?|NaN/Path/Refnum?	number/path/refnum
+Not And|.not. (x .and. y)?	y	x
+Not Equal To 0?|x != 0?	x
+Not Equal?|x != y?	y	x
+Not Exclusive Or|.not. (x .xor. y)?	y	x
+Not Or|.not. (x .or. y)?	y	x
+Number of Cache Levels|# of cache levels
+Number To Boolean Array|Boolean array	number
+Number To Decimal String|decimal integer string	width (-)	number
+Number To Engineering String|Engineering string	use system decimal point (T)	precision (6)	width (-)	number
+Number To Exponential String|E-format string	use system decimal point (T)	precision (6)	width (-)	number
+Number To Fractional String|F-format string	use system decimal point (T)	precision (6)	width (-)	number
+Number To Hexadecimal String|hex integer string	width (-)	number
+Number To Octal String|octal integer string	width (-)	number
+Obtain Notifier|name (unnamed)	notification data type	create if not found? (T)	error in (no error)	notifier out	created new?	error out
+Obtain Queue|name (unnamed)	element data type	create if not found? (T)	error in (no error)	max queue size (-1, unlimited)	queue out	created new?	error out
+Octal Digit?|octal?	char
+Octal String To Number|number	offset past number	default (0uL)	offset	string
+Old VISA Open|error out	VISA resource name	timeout (0)	error in (no error)	access mode	resource name ("")	VISA resource name (for class)
+One Button Dialog|true	button name ("OK")	message
+Open Application Reference|error out	application reference	error in (no error)		port number or service name (3363)	machine name ("":  open local reference)
+Open Device|err	device refnum	unit(0)	device name
+Open Dynamic Bitfile Reference|Device address	Bitfile path	Run When Loaded	Error In	Type	Refnum	Error Out
+Open File|file path	open mode (0)	deny mode (2)	error in	datalog type	refnum	error out
+Open MATLAB Session|release name	error in (no error)	session out	error out
+Open Python Session|python version	python path	error in (no error)	session out	error out
+Open VI Object Reference|error out	object refnum	vi object class	error in (no error)	name/order	owner refnum
+Open VI Reference|error out	vi reference	password ("")	type specifier VI Refnum (for type only)	error in (no error)	options	vi path	application reference (local)
+Open/Create/Replace Datalog|error out	cancelled	refnum out	record type	prompt	error in	access (0:read/write)	operation (0:open)	datalog path (use dialog)
+Open/Create/Replace File|error out	cancelled	refnum out	disable buffering (F)	prompt	error in	access (0:read/write)	operation (0:open)	file path (use dialog)
+Or|x .or. y?	y	x
+Or Array Elements|logical OR	Boolean array
+Package Matrix|matrix	array	matrix
+PassControl|error out	status	error in	address	bus
+Path to Array of Strings|path	relative	array of strings
+Path To String|string	path
+Path Type|type	path
+Pick Line|output string	line index	multi-line string	string ("")
+Polar To Complex|r * e^(i*theta)	theta	r
+Polar To Re/Im|y	x	theta	r
+Power Of 10|10^x	x
+Power Of 2|2^x	x
+Power Of X|x^y	x	y
+PPoll|bus	error in	parallel poll byte	status	error out
+PPollConfig|error out	status	error in	sense	dataline	address	bus
+PPollUnconfig|error out	status	error in	address list	bus
+Preallocated Read from Binary File|error out	num elements read	data out	refnum out	error in	byte order (0:big-endian, network order)	data in	refnum in
+Preserve Run-Time Class|object out	error out	target object	object in	error in
+Preview Queue Element|queue	timeout in ms (-1)	error in (no error)	queue out	element	timed out?	error out
+Printable?|printable ASCII?	char
+Quit LabVIEW|quit? (T)
+Quotient & Remainder|floor(x/y)	x-y*floor(x/y)	y	x
+Random Number (0-1)|number: 0 to 1
+RcvRespMsg|error out	byte count	status	data string	error in	count	mode	bus
+Re-accept TLS|error out	client certificate chain	TLS connection out	timeout ms	error in		CA certificates	TLS connection
+Re/Im To Complex|x + iy	y	x
+Re/Im To Polar|theta	r	y	x
+Read Datalog|error out	record(s)	refnum out	error in	count (1)	refnum
+Read Device|new offset	string	err	spc reset (F)	misc (-)	async (T)	pos offset (-)	pos mode (-)	count	device refnum
+Read File|error out	offset	data	dup refnum	byte stream type	convert eol (F)	count	line mode (F)	error in	pos offset (0)	pos mode (0:2)	refnum
+Read from Binary File|error out	cancelled	data	refnum out	data type	prompt (Open existing file)	error in	byte order (0:big-endian, network order)	count	file (use dialog)
+Read from Text File|error out	cancelled	text	refnum out	prompt (Open existing file)	error in	count	file (use dialog)
+Read Map Max & Min Keys|minimum	maximum	map
+Read Set Max & Min|minimum	maximum	set
+ReadStatus|error out	status	serial poll response	error in	address	bus
+Receive|error out	byte count	status	data string	error in	count	mode	address	bus
+ReceiveSetup|error out	status	error in	address	bus
+Reciprocal|1/x	x
+Refnum to Path|path	refnum
+Refnum to Session|error out	Session	error in(no error)	Refnum
+Register Session|error out	duplicate refnum	cleanup mode (default to class = 0)	error in (no error)	session	resource name	refnum
+Release Notifier|notifier	force destroy? (F)	error in (no error)	notifier name	last notification	error out
+Release Queue|queue	force destroy? (F)	error in (no error)	queue name	remaining elements	error out
+Remove Fixed-Point Overflow Status|overflow?	FXP with overflow removed	FXP
+Remove From Map|value	key not found?	map out	key	map in
+Remove From Set|not included?	set out	element	set in
+Replace Substring|replaced substring	result string	length	offset	substring	string
+Request Deallocation|flag
+ResetSys|error out	status	error in	address list	bus
+Resize Matrix|resized matrix	number of columns	number of rows	matrix
+Resource Index|Index	Resource
+Reverse 1D Array|reversed array	array
+Reverse String|reversed	string
+Rotate|x rotated left by y	x	y
+Rotate 1D Array|array (last n elements first)	array	n
+Rotate Left With Carry|value	msb carry out	value	carry
+Rotate Right With Carry|value	lsb carry out	value	carry
+Rotate String|first char last	string
+Round To Nearest|nearest integer value	number
+Round Toward +Infinity|ceil(x): smallest int >= x	x
+Round Toward -Infinity|floor(x): largest int <= x	x
+RT FIFO Create|name (unnamed)	type	create if not found? (T)	error in (no error)	size (10)	datapoints in waveform (1)	elements in array (1)	r/w modes (polling,polling)	rt fifo	created new?	error out
+RT FIFO Delete|rt fifo	force destroy? (F)	error in (no error)	error out
+RT FIFO Read|rt fifo	element	timeout in ms (0)	error in (no error)	# elements	rt fifo out	element out	empty?	error out
+RT FIFO Write|rt fifo	element	timeout in ms (0)	error in (no error)	overwrite on timeout (T)	# elements	rt fifo out	timed out?	error out
+Scale By Power Of 2|x*2^n	x	n
+Scan String For Tokens|token index	token string	offset past token	string out	use cached delim/oper data? (F)	allow empty tokens? (F)	delimiters (\s,\t,\r,\n)	operators (none)	offset	input string
+Scan Value|value	output string	default (0 dbl)	format string	string
+Search 1D Array|index of element	start index (0)	element	1D array
+Search and Replace String|input string	replace all?	case sensitive?	multiline?	result string	search string	replace string	number of replacements	offset	offset past replacement	error in	error out
+Search Variable Container|error out	refnum array out	container refnum out	access type	class	error in	data type	regular expression	container refnum in
+Search/Split String|offset of match	match + rest of string	substring before match	offset (0)	search string/char (-)	string
+Secant|1/cos(x)	x
+Seconds To Date/Time|date time rec	to UTC (F)	time stamp (now)
+Seek|error out	offset	dup refnum	error in	pos offset (0)	pos mode (0:2)	refnum
+Select|s? t:f	f	s	t
+Send|bus	address	mode	error in	data string	status	byte count	error out
+Send Notification|notifier	notification	error in (no error)	notifier out	error out
+SendCmds|error out	byte count	status	error in	command string	bus
+SendDataBytes|error out	byte count	status	error in	data string	mode	bus
+SendIFC|error out	status	error in	bus
+SendList|bus	address list	mode	error in	data string	status	byte count	error out
+SendLLO|error out	status	error in	bus
+SendSetup|error out	status	error in	address list	bus
+Session to Refnum|error out	Refnum	error in(no error)	Session	Class Type
+Set Control Values by Index|VI Refnum	control indexes	data values	error in (no error)	error out
+Set Datalog Position|error out	refnum out	error in	from (0:start)	offset (in records) (0)	refnum
+Set File Position|error out	refnum out	error in	from (0:start)	offset (in bytes) (0)	refnum
+Set File Size|error out	refnum out	error in	size (in bytes)	file
+Set Menu Item Info|error out	menu reference out	short cut	checked	item tag	error in (no error)	enabled	item name	menu reference
+Set Number of Records|error out	refnum out	error in	# of records	refnum
+Set Occurrence|occurrence
+Set Permissions|error out	path out	permissions	error in	new group	new owner	path
+Set Type and Creator|error out	path out	error in	creator (no change)	type (no change)	path
+Set Variant Attribute|error out	replaced	Variant out	error in	value	name	Variant
+Set Waveform Attribute|error out	replaced	waveform out	error in	value	name	waveform
+SetRWLS|error out	status	error in	address list	bus
+SetTimeOut|previous timeout	new timeout (10000)
+Shared Variable to String|string	Shared Variable
+Sign|-1, 0, 1	number
+Sinc|sin(x)/x	x
+Sine|sin(x)	x
+Sine & Cosine|x	sin(x)	cos(x)
+Size Handle|handle	error	handle (-)	size
+Sort 1D Array|sorted array	array
+Sort Array of String|sorted array	array
+Split 1D Array|second subarray	first subarray	index	array
+Split Number|x	hi(x)	lo(x)
+Spreadsheet String To Array|array	delimiter (Tab)	array type (2D Dbl)	spreadsheet string	format string
+Square|x^2	x
+Square Root|sqrt(x)	x
+Start TLS|error out	server certificate chain	TLS connection	server certificate validation	timeout ms	error in (no error)	server hostname	immutable TLS configuration	TCP connection
+Stop|stop? (T)
+String Length|length	string
+String Subset|substring	length (rest)	offset (0)	string
+String To Byte Array|unsigned byte array	string
+String To IP|net address	name
+String To Path|path	string
+String to Shared Variable|string	valid Shared Variable?	Shared Variable
+Strip Path|path	stripped path	name
+Subtract|x-y	y	x
+Subtract (with error terminals)|x-y	y	x	error out	error in (no error)
+Swap Bytes|byte swapped	anything
+Swap Values| y'	 x'  	y	?(T)	x
+Swap Vector Element|swapped element value	returned index	changed vector	element value	index	vector
+Swap Words|word swapped	anything
+Tangent|tan(x)	x
+TCP Close Connection|error out	connection ID out	error in (no error)	abort (F)	connection ID
+TCP Create Listener|error out	port	listener ID	net address	error in (no error)	timeout ms (25000)	port	service name
+TCP Flattened Read|error out	data out	connection ID out	type	error in (no error)	timeout ms (25000)	connection ID
+TCP Flattened Write|error out	connection ID out	error in (no error)	timeout ms (25000)	data in	connection ID
+TCP Flex Read|error out	coerced?	data out	connection ID out	type	error in (no error)	timeout ms (25000)	connection ID
+TCP Flex Write|error out	connection ID out	error in (no error)	timeout ms (25000)	data in	connection ID
+TCP Open Connection|error out	connection ID	local port	error in (no error)	timeout ms (60000)	remote port or service name	address
+TCP Read|error out	data out	connection ID out	mode (standard)	error in (no error)	timeout ms (25000)	bytes to read	connection ID
+TCP Wait On Listener|error out	remote port	remote address	listener ID out	connection ID	error in (no error)	timeout ms (wait forever: -1)	resolve remote address (T)	listener ID in
+TCP Write|error out	bytes written	connection ID out	error in (no error)	timeout ms (25000)	data in	connection ID
+TDMS Advanced Asynchronous Read (Data Ref)|error out	tdms file out	read process finished?	auto delete reference? (T)	error in (no error)	data reference	tdms file
+TDMS Advanced Asynchronous Write (Data Ref)|error out	tdms file out	auto delete reference? (T)	error in (no error)	data reference	tdms file
+TDMS Close|error out	file path out	error in (no error)	tdms file
+TDMS Configure Asynchronous Reads (Data Ref)|error out	tdms file out	timeout (5 s)	error in (no error)	total size (in bytes) (-1)	max asynchronous reads (4)	tdms file
+TDMS Configure Asynchronous Writes (Data Ref)|error out	tdms file out	timeout (5 s)	error in (no error)	max asynchronous writes (4)	tdms file
+TDMS Defragment|error out	object id	tdms file id	error in (no error)	channel name	group name	tdms file
+TDMS Delete Data|error out	file path out	count (-1: all)	keep empty group/channel? (T)	from (0: start)	error in (no error)	channel name(s) in	group name in	file path
+TDMS Flush|error out	tdms file out	error in (no error)	tdms file
+TDMS Get Asynchronous Read Status (Data Ref)|error out	number of pending reads	tdms file out	error in (no error)	tdms file
+TDMS Get Asynchronous Write Status (Data Ref)|error out	number of pending writes	tdms file out	error in (no error)	tdms file
+TDMS Get Properties|error out	channel name out	group name out	tdms file out	property values	data type	property names	property name	error in (no error)	channel name	group name	tdms file
+TDMS In Memory Close|error out	overwrite (F)	file path	error in (no error)	tdms file
+TDMS In Memory Open|error out	tdms file out	error in (no error)	byte array or file path
+TDMS In Memory Read Bytes|error out	data	tdms file out	byte count (-1: all)	offset (0)	error in (no error)	tdms file
+TDMS List Contents|error out	group/channel names	group names	tdms file out	error in (no error)	group name	tdms file
+TDMS Open|error out	tdms file out	create index file? (T)	disable buffering (T)	file format version (2.0)	error in (no error)	byte order (2:little-endian)	operation (0:open)	file path
+TDMS Read|tdms file	offset (0)	count (-1: all)	tdms file out	group name in	group name out	channel name(s) in	channel name(s) out	data	error in (no error)	data type	return channels in file order? (F)	end of file?	error out
+TDMS Refnum To File ID|error out	object id	tdms file id	error in (no error)	channel name	group name	tdms file
+TDMS Set Properties|error out	channel name out	group name out	tdms file out	property values	property names	error in (no error)	channel name	group name	tdms file
+TDMS Write|tdms file	data layout (0:decimated)	tdms file out	group name in (Untitled)	group name out	channel name(s) in (Untitled)	channel name(s) out	data	error in (no error)	error out
+TDMS Write IP|tdms file	tdms file out	group name in	group name out	channel names in	channel names out	data	data out	error in (no error)	error out
+Temporary Directory|path
+TestSRQ|bus	error in	SRQ	status	error out
+TestSys|bus	address list	error in	result list	status	failed devices	error out
+Text to UTF-8|error out	utf-8 text	error in	encoding	text
+Threshold 1D Array|fractional index or x	start index (0)	threshold y	array of numbers or points
+Tick Count (ms)|millisecond timer value
+TLS Connection?|TLS?	TCP connection
+To Byte Integer|8bit integer	number
+To Double Precision Complex|double precision complex	number
+To Double Precision Float|double precision float	number
+To Extended Precision Complex|extended precision complex	number
+To Extended Precision Float|extended precision float	number
+To Fixed-Point|number	fixed-point type	fixed-point
+To Long Integer|32bit integer	number
+To Lower Case|all lower case string	string
+To More Generic Class|reference	target class	generic class reference
+To More Specific Class|specific class reference	error out	target class	reference	error in
+To OLE Variant|error in	error out	x	vt VARTYPE	OLE Variant
+To Probe String|error out	probe string	error in	maximum string length	data value
+To Quad Integer|64bit integer	number
+To Single Precision Complex|single precision complex	number
+To Single Precision Float|single precision float	number
+To Time Stamp|Time Stamp	number
+To Unsigned Byte Integer|unsigned 8bit integer	number
+To Unsigned Long Integer|unsigned 32bit integer	number
+To Unsigned Quad Integer|unsigned 64bit integer	number
+To Unsigned Word Integer|unsigned 16bit integer	number
+To Upper Case|all upper case string	string
+To Variant|Variant	anything
+To Word Integer|16bit integer	number
+Transpose 1D Array|transposed array	1D array
+Transpose 2D Array|transposed array	2D array
+Transpose Matrix|transposed matrix	matrix
+Trigger|error out	status	error in	address	bus
+TriggerList|error out	status	error in	address list	bus
+Two Button Dialog|T button?	F button name ("Cancel")	T button name ("OK")	message
+Type and Creator|error out	creator	type	dup path	error in	new creator	new type	path
+Type Cast|x	type	*(type *) &x
+Type Error|bool const
+Type Must Be Array|any
+Type Must Be Cluster|any
+Type Of|type	any
+UDP Close|error out	connection ID out	error in (no error)	connection ID
+UDP Multicast Open|error out	port	connection ID	net address	error in (no error)	time-to-live	multicast addr	port
+UDP Open|error out	service name	port		net address	error in (no error)
+UDP Read|error out	data out	connection ID out	port	address	error in (no error)	timeout ms (25000)	max size (548)	connection ID
+UDP Write|error out	connection ID out	port or service name	address	error in (no error)	timeout ms (25000)	data in	connection ID
+Unbitpack from Array|data	type	bparray
+Unflatten From JSON|JSON string	type and defaults	error in (no error)	path	default null elements? (F)	enable LabVIEW extensions? (T)	strict validation? (F)	value	error out
+Unflatten From String|error out	value	rest of the binary string	type	error in (no error)	byte order (0:big-endian, network order)	data includes array or string size? (T)	binary string
+Unflatten From XML|error out	value	error in (no error)	type	xml string
+Unleak Variant Value Reference|error out	variant value reference out	error in	variant value reference in
+Unpackage Matrix|matrix	matrix	array
+Unregister For Events|event registration refnum	error in	error out
+Unregister Session|error out	error in (no error)	refnum
+UTF-8 to Text|error out	text	error in	encoding	utf-8 text
+Variant To Data|error in	error out	Variant	type	data
+Variant To Flattened String|Variant	type string	data string
+VI Library|path
+VISA Assert Interrupt Signal|error out	VISA resource name out	error in (no error)	status ID	mode	VISA resource name
+VISA Assert Trigger|error out	VISA resource name out	error in (no error)	protocol (default:  0)	VISA resource name
+VISA Assert Utility Signal|error out	VISA resource name out	error in (no error)	bus signal	VISA resource name
+VISA Clear|error out	VISA resource name out	error in (no error)	VISA resource name
+VISA Close|error out	error in (no error)	VISA resource name
+VISA Disable Event|error out	VISA resource name out	error in (no error)	mechanism (1:  VI_QUEUE)	event type (all enabled)	VISA resource name
+VISA Discard Events|error out	VISA resource name out	error in (no error)	mechanism  (1:  VI_QUEUE)	event type (all enabled)	VISA resource name
+VISA Enable Event|error out	VISA resource name out	error in (no error)	mechanism (1:  VI_QUEUE)	event type	VISA resource name
+VISA Find Resource|error out	return count	find list	error in (no error)	search mode (0)	expression ("")
+VISA Flush I/O Buffer|error out	VISA resource name out	error in (no error)	mask (16)	VISA resource name
+VISA GPIB Command|error out	return count	VISA resource name out	error in (no error)	command	VISA resource name
+VISA GPIB Control ATN|error out	VISA resource name out	error in (no error)	mode	VISA resource name
+VISA GPIB Control REN|error out	VISA resource name out	error in (no error)	mode	VISA resource name
+VISA GPIB Pass Control|error out	VISA resource name out	error in (no error)	secondary address (none)	primary address	VISA resource name
+VISA GPIB Send IFC|error out	VISA resource name out	error in (no error)	VISA resource name
+VISA In 16|error out	value	VISA resource name out	address space (A16:  1)	error in (no error)	offset (0)	VISA resource name
+VISA In 32|error out	value	VISA resource name out	address space (A16:  1)	error in (no error)	offset (0)	VISA resource name
+VISA In 64|error out	value	VISA resource name out	address space (A16:  1)	error in (no error)	offset (0)	VISA resource name
+VISA In 8|error out	value	VISA resource name out	address space (A16:  1)	error in (no error)	offset (0)	VISA resource name
+VISA Lock|error out	access key	VISA resource name out	lock type (exclusive:  1)	error in (no error)	requested key	timeout (0)	VISA resource name
+VISA Map Address|error out	VISA resource name out	access (False)	address space (A16:  1)	error in (no error)	map size (0)	map base (0)	VISA resource name
+VISA Map Trigger|error out	VISA resource name out	mode	error in (no error)	trigger destination	trigger source	VISA resource name
+VISA Memory Allocation|error out	offset	VISA resource name out	error in (no error)	size	VISA resource name
+VISA Memory Allocation Ex|error out	offset	VISA resource name out	error in (no error)	size	VISA resource name
+VISA Memory Free|error out	VISA resource name out	error in (no error)	offset	VISA resource name
+VISA Move|VISA resource name	source space (A16:  1)	source width (8)	VISA resource name out	source offset (0)	length	dest offset (0)	error in (no error)	dest space (A16:  1)	dest width (same as source)	error out
+VISA Move In 16|error out	data	VISA resource name out	address space (A16:  1)	error in (no error)	count	offset (0)	VISA resource name
+VISA Move In 32|error out	data	VISA resource name out	address space (A16:  1)	error in (no error)	count	offset (0)	VISA resource name
+VISA Move In 64|error out	data	VISA resource name out	address space (A16:  1)	error in (no error)	count	offset (0)	VISA resource name
+VISA Move In 8|error out	data	VISA resource name out	address space (A16:  1)	error in (no error)	count	offset (0)	VISA resource name
+VISA Move Out 16|error out	VISA resource name out	address space (A16:  1)	error in (no error)	data	offset (0)	VISA resource name
+VISA Move Out 32|error out	VISA resource name out	address space (A16:  1)	error in (no error)	data	offset (0)	VISA resource name
+VISA Move Out 64|error out	VISA resource name out	address space (A16:  1)	error in (no error)	data	offset (0)	VISA resource name
+VISA Move Out 8|error out	VISA resource name out	address space (A16:  1)	error in (no error)	data	offset (0)	VISA resource name
+VISA Open|error out	VISA resource name	timeout (0)	error in (no error)	access mode	duplicate session (F)	VISA resource name
+VISA Out 16|error out	VISA resource name out	address space (A16:  1)	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Out 32|error out	VISA resource name out	address space (A16:  1)	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Out 64|error out	VISA resource name out	address space (A16:  1)	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Out 8|error out	VISA resource name out	address space (A16:  1)	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Peek 16|error out	value	VISA resource name out	error in (no error)	offset (0)	VISA resource name
+VISA Peek 32|error out	value	VISA resource name out	error in (no error)	offset (0)	VISA resource name
+VISA Peek 64|error out	value	VISA resource name out	error in (no error)	offset (0)	VISA resource name
+VISA Peek 8|error out	value	VISA resource name out	error in (no error)	offset (0)	VISA resource name
+VISA Poke 16|error out	VISA resource name out	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Poke 32|error out	VISA resource name out	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Poke 64|error out	VISA resource name out	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Poke 8|error out	VISA resource name out	error in (no error)	value (0)	offset (0)	VISA resource name
+VISA Read|error out	return count	read buffer	VISA resource name out	error in (no error)	byte count	VISA resource name
+VISA Read STB|error out	status byte	VISA resource name out	error in (no error)	VISA resource name
+VISA Read To File|error out	return count	VISA resource name out	error in (no error)	byte count	filename	VISA resource name
+VISA Refnum to Session|session	Visa Refnum
+VISA Set I/O Buffer Size|error out	VISA resource name out	error in (no error)	size (4096)	mask (16)	VISA resource name
+VISA Status Description|error out	status description	VISA resource name out	error in (no error)	VISA resource name
+VISA Unlock|error out	VISA resource name out	error in (no error)	VISA resource name
+VISA Unmap Address|error out	VISA resource name out	error in (no error)	VISA resource name
+VISA Unmap Trigger|error out	VISA resource name out	error in (no error)	trigger destination (all)	trigger source	VISA resource name
+VISA USB Control In|VISA resource name	value (0)	index (0)	VISA resource name out	request type	read buffer	request	length (0)	error in (no error)	error out
+VISA USB Control Out|VISA resource name	value (0)	index (0)	VISA resource name out	request type	request	length (0)	error in (no error)	error out
+VISA VXI Cmd or Query|error out	response	VISA resource name out	error in (no error)	command	mode (x200: 16-bit cmd)	VISA resource name
+VISA Wait on Event|error out	event  resource name	event type	VISA resource name out	timeout (0)	error in (no error)	event  resource name (for class)	event type (all enabled)	VISA resource name
+VISA Write|error out	return count	VISA resource name out	error in (no error)	write buffer	VISA resource name
+VISA Write From File|error out	return count	VISA resource name out	error in (no error)	count (entire file)	filename	VISA resource name
+Volume Info|error out	free	used	size	volume path	error in	path
+Wait (ms)|millisecond timer value	milliseconds to wait
+Wait For Activity|error out	connection IDs active	listener IDs active	error in (no error)	timeout	connection IDs	listener IDs
+Wait For Front Panel Activity|millisecond timer value	timeout ms (-1 never timeout)	front panel (this VI's panel)	do not wait! (False)
+Wait for GPIB RQS|error out	poll response byte	error in	timeout ms (488.2 global)	address string
+Wait on Notification|notifier	ignore previous (F)	timeout in ms (-1)	error in (no error)	notifier out	notification	timed out?	error out
+Wait on Notification from Multiple|notifiers	ignore previous (F)	timeout in ms (-1)	error in (no error)	notifier out	notifiers out	timed out?	error out
+Wait on Notification from Multiple with Notifier History|notifiers	ignore previous (F)	timeout in ms (-1)	error in (no error)	notifier out	notifiers out	timed out?	error out
+Wait on Notification with Notifier History|notifier	ignore previous (F)	timeout in ms (-1)	error in (no error)	notifier out	notification	timed out?	error out
+Wait on Occurrence|timed out	ignore previous (T)	occurrence	ms timeout (-1)
+Wait Until Next ms Multiple|millisecond timer value	millisecond multiple
+WaitSRQ|bus	error in	SRQ	status	error out
+White Space?|space, h/v tab, cr, lf, ff?	char
+Write Datalog|error out	refnum out	error in	record(s)	refnum
+Write Device|new offset	count	err	spc reset (F)	misc (-)	async (T)	pos offset (-)	pos mode (-)	string	device refnum
+Write File|error out	offset	dup refnum	convert eol (F)	data	header (F)	error in	pos offset (0)	pos mode (0:2)	refnum
+Write to Binary File|error out	cancelled	refnum out	prepend array or string size? (T)	prompt (Choose or enter file path)	error in	byte order (0:big-endian, network order)	data	file (use dialog)
+Write to Text File|error out	cancelled	refnum out	prompt (Choose or enter file path)	error in	text	file (use dialog)
+Y-th Root of X|y-th root(x)	x	y

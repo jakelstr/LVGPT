@@ -46,78 +46,6 @@ def convertBinaryDictToConcatStrings(binaryDict, blockLevel):
     
     return (binaryDict, "STRING")
 
-def processForStmt(node):
-    """
-    Process a traditional for loop in Go.
-    """
-    init = node.find("init")
-    cond = node.find("cond")
-    post = node.find("post")
-    body = node.find("body")
-
-    # Process initialization
-    if init is not None:
-        logger.info("Processing for loop initialization")
-        processBlockStmtChild(init, lvGraph.diagramUUID)
-
-    # Process condition
-    condUUID = None
-    if cond is not None:
-        logger.info("Processing for loop condition")
-        if cond[0].tag == "BinaryExpr":
-            condUUID = addBinaryNodeToLVGraph(cond[0], None, False)
-        elif cond[0].tag == "Ident":
-            identName = cond[0].find("name").text
-            condUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
-
-    # Process post statement
-    if post is not None:
-        logger.info("Processing for loop post statement")
-        processBlockStmtChild(post, lvGraph.diagramUUID)
-
-    # Process loop body
-    bodyNode = body.find("BlockStmt")
-    for child in bodyNode:
-        processBlockStmtChild(child, lvGraph.diagramUUID)
-
-    # Optionally, add a loop node in LabVIEW to represent the iteration
-    loopNode = LoopNode()  # To be defined in lvgptGraph.py
-    lvGraph.addNode(loopNode)
-    if condUUID:
-        lvGraph.addTerminalEdge(condUUID, loopNode.getConditionTerminal().uuid)
-
-def processRangeStmt(node):
-    """
-    Process a for range loop in Go.
-    """
-    key = node.find("key")
-    value = node.find("value")
-    iterable = node.find("iterable")
-    body = node.find("body")
-
-    # Process key and value assignments
-    if key is not None:
-        processBlockStmtChild(key, lvGraph.diagramUUID)
-    if value is not None:
-        processBlockStmtChild(value, lvGraph.diagramUUID)
-
-    # Process iterable
-    iterableUUID = None
-    if iterable is not None:
-        if iterable[0].tag == "Ident":
-            identName = iterable[0].find("name").text
-            iterableUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
-
-    # Process loop body
-    bodyNode = body.find("BlockStmt")
-    for child in bodyNode:
-        processBlockStmtChild(child, lvGraph.diagramUUID)
-
-    # Add range loop node in LabVIEW
-    rangeLoopNode = RangeLoopNode()  # To be defined in lvgptGraph.py
-    lvGraph.addNode(rangeLoopNode)
-    if iterableUUID:
-        lvGraph.addTerminalEdge(iterableUUID, rangeLoopNode.getIterableTerminal().uuid)
 
 def processBinaryExpr(node):
     returnDict = {}
@@ -555,9 +483,9 @@ def processBlockStmtChild(node, blockUUID):
             lvGraph.addNode(outNode)
             lvGraph.addTerminalEdge(outTerm.uuid, outNode.getTerminal().uuid)
         else:
-            caseSelector = CaseSelector(lvGraph.getAvailableNodeName("case"))
-            trueCaseUUID = caseSelector.addSubdiagram("True")
-            falseCaseUUID = caseSelector.addSubdiagram("False")
+            caseSelector = CaseStructure(lvGraph.getAvailableNodeName("case"))
+            trueCaseUUID = caseSelector.addFrame("True")
+            falseCaseUUID = caseSelector.addFrame("False")
             lvGraph.addNode(caseSelector)
             lvGraph.addSubSymbolTable(trueCaseUUID)
 
@@ -573,7 +501,7 @@ def processBlockStmtChild(node, blockUUID):
         processRangeStmt(node)
 
     elif node.tag == "SwitchStmt":
-        caseSelector = CaseSelector(lvGraph.getAvailableNodeName("case"))
+        caseSelector = CaseStructure(lvGraph.getAvailableNodeName("case"))
         processSwitchBody(node.find("body"), caseSelector)
         lvGraph.setDiagram(blockUUID)
         lvGraph.addNode(caseSelector)
@@ -589,12 +517,7 @@ def processBlockStmtChild(node, blockUUID):
         
                                     
 
-def writeWireToXML(wire):
-    rootElem = ET.Element("wire")
-    rootElem.attrib["id"] = wire.uuid
-    rootElem.attrib["from"] = wire.fromUUID
-    rootElem.attrib["to"] = wire.toUUID
-    return rootElem
+
 
 def process():
     tree = ET.parse('goast/goast1.txt')
@@ -645,30 +568,24 @@ def test_property_node_wiring():
     outputWiresElem = ET.Element("wires")
     # Create the Class Specifier Constant node.
     # (Here, the id_string is set to "NumericConstant" as specified.)
-    # stringControl = StringControl("input 1")
-    # lvGraph.addNode(stringControl)
+
+    whileLoop = WhileLoop("whileLoop")
+    lvGraph.addNode(whileLoop)
+
+    tc = BoolConstant("tc")
+    tc.setValue(True)
+    lvGraph.addNode(tc, whileLoop.getSubdiagram())
+
+    whileLoopCondTerm = whileLoop.getConditionalTerminal()
+    lvGraph.addTerminalEdge(tc.getTerminal().uuid, whileLoopCondTerm.uuid)
     
-    # # Create a Property Node.
+    # Create a Property Node.
     # propNode = PropertyNode()
     # propNode.setLinkUUID(stringControl.uuid)
     # classPropTerminalUUID = propNode.addProperty("Value")
     # lvGraph.addNode(propNode)
     
-    # Wire the constant's main output to the Property Node's reference terminal.
-    # We assume that classSpecConst.getTerminal() returns its primary terminal.
-    
-    # Create a String Indicator.
 
-    stringInd = StringIndicator("string indicator")
-
-    strIndicator = StringArrayIndicator("string array")
-    strIndicator.setChildNode(stringInd)
-    lvGraph.addNode(strIndicator)
-    
-    # Now wire the constant's "Class" property terminal to the String Indicator's terminal.
-    # For the constant, retrieve the "Class" property terminal. Here we assume that
-    # getTerminalByName can be used to look it up by the terminal name "Class".
-    strIndTerm = strIndicator.getTerminal()
 
     for i, n in enumerate(lvGraph.graph["nodes"]):
         outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
@@ -684,15 +601,9 @@ def test_property_node_wiring():
         tree.write(files)
 
 def gen_unit_test_file():
-
-    visNode = ET.Element("vis")
-    viNode = ET.Element("vi")
-    bdNode = ET.Element("bd")
-    bdNode.attrib["name"] = "test"
-    outputNodesElem = ET.Element("nodes")
-    outputWiresElem = ET.Element("wires")
-
+    # Boolean Control and Indicator Test
     boolControl = BoolControl("boolean control")
+    boolControl.setValue(True) # Set a value for testing
     lvGraph.addNode(boolControl)
 
     boolInd = BoolIndicator("boolean indicator")
@@ -700,6 +611,7 @@ def gen_unit_test_file():
 
     lvGraph.addTerminalEdge(boolControl.getTerminal().uuid, boolInd.getTerminal().uuid)
 
+    # String Control, Constant, Concatenation, and Indicator Test
     strControl = StringControl("string control")
     strControl.setValue("test")
     lvGraph.addNode(strControl)
@@ -707,8 +619,19 @@ def gen_unit_test_file():
     strInd = StringIndicator("string indicator")
     lvGraph.addNode(strInd)
 
-    lvGraph.addTerminalEdge(strControl.getTerminal().uuid, strInd.getTerminal().uuid)
+    stringConst = StringConstant("string constant")
+    stringConst.setValue("Const")
+    lvGraph.addNode(stringConst)
 
+    concatString = ConcatenateStringsNode()
+    lvGraph.addNode(concatString)
+    stringTerms = concatString.getStringTerms()
+    
+    lvGraph.addTerminalEdge(strControl.getTerminal().uuid, stringTerms[0].uuid)
+    lvGraph.addTerminalEdge(stringConst.getTerminal().uuid, stringTerms[1].uuid)
+    lvGraph.addTerminalEdge(concatString.getTerminal().uuid, strInd.getTerminal().uuid)
+
+    # Numeric Control and Indicator Test
     numControl = NumericControl("numeric control", "Long")
     numControl.setValue("33")
     lvGraph.addNode(numControl)
@@ -718,28 +641,242 @@ def gen_unit_test_file():
 
     lvGraph.addTerminalEdge(numControl.getTerminal().uuid, numInd.getTerminal().uuid)
 
-    for i, n in enumerate(lvGraph.graph["nodes"]):
-        outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
-    for w in lvGraph.getWires():
-        outputWiresElem.append(writeWireToXML(w))
-    bdNode.append(outputNodesElem)
-    bdNode.append(outputWiresElem)
-    viNode.append(bdNode)
-    visNode.append(viNode)
-    tree = ET.ElementTree(visNode)
-    with open("LabVIEW/unit_tests/def.xml", "wb") as files:
-        ET.indent(tree, space="\t", level=0)
-        tree.write(files)
+    # Select Node Test (Boolean Based)
+    selectNode = SelectNode()
+    lvGraph.addNode(selectNode)
+    true_val = NumericConstant("true_val", "Long")
+    true_val.setValue("100")
+    lvGraph.addNode(true_val)
+    false_val = NumericConstant("false_val", "Long")
+    false_val.setValue("200")
+    lvGraph.addNode(false_val)
+    select_ind = NumericIndicator("select_ind", "Long")
+    lvGraph.addNode(select_ind)
 
-def test_VI_From_File_wiring(path):
+    lvGraph.addTerminalEdge(true_val.getTerminal().uuid, selectNode.getTerms()[0].uuid) # True value
+    lvGraph.addTerminalEdge(boolControl.getTerminal().uuid, selectNode.getTerms()[1].uuid) # Selector
+    lvGraph.addTerminalEdge(false_val.getTerminal().uuid, selectNode.getTerms()[2].uuid) # False value
+    lvGraph.addTerminalEdge(selectNode.getTerms()[3].uuid, select_ind.getTerminal().uuid)
 
-    visNode = ET.Element("vis")
-    viNode = ET.Element("vi")
-    bdNode = ET.Element("bd")
-    bdNode.attrib["name"] = "test"
-    outputNodesElem = ET.Element("nodes")
-    outputWiresElem = ET.Element("wires")
+    # Addition Node Test
+    addNode = AddNode()
+    lvGraph.addNode(addNode)
+    add_input1 = NumericConstant("add_input1", "Long")
+    add_input1.setValue("10")
+    lvGraph.addNode(add_input1)
+    add_input2 = NumericConstant("add_input2", "Long")
+    add_input2.setValue("20")
+    lvGraph.addNode(add_input2)
+    add_indicator = NumericIndicator("add_indicator", "Long")
+    lvGraph.addNode(add_indicator)
+    lvGraph.addTerminalEdge(add_input1.getTerminal().uuid, addNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(add_input2.getTerminal().uuid, addNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(addNode.getTerms()[2].uuid, add_indicator.getTerminal().uuid)
+
+    # Subtraction Node Test
+    subtractNode = SubtractNode()
+    lvGraph.addNode(subtractNode)
+    sub_input1 = NumericConstant("sub_input1", "Long")
+    sub_input1.setValue("30")
+    lvGraph.addNode(sub_input1)
+    sub_input2 = NumericConstant("sub_input2", "Long")
+    sub_input2.setValue("5")
+    lvGraph.addNode(sub_input2)
+    sub_indicator = NumericIndicator("sub_indicator", "Long")
+    lvGraph.addNode(sub_indicator)
+    lvGraph.addTerminalEdge(sub_input1.getTerminal().uuid, subtractNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(sub_input2.getTerminal().uuid, subtractNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(subtractNode.getTerms()[2].uuid, sub_indicator.getTerminal().uuid)
+
+     # Multiplication Node Test
+    multiplyNode = MultiplyNode()
+    lvGraph.addNode(multiplyNode)
+    mult_input1 = NumericConstant("mult_input1", "Long")
+    mult_input1.setValue("7")
+    lvGraph.addNode(mult_input1)
+    mult_input2 = NumericConstant("mult_input2", "Long")
+    mult_input2.setValue("6")
+    lvGraph.addNode(mult_input2)
+    mult_indicator = NumericIndicator("mult_indicator", "Long")
+    lvGraph.addNode(mult_indicator)
+    lvGraph.addTerminalEdge(mult_input1.getTerminal().uuid, multiplyNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(mult_input2.getTerminal().uuid, multiplyNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(multiplyNode.getTerms()[2].uuid, mult_indicator.getTerminal().uuid)
+
+    # Division Node Test
+    divideNode = DivideNode()
+    lvGraph.addNode(divideNode)
+    div_input1 = NumericConstant("div_input1", "Double Precision")
+    div_input1.setValue("100")
+    lvGraph.addNode(div_input1)
+    div_input2 = NumericConstant("div_input2", "Double Precision")
+    div_input2.setValue("4")
+    lvGraph.addNode(div_input2)
+    div_indicator = NumericIndicator("div_indicator", "Double Precision")
+    lvGraph.addNode(div_indicator)
+    lvGraph.addTerminalEdge(div_input1.getTerminal().uuid, divideNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(div_input2.getTerminal().uuid, divideNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(divideNode.getTerms()[2].uuid, div_indicator.getTerminal().uuid)
     
+    # Comparison Node Tests (Greater Or Equal)
+    greaterOrEqualNode = GreaterOrEqualNode()
+    lvGraph.addNode(greaterOrEqualNode)
+    ge_input1 = NumericConstant("ge_input1", "Long")
+    ge_input1.setValue("50")
+    lvGraph.addNode(ge_input1)
+    ge_input2 = NumericConstant("ge_input2", "Long")
+    ge_input2.setValue("40")
+    lvGraph.addNode(ge_input2)
+    ge_indicator = BoolIndicator("ge_indicator")
+    lvGraph.addNode(ge_indicator)
+    lvGraph.addTerminalEdge(ge_input1.getTerminal().uuid, greaterOrEqualNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(ge_input2.getTerminal().uuid, greaterOrEqualNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(greaterOrEqualNode.getTerms()[2].uuid, ge_indicator.getTerminal().uuid)
+
+    # Comparison Node Tests (Equal)
+    equalNode = EqualNode()
+    lvGraph.addNode(equalNode)
+    eq_input1 = NumericConstant("eq_input1", "Long")
+    eq_input1.setValue("50")
+    lvGraph.addNode(eq_input1)
+    eq_input2 = NumericConstant("eq_input2", "Long")
+    eq_input2.setValue("50")
+    lvGraph.addNode(eq_input2)
+    eq_indicator = BoolIndicator("eq_indicator")
+    lvGraph.addNode(eq_indicator)
+    lvGraph.addTerminalEdge(eq_input1.getTerminal().uuid, equalNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(eq_input2.getTerminal().uuid, equalNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(equalNode.getTerms()[2].uuid, eq_indicator.getTerminal().uuid)
+
+    # Comparison Node Tests (Not Equal)
+    notEqualNode = NotEqualNode()
+    lvGraph.addNode(notEqualNode)
+    neq_input1 = NumericConstant("neq_input1", "Long")
+    neq_input1.setValue("50")
+    lvGraph.addNode(neq_input1)
+    neq_input2 = NumericConstant("neq_input2", "Long")
+    neq_input2.setValue("40")
+    lvGraph.addNode(neq_input2)
+    neq_indicator = BoolIndicator("neq_indicator")
+    lvGraph.addNode(neq_indicator)
+    lvGraph.addTerminalEdge(neq_input1.getTerminal().uuid, notEqualNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(neq_input2.getTerminal().uuid, notEqualNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(notEqualNode.getTerms()[2].uuid, neq_indicator.getTerminal().uuid)
+    
+    # Comparison Node Tests (Greater Than)
+    greaterThanNode = GreaterThanNode()
+    lvGraph.addNode(greaterThanNode)
+    gt_input1 = NumericConstant("gt_input1", "Long")
+    gt_input1.setValue("50")
+    lvGraph.addNode(gt_input1)
+    gt_input2 = NumericConstant("gt_input2", "Long")
+    gt_input2.setValue("40")
+    lvGraph.addNode(gt_input2)
+    gt_indicator = BoolIndicator("gt_indicator")
+    lvGraph.addNode(gt_indicator)
+    lvGraph.addTerminalEdge(gt_input1.getTerminal().uuid, greaterThanNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(gt_input2.getTerminal().uuid, greaterThanNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(greaterThanNode.getTerms()[2].uuid, gt_indicator.getTerminal().uuid)
+
+    # Comparison Node Tests (Less Than)
+    lessThanNode = LessThanNode()
+    lvGraph.addNode(lessThanNode)
+    lt_input1 = NumericConstant("lt_input1", "Long")
+    lt_input1.setValue("40")
+    lvGraph.addNode(lt_input1)
+    lt_input2 = NumericConstant("lt_input2", "Long")
+    lt_input2.setValue("50")
+    lvGraph.addNode(lt_input2)
+    lt_indicator = BoolIndicator("lt_indicator")
+    lvGraph.addNode(lt_indicator)
+    lvGraph.addTerminalEdge(lt_input1.getTerminal().uuid, lessThanNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(lt_input2.getTerminal().uuid, lessThanNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(lessThanNode.getTerms()[2].uuid, lt_indicator.getTerminal().uuid)
+
+    # Comparison Node Tests (Less or Equal)
+    lessOrEqualNode = LessOrEqualNode()
+    lvGraph.addNode(lessOrEqualNode)
+    loe_input1 = NumericConstant("loe_input1", "Long")
+    loe_input1.setValue("40")
+    lvGraph.addNode(loe_input1)
+    loe_input2 = NumericConstant("loe_input2", "Long")
+    loe_input2.setValue("50")
+    lvGraph.addNode(loe_input2)
+    loe_indicator = BoolIndicator("loe_indicator")
+    lvGraph.addNode(loe_indicator)
+    lvGraph.addTerminalEdge(loe_input1.getTerminal().uuid, lessOrEqualNode.getTerms()[0].uuid)
+    lvGraph.addTerminalEdge(loe_input2.getTerminal().uuid, lessOrEqualNode.getTerms()[1].uuid)
+    lvGraph.addTerminalEdge(lessOrEqualNode.getTerms()[2].uuid, loe_indicator.getTerminal().uuid)
+    
+    # Insert Into Array Node Test
+    insertIntoArrayNode = InsertIntoArrayNode("insert_into_array")
+    lvGraph.addNode(insertIntoArrayNode)
+
+    input_array = ArrayControl("input_array")
+    input_array.setChildNode(StringControl("String"))
+    input_array.setValue(0, "First")
+    input_array.setValue(1, "Second")
+    lvGraph.addNode(input_array)
+    
+    index_to_insert = NumericConstant("index_to_insert", "Long")
+    index_to_insert.setValue("1")
+    lvGraph.addNode(index_to_insert)
+    
+    new_item = StringConstant("new_item")
+    new_item.setValue("Inserted")
+    lvGraph.addNode(new_item)
+
+    output_array_indicator = ArrayIndicator("output_array")
+    lvGraph.addNode(output_array_indicator)
+    childNode = StringIndicator("String")
+    output_array_indicator.setChildNode(childNode)
+
+    terms = insertIntoArrayNode.getTerms()
+    lvGraph.addTerminalEdge(input_array.getTerminal().uuid, terms[0].uuid)
+    lvGraph.addTerminalEdge(index_to_insert.getTerminal().uuid, terms[1].uuid)
+    lvGraph.addTerminalEdge(new_item.getTerminal().uuid, terms[2].uuid)
+    lvGraph.addTerminalEdge(terms[3].uuid, output_array_indicator.getTerminal().uuid)
+    
+    # Case Structure Test
+    caseSelector = CaseStructure("case_structure")
+    case_0_uuid = caseSelector.addFrame("0")
+    case_1_uuid = caseSelector.addFrame("1")
+    tunnel = caseSelector.addTunnel()
+    lvGraph.addNode(caseSelector)
+    caseSelector.setDefaultFrame(case_0_uuid)
+
+    case_selector_control = NumericControl("case_selector", "Long")
+    case_selector_control.setValue("1")
+    lvGraph.addNode(case_selector_control)
+
+    case_selector_external = caseSelector.getCaseSelectorExternal()
+    lvGraph.addTerminalEdge(case_selector_control.getTerminal().uuid, case_selector_external.uuid)
+
+    
+    true_constant = BoolConstant("true_constant")
+    true_constant.setValue(True)
+    lvGraph.addNode(true_constant, case_0_uuid)
+
+    case_0_indicator = BoolIndicator("case_indicator")
+    lvGraph.addNode(case_0_indicator)
+
+
+    false_constant = BoolConstant("false_constant")
+    false_constant.setValue(False)
+    lvGraph.addNode(false_constant, case_1_uuid)
+
+    
+    lvGraph.addTerminalEdge(tunnel.external_terminal.uuid, case_0_indicator.getTerminal().uuid)
+    case_0_internal = next((term for term in tunnel.terminals_internal if case_0_uuid in term.name), None)
+    case_1_internal = next((term for term in tunnel.terminals_internal if case_1_uuid in term.name), None)
+
+    lvGraph.addTerminalEdge(true_constant.getTerminal().uuid, case_0_internal.uuid)
+    lvGraph.addTerminalEdge(false_constant.getTerminal().uuid, case_1_internal.uuid)
+    lvGraph.finalize_layout()
+
+    lvGraph.writeXML("test", "LabVIEW/unit_tests/def.xml")
+
+def test_VI_From_File_wiring(path):    
     csc1 = ClassSpecifierConstant("csc1", "Control")
     csc1Term = csc1.getTerminal()
     lvGraph.addNode(csc1)
@@ -783,21 +920,60 @@ def test_VI_From_File_wiring(path):
     lvGraph.addTerminalEdge(compareConstTerm.uuid, eq["y"].uuid)
     lvGraph.addTerminalEdge(eq["x = y?"].uuid, classPropTerminalUUID)
 
-    for i, n in enumerate(lvGraph.graph["nodes"]):
-        outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
-    for w in lvGraph.getWires():
-        outputWiresElem.append(writeWireToXML(w))
-    bdNode.append(outputNodesElem)
-    bdNode.append(outputWiresElem)
-    viNode.append(bdNode)
-    visNode.append(viNode)
-    tree = ET.ElementTree(visNode)
-    with open("python/ai-test.xml", "wb") as files:
-        ET.indent(tree, space="\t", level=0)
-        tree.write(files)
+    lvGraph.writeXML("test", "LabVIEW/unit_tests/subVI.xml")
+
+
+def GeminiGenerate():
+
+    # Create a While Loop
+    while_loop = WhileLoop("While Loop")
+    lvGraph.addNode(while_loop)
+
+    # Conditional Terminal for While Loop
+    stop_control = BoolControl("Stop Control")
+    lvGraph.addNode(stop_control)
+    
+    conditional_terminal = while_loop.getConditionalTerminal()
+    lvGraph.addTerminalEdge(stop_control.getTerminal().uuid, conditional_terminal.uuid)
+
+    # Shift Register
+    shift_register = while_loop.addShiftRegister(50)
+
+    # Numeric Constant for Initial Value
+    initial_value = NumericConstant("Initial Value", "Long")
+    initial_value.setValue("0")
+    lvGraph.addNode(initial_value)
+    
+    # Add Node inside the loop
+    add_node = AddNode()
+    lvGraph.addNode(add_node, while_loop.getSubdiagram())
+    
+    # Numeric Constant to Increment
+    increment_value = NumericConstant("Increment", "Long")
+    increment_value.setValue("1")
+    lvGraph.addNode(increment_value, while_loop.getSubdiagram())
+    
+    #Numeric Indicator for output
+    numeric_indicator = NumericIndicator("Output", "Long")
+    lvGraph.addNode(numeric_indicator)
+
+    # Connect Initial Value to Left Hand External of Shift Register
+    lvGraph.addTerminalEdge(initial_value.getTerminal().uuid, shift_register.lhExternalTerminal.uuid)
+    # Wire the output indicator to the right hand external
+    lvGraph.addTerminalEdge(shift_register.rhExternalTerminal.uuid, numeric_indicator.getTerminal().uuid)
+
+    # Connections within the loop
+    diagram_id = while_loop.getSubdiagram()
+    lvGraph.addTerminalEdge(shift_register.lhInternalTerminal.uuid, add_node.getTerms()[0].uuid)  # Shift Register Value to Add Node (x)
+    lvGraph.addTerminalEdge(increment_value.getTerminal().uuid, add_node.getTerms()[1].uuid)  # Increment Value to Add Node (y)
+    lvGraph.addTerminalEdge(add_node.getTerms()[2].uuid, shift_register.rhInternalTerminal.uuid) #Add Output to Shift Register
+    
+
+    lvGraph.finalize_layout()
+    lvGraph.writeXML("while_loop_with_shift_register", "while_loop_with_shift_register.xml")
 
 
 # Optionally, call the test function if this file is run directly.
 if __name__ == "__main__":
-    gen_unit_test_file()
+    GeminiGenerate()
 

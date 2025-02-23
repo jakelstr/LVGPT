@@ -10,15 +10,13 @@ import (
 	"go/token"
 	"os"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
-var exitBlockLines []int
+var visited = make(map[uuid.UUID]ast.Node)
 
-var depthCounter int = -1
-
-var openTags = make([]string, 0)
-
-var visited = make(map[ast.Node]bool)
+var variableLink = make(map[string][]string)
 
 func xmlEscape(s string) string {
 	var b bytes.Buffer
@@ -36,7 +34,6 @@ func stripQuotes(s string) string {
 func processBasicLit(node ast.BasicLit) string {
 	kind := node.Kind
 	value := node.Value
-	visited[&node] = true
 	return fmt.Sprintf("<kind>%s</kind>\n<value>%s</value>\n", kind, stripQuotes(value))
 }
 
@@ -79,11 +76,12 @@ func processIfStmt(expr *ast.IfStmt) string {
 
 func walkNode(f ast.Node) string {
 	retString := ""
-	ast.Inspect(f, func(n ast.Node) bool {
-		retString += processNode(n)
-		return true
-	})
-	fmt.Println(retString)
+	// ast.Inspect(f, func(n ast.Node) bool {
+	// 	retString += processNode(n)
+	// 	return true
+	// })
+	retString += processNode(f)
+	// fmt.Println(retString)
 	return retString
 }
 
@@ -93,29 +91,11 @@ func processNode(n ast.Node) string {
 	if nodeType != "<nil>" {
 
 		nodeType = strings.TrimPrefix(nodeType, "*ast.")
-		depthCounter++
-		//fmt.Printf("<%s>\n", nodeType)
-		if visited[n] {
-			openTags = append(openTags, "SKIP")
-			return ""
-		} else {
-			retString += fmt.Sprintf("<%s>\n", nodeType)
-			openTags = append(openTags, nodeType)
-		}
-		visited[n] = true
-
+		retString += fmt.Sprintf("<%s>\n", nodeType)
 	} else {
-		if depthCounter > -1 {
-			depthCounter--
-			lastTag := openTags[len(openTags)-1]
-			openTags = openTags[:len(openTags)-1]
-			//fmt.Printf("</%s>\n", lastTag)
-			if lastTag != "SKIP" {
-				retString += fmt.Sprintf("</%s>\n", lastTag)
-			}
-		}
-
+		return ""
 	}
+
 	switch x := n.(type) {
 
 	case *ast.IfStmt:
@@ -123,9 +103,13 @@ func processNode(n ast.Node) string {
 
 	case *ast.File:
 		fmt.Printf("File ends on block %d\n", int(n.End()))
+		retString += walkNode(x.Name)
+		for _, decl := range x.Decls {
+			retString += walkNode(decl)
+		}
 
 	case *ast.BlockStmt:
-		fmt.Printf("Entering Block... At depth %d\n", depthCounter)
+		fmt.Printf("Entering Block... ")
 		//exitBlockLines = append(exitBlockLines, depthCounter)
 		for _, stmt := range x.List {
 			retString += walkNode(stmt)
@@ -134,12 +118,14 @@ func processNode(n ast.Node) string {
 		retString += fmt.Sprintf("<name>%s</name>\n", x.Name)
 
 	case *ast.FuncDecl:
+		retString += walkNode(x.Name)
+		if x.Body != nil {
+			retString += walkNode(x.Body)
+		}
 		if x.Type.Results != nil {
 			for _, result := range x.Type.Results.List {
 				fmt.Println("Function:", x.Name.Name, "Return Type:", result.Type)
 			}
-		} else {
-			fmt.Println("Function:", x.Name.Name, "has no return values")
 		}
 	case *ast.CallExpr:
 		//funcName := x.Fun.(*ast.SelectorExpr).Sel.Name
@@ -149,6 +135,7 @@ func processNode(n ast.Node) string {
 			retString += fmt.Sprintf("<arg>%s</arg>", walkNode(arg))
 		}
 		retString += fmt.Sprintf("</args>")
+		retString += fmt.Sprintf("<fun>%s</fun>", walkNode(x.Fun))
 	case *ast.AssignStmt:
 		fmt.Printf("AssignStmt: ")
 		retString += fmt.Sprintf("<token>%s</token>\n", x.Tok)
@@ -159,25 +146,12 @@ func processNode(n ast.Node) string {
 		retString += "</LhsArray>\n"
 		retString += "<RhsArray>\n"
 		for i, rhs := range x.Rhs {
-			/* 			if _, ok := rhs.(*ast.BasicLit); ok {
-			   				basicLit := rhs.(*ast.BasicLit)
-			   				retString += fmt.Sprintf("<Rhs id=\"%d\">\n%s</Rhs>\n", i, walkNode(basicLit))
-			   				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
-			   			}
-			   			if _, ok := rhs.(*ast.BinaryExpr); ok {
-			   				binaryExpr := rhs.(*ast.BinaryExpr)
-			   				visited[binaryExpr] = true
-			   				retString += fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, findBottomBinaryExpr((binaryExpr)))
-			   				//fmt.Printf("RHS: %s\n", processBasicLit(*basicLit))
-			   			} */
 			retString += fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, walkNode(rhs))
 		}
 		retString += "</RhsArray>\n"
 
 	case *ast.SelectorExpr:
 		retString += fmt.Sprintf("<x>%s</x><sel>%s</sel>", x.X, x.Sel)
-		visited[x.X] = true
-		visited[x.Sel] = true
 		fmt.Printf("Selector Expr: %s, %s\n", x.X, x.Sel)
 
 	case *ast.ExprStmt:
@@ -186,6 +160,7 @@ func processNode(n ast.Node) string {
 			w.WriteString(fmt.Sprintf("<ExprStmt><CallExpr>%s</CallExpr></ExprStmt>\n", callExpr.Fun))
 
 		}*/
+		retString += walkNode(x.X)
 
 	case *ast.BasicLit:
 		retString += processBasicLit(*x)
@@ -200,7 +175,11 @@ func processNode(n ast.Node) string {
 		retString += fmt.Sprintf("<index>%s</index><x>%s</x>", walkNode(x.Index), walkNode(x.X))
 
 	case *ast.DeclStmt:
-		fmt.Printf("Decl statement %s\n", x.Decl)
+		// fmt.Printf("Decl statement %s\n", x.Decl)
+		retString += walkNode(x.Decl)
+		// for _, spec := range x.Decl.(*ast.GenDecl).Specs {
+		// 	retString += walkNode(spec)
+		// }
 	case *ast.ArrayType:
 		if x.Len != nil {
 			retString += fmt.Sprintf("<len>%s</len>", walkNode(x.Len))
@@ -210,12 +189,15 @@ func processNode(n ast.Node) string {
 		}
 
 	case *ast.ValueSpec:
-		//fmt.Printf("Value Spec %s\n", x.Values)
-		retString += fmt.Sprintf("<type>%s</type>\n", walkNode(x.Type))
+		if x.Type != nil {
+			retString += fmt.Sprintf("<type>%s</type>\n", walkNode(x.Type))
+		} else {
+			retString += fmt.Sprintf("<type>nil</type>\n")
+		}
 		retString += fmt.Sprintf("<names>\n")
 		for _, name := range x.Names {
 			//visited[name] = true
-			retString += fmt.Sprintf("<name>%s</name>\n", name.Name)
+			retString += fmt.Sprint(walkNode(name))
 		}
 		retString += fmt.Sprintf("</names>\n")
 		retString += fmt.Sprintf("<values>\n")
@@ -229,6 +211,9 @@ func processNode(n ast.Node) string {
 	case *ast.GenDecl:
 
 		fmt.Printf("---- gen decl\n")
+		for _, spec := range x.Specs {
+			retString += walkNode(spec)
+		}
 		for _, spec := range x.Specs {
 			switch spec := spec.(type) {
 			case *ast.ImportSpec:
@@ -263,13 +248,36 @@ func processNode(n ast.Node) string {
 	case *ast.SwitchStmt:
 		retString += fmt.Sprintf("<tag>%s</tag><body>%s</body>", walkNode(x.Tag), walkNode(x.Body))
 
+	case *ast.ImportSpec:
+		retString += walkNode(x.Path)
+
+	case *ast.ForStmt:
+		initString := walkNode(x.Init)
+		if initString != "" {
+			retString += fmt.Sprintf("<init>%s</init>", initString)
+		}
+		condString := walkNode(x.Cond)
+		if condString != "" {
+			retString += fmt.Sprintf("<cond>%s</cond>", condString)
+		}
+		postString := walkNode(x.Post)
+		if postString != "" {
+			retString += fmt.Sprintf("<post>%s</post>", postString)
+		}
+		bodyString := walkNode(x.Body)
+		if bodyString != "" {
+			retString += fmt.Sprintf("<body>%s</body>", bodyString)
+		}
+
 	default:
 		nodeType := fmt.Sprintf("%T", n)
+		fmt.Println(nodeType)
 		if nodeType != "<nil>" {
 			//retString += fmt.Sprintf("Node type: %s\n", nodeType)
 		}
 
 	}
+	retString += fmt.Sprintf("</%s>\n", nodeType)
 	return retString
 }
 
@@ -281,7 +289,7 @@ func main() {
 		panic(err)
 	}
 
-	file, err := os.Create("goast1.txt")
+	file, err := os.Create("goast1_new.txt")
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return

@@ -34,7 +34,7 @@ def convertBinaryDictToConcatStrings(binaryDict, blockLevel):
     uniform, op, binVars = determineBinaryDictOpUniform(binaryDict)
     if uniform and op is Add:
         lvGraph.deleteNode(binaryDict['op'].uuid)
-        concatNode = ConcatenateStringsNode()
+        concatNode = ConcatenateStrings()
         lvGraph.addNode(concatNode)
         if len(binVars) > 2:
             for x in range(len(binVars) - 2):
@@ -61,6 +61,8 @@ def processBinaryExpr(node):
         returnDict["op"] = Divide()
     elif op == ">=":
         returnDict["op"] = GreaterOrEqual()
+    elif op == ">":
+        returnDict["op"] = Greater()
     left = node.find("left")
     right = node.find("right")
     if len(left) > 0:
@@ -239,7 +241,7 @@ def processSwitchBody(bodyTag, caseNode):
         caseUUID = None
         if case[0].tag == "BasicLit":
             val = case.find("BasicLit/value").text
-            caseUUID = caseNode.addSubdiagram(val)
+            caseUUID = caseNode.addFrame(val)
             lvGraph.setDiagram(caseUUID)
         body = c.find("body")
         found, node = unaryPrintStmt(body)
@@ -274,7 +276,7 @@ def processBlockStmtChild(node, blockUUID):
     if node.tag == "DeclStmt":
         varType = ""
         valSpec = node.find("GenDecl/ValueSpec")
-        name = valSpec.find("names/name").text
+        name = valSpec.find("names/Ident/name").text
         if valSpec is not None:
             varTypeNode = valSpec.find("type")
             if len(varTypeNode) == 0:
@@ -293,8 +295,11 @@ def processBlockStmtChild(node, blockUUID):
             if valueTag is not None:
                 match valueTag[0].tag:
                     case "BasicLit":
-                        varNode = getControlNodeByVarType(name, varType)
                         value = valueTag.find("BasicLit/value").text
+                        valueType = valueTag.find("BasicLit/kind").text
+                        if varType == "nil":
+                            varType = valueType
+                        varNode = getControlNodeByVarType(name, varType)
                         if value is not None:
                             varNode.setValue(value)
                         lvGraph.addNode(varNode)
@@ -506,48 +511,89 @@ def processBlockStmtChild(node, blockUUID):
             lvGraph.addTerminalEdge(caseTerminalUUID, caseSelector.getCaseSelectorExternal().uuid)
         processCaseSelectorPrintTerminals(caseSelector)
 
+
+    elif node.tag == "ForStmt":
+        initNode = node.find("init")
+        condNode = node.find("cond")
+        postNode = node.find("post")
+        bodyNode = node.find("body")
+
+        # Process Init Node
+        if initNode is not None:
+            for child in initNode:
+                processBlockStmtChild(child, blockUUID)
+
+        # Create While Loop
+        whileLoop = WhileLoop("whileLoop")
+        lvGraph.addNode(whileLoop)
+        lvGraph.setDiagram(whileLoop.getSubdiagram())  # Set diagram to the loop's subdiagram
+
+        # Process Condition Node
+        condUUID = None
+        if condNode is not None and len(condNode) > 0:  # Check if condNode exists and has children
+            if condNode[0].tag == "BinaryExpr":
+                condUUID = addBinaryNodeToLVGraph(condNode[0], None, False)
+            elif condNode[0].tag == "Ident":
+                identName = condNode[0].find("name").text
+                condUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
+            else:
+                logger.warning(f"Unhandled condition type: {condNode[0].tag}")
+
+            if condUUID is not None:
+                whileLoopCondTerm = whileLoop.getConditionalTerminal()
+                lvGraph.addTerminalEdge(condUUID, whileLoopCondTerm.uuid)
+            else:
+                logger.warning("Condition UUID is None, loop may not behave as expected.")
+        else:
+            logger.warning("No condition found for the loop.  Loop will run indefinitely if not handled elsewhere.")
+
+        # Process Body Node
+        if bodyNode is not None:
+            for child in bodyNode:
+                processBlockStmtChild(child, whileLoop.getSubdiagram())
+
+        # Process Post Node (Increment/Decrement)
+        if postNode is not None:
+            for child in postNode:
+                processBlockStmtChild(child, whileLoop.getSubdiagram()) # Process inside the loop
+
+        lvGraph.setDiagram(blockUUID) # Restore the original diagram
+
     else:
         logger.warning(f"Unhandled block statement type: {node.tag}")
         
 
 def process():
-    tree = ET.parse('goast/goast1.txt')
+    tree = ET.parse('goast/goast1_new.txt')
     with open("python/goast2.xml", "wb") as writeBack:
         ET.indent(tree, space="\t", level=0)
         tree.write(writeBack)
     root = tree.getroot()
-    propNode = PropertyNode()
-    propNode.addProperty("prop1")
-    propNode.addProperty("prop2")
-    lvGraph.addNode(propNode)
     funcDecls = root.findall(".//FuncDecl")
-    visNode = ET.Element("vis")
-    viNode = ET.Element("vi")
-    bdNode = ET.Element("bd")
-    bdNode.attrib["name"] = "test"
-    outputNodesElem = ET.Element("nodes")
-    outputWiresElem = ET.Element("wires")
+    # visNode = ET.Element("vis")
+    # viNode = ET.Element("vi")
+    # bdNode = ET.Element("bd")
+    # bdNode.attrib["name"] = "test"
+    # outputNodesElem = ET.Element("nodes")
+    # outputWiresElem = ET.Element("wires")
     if len(funcDecls) > 0:
         for funcDecl in funcDecls:
             ident = funcDecl.find("Ident/name").text
             if ident == "main":
                 bdUUID = lvGraph.diagramUUID
-                bdNode.attrib["diagramUUID"] = bdUUID
                 mainBlockStmt = funcDecl.find("BlockStmt")
                 for node in mainBlockStmt:
                     processBlockStmtChild(node, bdUUID)
-                for i, n in enumerate(lvGraph.graph["nodes"]):
-                    outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
-                for w in lvGraph.getWires():
-                    outputWiresElem.append(writeWireToXML(w))
-    bdNode.append(outputNodesElem)
-    bdNode.append(outputWiresElem)
-    viNode.append(bdNode)
-    visNode.append(viNode)
-    tree = ET.ElementTree(visNode)
-    with open("python/ai.xml", "wb") as files:
-        ET.indent(tree, space="\t", level=0)
-        tree.write(files)
+                # for i, n in enumerate(lvGraph.graph["nodes"]):
+                #     outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
+                # for w in lvGraph.getWires():
+                #     outputWiresElem.append(w.writeWireToXML())
+    # bdNode.append(outputNodesElem)
+    # bdNode.append(outputWiresElem)
+    # viNode.append(bdNode)
+    # visNode.append(viNode)
+    # tree = ET.ElementTree(visNode)
+    lvGraph.writeXML("test", "LabVIEW/unit_tests/output.xml")
 
 def test_property_node_wiring():
 
@@ -581,7 +627,7 @@ def test_property_node_wiring():
     for i, n in enumerate(lvGraph.graph["nodes"]):
         outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
     for w in lvGraph.getWires():
-        outputWiresElem.append(writeWireToXML(w))
+        outputWiresElem.append(w.writeWireToXML())
     bdNode.append(outputNodesElem)
     bdNode.append(outputWiresElem)
     viNode.append(bdNode)
@@ -976,4 +1022,4 @@ def GeminiGenerate():
 
 # Optionally, call the test function if this file is run directly.
 if __name__ == "__main__":
-    GeminiGenerate()
+    process()

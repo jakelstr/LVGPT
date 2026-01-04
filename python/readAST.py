@@ -511,43 +511,10 @@ def processBlockStmtChild(node, blockUUID):
         
 
 def process():
-    tree = ET.parse('goast/goast1.txt')
-    with open("python/goast2.xml", "wb") as writeBack:
-        ET.indent(tree, space="\t", level=0)
-        tree.write(writeBack)
-    root = tree.getroot()
-    propNode = PropertyNode()
-    propNode.addProperty("prop1")
-    propNode.addProperty("prop2")
-    lvGraph.addNode(propNode)
-    funcDecls = root.findall(".//FuncDecl")
-    visNode = ET.Element("vis")
-    viNode = ET.Element("vi")
-    bdNode = ET.Element("bd")
-    bdNode.attrib["name"] = "test"
-    outputNodesElem = ET.Element("nodes")
-    outputWiresElem = ET.Element("wires")
-    if len(funcDecls) > 0:
-        for funcDecl in funcDecls:
-            ident = funcDecl.find("Ident/name").text
-            if ident == "main":
-                bdUUID = lvGraph.diagramUUID
-                bdNode.attrib["diagramUUID"] = bdUUID
-                mainBlockStmt = funcDecl.find("BlockStmt")
-                for node in mainBlockStmt:
-                    processBlockStmtChild(node, bdUUID)
-                for i, n in enumerate(lvGraph.graph["nodes"]):
-                    outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
-                for w in lvGraph.getWires():
-                    outputWiresElem.append(writeWireToXML(w))
-    bdNode.append(outputNodesElem)
-    bdNode.append(outputWiresElem)
-    viNode.append(bdNode)
-    visNode.append(viNode)
-    tree = ET.ElementTree(visNode)
-    with open("python/ai.xml", "wb") as files:
-        ET.indent(tree, space="\t", level=0)
-        tree.write(files)
+    raise RuntimeError(
+        "The Go AST pipeline has been removed. Use the Python graph builders like "
+        "gen_unit_test_file() or test_property_node_wiring() instead."
+    )
 
 def test_property_node_wiring():
 

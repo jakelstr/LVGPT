@@ -49,7 +49,7 @@ def convertBinaryDictToConcatStrings(binaryDict, blockLevel):
     uniform, op, binVars = determineBinaryDictOpUniform(binaryDict)
     if uniform and op is Add:
         lvGraph.deleteNode(binaryDict['op'].uuid)
-        concatNode = ConcatenateStringsNode()
+        concatNode = ConcatenateStrings()
         lvGraph.addNode(concatNode)
         if len(binVars) > 2:
             for x in range(len(binVars) - 2):
@@ -76,8 +76,15 @@ def processBinaryExpr(node):
         returnDict["op"] = Divide()
     elif op == ">=":
         returnDict["op"] = GreaterOrEqual()
-    left = node.find("left")
-    right = node.find("right")
+    elif op == ">":
+        returnDict["op"] = Greater()
+    elif op == "%":
+        returnDict["op"] = QuotientRemainder()
+    else:
+        print (f"Unsupported binary operator: {op}")
+        assert False
+    left = node.find("x")
+    right = node.find("y")
     if len(left) > 0:
         if left[0].tag == "BinaryExpr":
             returnDict["left"] = processBinaryExpr(left[0])
@@ -254,7 +261,7 @@ def processSwitchBody(bodyTag, caseNode):
         caseUUID = None
         if case[0].tag == "BasicLit":
             val = case.find("BasicLit/value").text
-            caseUUID = caseNode.addSubdiagram(val)
+            caseUUID = caseNode.addFrame(val)
             lvGraph.setDiagram(caseUUID)
         body = c.find("body")
         found, node = unaryPrintStmt(body)
@@ -289,7 +296,7 @@ def processBlockStmtChild(node, blockUUID):
     if node.tag == "DeclStmt":
         varType = ""
         valSpec = node.find("GenDecl/ValueSpec")
-        name = valSpec.find("names/name").text
+        name = valSpec.find("names/Ident/name").text
         if valSpec is not None:
             varTypeNode = valSpec.find("type")
             if len(varTypeNode) == 0:
@@ -308,8 +315,11 @@ def processBlockStmtChild(node, blockUUID):
             if valueTag is not None:
                 match valueTag[0].tag:
                     case "BasicLit":
-                        varNode = getControlNodeByVarType(name, varType)
                         value = valueTag.find("BasicLit/value").text
+                        valueType = valueTag.find("BasicLit/kind").text
+                        if varType == "nil":
+                            varType = valueType
+                        varNode = getConstantNodeByVarType(name, varType)
                         if value is not None:
                             varNode.setValue(value)
                         lvGraph.addNode(varNode)
@@ -521,6 +531,63 @@ def processBlockStmtChild(node, blockUUID):
             lvGraph.addTerminalEdge(caseTerminalUUID, caseSelector.getCaseSelectorExternal().uuid)
         processCaseSelectorPrintTerminals(caseSelector)
 
+
+    elif node.tag == "ForStmt":
+        initNode = node.find("init")
+        condNode = node.find("cond")
+        postNode = node.find("post")
+        bodyNode = node.find("body/BlockStmt")
+        shiftRegistersNode = node.find("shiftRegisters")
+        shiftRegisters = {}
+
+        # Process Init Node
+        if initNode is not None:
+            for child in initNode:
+                processBlockStmtChild(child, blockUUID)
+
+        # Create While Loop
+        whileLoop = WhileLoop("whileLoop")
+        lvGraph.addNode(whileLoop)
+        lvGraph.setDiagram(whileLoop.getSubdiagram())  # Set diagram to the loop's subdiagram
+
+        # Process Condition Node
+        condUUID = None
+        if condNode is not None and len(condNode) > 0:  # Check if condNode exists and has children
+            if condNode[0].tag == "BinaryExpr":
+                condUUID = addBinaryNodeToLVGraph(condNode[0], None, False)
+            elif condNode[0].tag == "Ident":
+                identName = condNode[0].find("name").text
+                condUUID = lvGraph.getNodeByUUID(lvGraph.getNodeByName(identName)).getTerminal().uuid
+            else:
+                logger.warning(f"Unhandled condition type: {condNode[0].tag}")
+
+            if condUUID is not None:
+                whileLoopCondTerm = whileLoop.getConditionalTerminal()
+                lvGraph.addTerminalEdge(condUUID, whileLoopCondTerm.uuid)
+            else:
+                logger.warning("Condition UUID is None, loop may not behave as expected.")
+        else:
+            logger.warning("No condition found for the loop.  Loop will run indefinitely if not handled elsewhere.")
+
+        yPos = 10
+        if shiftRegistersNode is not None:
+            for shiftRegister in shiftRegistersNode:
+                shiftRegisterName = shiftRegister.text
+                shiftRegisters[shiftRegisterName] = whileLoop.addShiftRegister(yPos)
+                yPos += 10
+
+        # Process Body Node
+        if bodyNode is not None:
+            for child in bodyNode:
+                processBlockStmtChild(child, whileLoop.getSubdiagram())
+
+        # Process Post Node (Increment/Decrement)
+        if postNode is not None:
+            for child in postNode:
+                processBlockStmtChild(child, whileLoop.getSubdiagram()) # Process inside the loop
+
+        lvGraph.setDiagram(blockUUID) # Restore the original diagram
+
     else:
         logger.warning(f"Unhandled block statement type: {node.tag}")
         
@@ -599,6 +666,7 @@ def test_property_node_wiring():
     for i, n in enumerate(lvGraph.graph["nodes"]):
         outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
     for w in lvGraph.getWires():
+        outputWiresElem.append(w.writeWireToXML())
         outputWiresElem.append(w.writeWireToXML())
     bdNode.append(outputNodesElem)
     bdNode.append(outputWiresElem)
@@ -957,44 +1025,52 @@ def GeminiGenerate():
     lvGraph.addNode(visa_open)
     lvGraph.addTerminalEdge(address_constant.getTerminal().uuid, visa_open["VISA resource name"].uuid)
 
-    # VISA Write
-    visa_write = VisaWrite()
-    lvGraph.addNode(visa_write)
-
-    # IDN Query String Constant
-    idn_string_constant = StringConstant("IDN String")
-    idn_string_constant.setValue("*IDN?\n")
-    lvGraph.addNode(idn_string_constant)
-
-    # Wire IDN String and VISA Resource to VISA Write
-    lvGraph.addTerminalEdge(idn_string_constant.getTerminal().uuid, visa_write["write buffer"].uuid)
-    lvGraph.addTerminalEdge(visa_open["VISA resource name"].uuid, visa_write["VISA resource name"].uuid)
-
-    # VISA Read
-    visa_read = VisaRead()
-    lvGraph.addNode(visa_read)
-
-    # Wire VISA Resource from Write to VISA Read
-    lvGraph.addTerminalEdge(visa_write["VISA resource name out"].uuid, visa_read["VISA resource name"].uuid)
-
-    # String Indicator for IDN
-    idn_indicator = StringIndicator("IDN String")
-    lvGraph.addNode(idn_indicator)
-
-    # Wire VISA Read output to String Indicator
-    lvGraph.addTerminalEdge(visa_read["read buffer"].uuid, idn_indicator.getTerminal().uuid)
-    
-    # VISA Close
-    visa_close = VisaClose()
-    lvGraph.addNode(visa_close)
-    lvGraph.addTerminalEdge(visa_read["VISA resource name out"].uuid, visa_close["VISA resource name"].uuid)
-    
-    # error_indicator = ErrorClusterIndicator("Error Out")
+    # Add Error Indicator
+    # error_indicator = ClusterIndicator("Error Cluster")
     # lvGraph.addNode(error_indicator)
-    # lvGraph.addTerminalEdge(visa_close["error out"].uuid, error_indicator.getTerminal().uuid)
+    
+
+    # Constants
+    idn_constant = StringConstant("idn_string")
+    idn_constant.setValue("*IDN?")
+    lvGraph.addNode(idn_constant)
+    
+    address_constant = StringConstant("address_string")
+    address_constant.setValue("GPIB0::6::INSTR")
+    lvGraph.addNode(address_constant)
+    
+    mode_constant = NumericConstant("mode", "I32")
+    mode_constant.setValue("0")
+    lvGraph.addNode(mode_constant)
+    
+    byte_constant = NumericConstant("byte_count", "I32")
+    byte_constant.setValue("256")
+    lvGraph.addNode(byte_constant)
+
+    # Wire the nodes
+    #GPIB init
+    lvGraph.addTerminalEdge(address_constant.getTerminal().uuid, gpib_init["address string"].uuid)
+
+    #GPIB Write
+    lvGraph.addTerminalEdge(gpib_init["error out"].uuid, gpib_write["error in"].uuid)
+    lvGraph.addTerminalEdge(address_constant.getTerminal().uuid, gpib_write["address string"].uuid)
+    lvGraph.addTerminalEdge(idn_constant.getTerminal().uuid, gpib_write["data"].uuid)
+    lvGraph.addTerminalEdge(mode_constant.getTerminal().uuid, gpib_write["mode (0)"].uuid)
+
+    #GPIB Read
+    lvGraph.addTerminalEdge(gpib_write["error out"].uuid, gpib_read["error in"].uuid)
+    lvGraph.addTerminalEdge(address_constant.getTerminal().uuid, gpib_read["address string"].uuid)
+    lvGraph.addTerminalEdge(byte_constant.getTerminal().uuid, gpib_read["byte count"].uuid)
+    lvGraph.addTerminalEdge(mode_constant.getTerminal().uuid, gpib_read["mode (0)"].uuid)
+
+    #String Indicator
+    lvGraph.addTerminalEdge(gpib_read["data"].uuid, string_indicator.getTerminal().uuid)
+
+    #Error Indicator
+    # lvGraph.addTerminalEdge(gpib_read["error out"].uuid, error_indicator.getTerminal().uuid)
 
     lvGraph.finalize_layout()
-    lvGraph.writeXML("test", "LabVIEW/unit_tests/def.xml")
+    lvGraph.writeXML("GPIB Identity Query", "LabVIEW/unit_tests/gpib_identity.xml")
 
 
 # Optionally, call the test function if this file is run directly.

@@ -592,46 +592,11 @@ def processBlockStmtChild(node, blockUUID):
         logger.warning(f"Unhandled block statement type: {node.tag}")
         
 
-def build_from_ast_root(ast_root, graph=None):
-    """Populate a :class:`LVGraph` from a parsed AST root element."""
-
-    graph = reset_graph(graph)
-    block_nodes = ast_root.findall(".//BlockStmt")
-
-    if not block_nodes:
-        raise ValueError("No <BlockStmt> elements found in the provided AST")
-
-    for block in block_nodes:
-        for child in block:
-            processBlockStmtChild(child, graph.diagramUUID)
-
-    graph.finalize_layout()
-    return graph
-
-
-def build_from_ast_file(xml_path, graph=None):
-    """Parse an AST XML file and return the populated :class:`LVGraph`."""
-
-    tree = ET.parse(xml_path)
-    root = tree.getroot()
-    return build_from_ast_root(root, graph=graph)
-
-
-def process(xml_path, output_path=None, graph=None):
-    """Build a LabVIEW graph from an AST XML file.
-
-    Args:
-        xml_path: Path to the AST XML file to consume.
-        output_path: Optional destination for the generated VI XML.
-        graph: Optional existing :class:`LVGraph` instance to populate.
-    """
-
-    graph = build_from_ast_file(xml_path, graph=graph)
-
-    if output_path:
-        graph.writeXML("generated", output_path)
-
-    return graph
+def process():
+    raise RuntimeError(
+        "The Go AST pipeline has been removed. Use the Python graph builders like "
+        "gen_unit_test_file() or test_property_node_wiring() instead."
+    )
 
 def test_property_node_wiring():
     reset_graph()

@@ -46,173 +46,258 @@ type CodePage struct {
 	Elements []CodeElement
 }
 
-func findBottomBinaryExpr(expr ast.Expr) string {
-	if binaryExpr, ok := expr.(*ast.BinaryExpr); ok {
-		return fmt.Sprintf("<op>%s</op><left>%s</left><right>%s</right>", xmlEscape(fmt.Sprintf("%s", binaryExpr.Op)), walkNode(binaryExpr.X), walkNode(binaryExpr.Y))
-	} else if basicLit, ok := expr.(*ast.BasicLit); ok {
-		return fmt.Sprintf("<BasicLit>%s</BasicLit>", processBasicLit(*basicLit))
+func processIfStmt(expr *ast.IfStmt) AnalysisResult {
+	mergedResult := AnalysisResult{
+		AccessedVars: map[string]bool{},
+		ModifiedVars: map[string]bool{},
+		ChildResults: []*AnalysisResult{},
+		XMLString:    "", // Initialize XMLString
 	}
-	return fmt.Sprintf("%s", expr)
-}
-
-func processCallExpr(expr ast.Expr) string {
-	if selectorExpr, ok := expr.(*ast.SelectorExpr); ok {
-		return fmt.Sprintf("<SelectorExpr>%s</SelectorExpr>", selectorExpr.Sel.Name)
-	}
-	return fmt.Sprintf("%s", expr)
-}
-
-func processIfStmt(expr *ast.IfStmt) string {
 	condString := ""
 	elseString := ""
-	condString = walkNode(expr.Cond)
+	condResult := walkNode(expr.Cond)
+	condString = condResult.XMLString
 	if expr.Else != nil {
-		elseString = fmt.Sprintf("<else>%s</else>", walkNode(expr.Else))
+		elseResult := walkNode(expr.Else)
+		mergedResult.AccessedVars = mergeMaps(mergedResult.AccessedVars, elseResult.AccessedVars)
+		mergedResult.ModifiedVars = mergeMaps(mergedResult.ModifiedVars, elseResult.ModifiedVars)
+		elseString = fmt.Sprintf("<else>%s</else>", elseResult.XMLString)
 
 	}
-	bodyString := walkNode(expr.Body)
-	return fmt.Sprintf("<cond>%s</cond>%s<body>%s</body>", condString, elseString, bodyString)
+	bodyResult := walkNode(expr.Body)
+	bodyString := bodyResult.XMLString
+	mergedResult.AccessedVars = mergeMaps(mergedResult.AccessedVars, bodyResult.AccessedVars)
+	mergedResult.ModifiedVars = mergeMaps(mergedResult.ModifiedVars, bodyResult.ModifiedVars)
+	mergedResult.XMLString += fmt.Sprintf("<cond>%s</cond>%s<body>%s</body>", condString, elseString, bodyString)
+	return mergedResult
 }
 
-func walkNode(f ast.Node) string {
-	retString := ""
-	// ast.Inspect(f, func(n ast.Node) bool {
-	// 	retString += processNode(n)
-	// 	return true
-	// })
-	retString += processNode(f)
-	// fmt.Println(retString)
-	return retString
+// AnalysisResult holds the XML string and variable information.
+type AnalysisResult struct {
+	XMLString    string
+	AccessedVars map[string]bool
+	ModifiedVars map[string]bool
+	ChildResults []*AnalysisResult // For hierarchical structures like blocks
 }
 
-func processNode(n ast.Node) string {
-	retString := ""
+func mergeMaps(maps ...map[string]bool) map[string]bool {
+	mergedMap := map[string]bool{}
+	for _, m := range maps {
+		for k, v := range m {
+			mergedMap[k] = v
+		}
+	}
+	return mergedMap
+}
+
+func mergeResults(results ...*AnalysisResult) *AnalysisResult {
+	mergedResult := &AnalysisResult{
+		AccessedVars: map[string]bool{},
+		ModifiedVars: map[string]bool{},
+		ChildResults: []*AnalysisResult{},
+		XMLString:    "", // Initialize XMLString
+	}
+
+	for _, result := range results {
+		if result == nil {
+			continue // Skip nil results
+		}
+		mergedResult.XMLString += result.XMLString
+		mergedResult.AccessedVars = mergeMaps(mergedResult.AccessedVars, result.AccessedVars)
+		mergedResult.ModifiedVars = mergeMaps(mergedResult.ModifiedVars, result.ModifiedVars)
+		mergedResult.ChildResults = append(mergedResult.ChildResults, result.ChildResults...) // Append child results
+	}
+
+	return mergedResult
+}
+
+func walkNode(f ast.Node) *AnalysisResult {
+	return processNode(f)
+}
+
+func processNode(n ast.Node) *AnalysisResult {
+	result := &AnalysisResult{
+		AccessedVars: map[string]bool{},
+		ModifiedVars: map[string]bool{},
+		ChildResults: []*AnalysisResult{},
+	}
+
 	nodeType := fmt.Sprintf("%T", n)
 	if nodeType != "<nil>" {
-
 		nodeType = strings.TrimPrefix(nodeType, "*ast.")
-		retString += fmt.Sprintf("<%s>\n", nodeType)
+		result.XMLString += fmt.Sprintf("<%s>\n", nodeType)
 	} else {
-		return ""
+		return result // Return empty result, not an empty string
 	}
 
 	switch x := n.(type) {
 
 	case *ast.IfStmt:
-		retString += fmt.Sprintf("%s\n", processIfStmt(x))
+		ifStmtResult := processIfStmt(x)
+		result.XMLString += fmt.Sprintf("%s\n", ifStmtResult.XMLString)
+		result.AccessedVars = mergeMaps(result.AccessedVars, ifStmtResult.AccessedVars)
+		result.ModifiedVars = mergeMaps(result.ModifiedVars, ifStmtResult.ModifiedVars)
 
 	case *ast.File:
 		fmt.Printf("File ends on block %d\n", int(n.End()))
-		retString += walkNode(x.Name)
+		nameResult := walkNode(x.Name)
+		result = mergeResults(result, nameResult)
+
 		for _, decl := range x.Decls {
-			retString += walkNode(decl)
+			declResult := walkNode(decl)
+			result = mergeResults(result, declResult)
 		}
 
 	case *ast.BlockStmt:
-		fmt.Printf("Entering Block... ")
-		//exitBlockLines = append(exitBlockLines, depthCounter)
+		fmt.Println("------Entering Block------")
 		for _, stmt := range x.List {
-			retString += walkNode(stmt)
+			stmtResult := walkNode(stmt)
+			result = mergeResults(result, stmtResult)
 		}
+		fmt.Println("------Exiting Block-------")
+		for k, _ := range result.AccessedVars {
+			fmt.Printf("Accessed: %s\n", k)
+		}
+		for k, _ := range result.ModifiedVars {
+			fmt.Printf("Modified: %s\n", k)
+		}
+
 	case *ast.Ident:
-		retString += fmt.Sprintf("<name>%s</name>\n", x.Name)
+		result.XMLString += fmt.Sprintf("<name>%s</name>\n", x.Name)
+		result.AccessedVars[x.Name] = true
 
 	case *ast.FuncDecl:
-		retString += walkNode(x.Name)
+		nameResult := walkNode(x.Name)
+		result = mergeResults(result, nameResult)
+		result.AccessedVars[x.Name.Name] = true
+
 		if x.Body != nil {
-			retString += walkNode(x.Body)
+			bodyResult := walkNode(x.Body)
+			result = mergeResults(result, bodyResult)
 		}
 		if x.Type.Results != nil {
-			for _, result := range x.Type.Results.List {
-				fmt.Println("Function:", x.Name.Name, "Return Type:", result.Type)
+			for _, res := range x.Type.Results.List {
+				fmt.Println("Function:", x.Name.Name, "Return Type:", res.Type)
 			}
 		}
+
 	case *ast.CallExpr:
-		//funcName := x.Fun.(*ast.SelectorExpr).Sel.Name
-		//fmt.Println("Function call:", funcName)
-		retString += fmt.Sprintf("<args>")
+		result.XMLString += "<args>"
 		for _, arg := range x.Args {
-			retString += fmt.Sprintf("<arg>%s</arg>", walkNode(arg))
+			argResult := walkNode(arg)
+			result.XMLString += fmt.Sprintf("<arg>%s</arg>", argResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, argResult.AccessedVars)
 		}
-		retString += fmt.Sprintf("</args>")
-		retString += fmt.Sprintf("<fun>%s</fun>", walkNode(x.Fun))
+		result.XMLString += "</args>"
+
+		funResult := walkNode(x.Fun)
+		result.XMLString += fmt.Sprintf("<fun>%s</fun>", funResult.XMLString)
+		//result.AccessedVars = mergeMaps(result.AccessedVars, funResult.AccessedVars)
+
 	case *ast.AssignStmt:
-		fmt.Printf("AssignStmt: ")
-		retString += fmt.Sprintf("<token>%s</token>\n", x.Tok)
-		retString += "<LhsArray>\n"
+		result.XMLString += fmt.Sprintf("<token>%s</token>\n", x.Tok)
+		result.XMLString += "<LhsArray>\n"
 		for i, lhs := range x.Lhs {
-			retString += fmt.Sprintf("<Lhs id=\"%d\">%s</Lhs>\n", i, walkNode(lhs))
+			lhsResult := walkNode(lhs)
+			result.XMLString += fmt.Sprintf("<Lhs id=\"%d\">%s</Lhs>\n", i, lhsResult.XMLString)
+			result.ModifiedVars = mergeMaps(result.ModifiedVars, lhsResult.AccessedVars) // LHS is being modified
 		}
-		retString += "</LhsArray>\n"
-		retString += "<RhsArray>\n"
+		result.XMLString += "</LhsArray>\n"
+		result.XMLString += "<RhsArray>\n"
 		for i, rhs := range x.Rhs {
-			retString += fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, walkNode(rhs))
+			rhsResult := walkNode(rhs)
+			result.XMLString += fmt.Sprintf("<Rhs id=\"%d\">%s</Rhs>\n", i, rhsResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, rhsResult.AccessedVars) // RHS is being accessed
 		}
-		retString += "</RhsArray>\n"
+		result.XMLString += "</RhsArray>\n"
+		fmt.Println("AssignStmt")
+		for k, _ := range result.AccessedVars {
+			fmt.Printf("Accessed: %s\n", k)
+		}
+		for k, _ := range result.ModifiedVars {
+			fmt.Printf("Modified: %s\n", k)
+		}
 
 	case *ast.SelectorExpr:
-		retString += fmt.Sprintf("<x>%s</x><sel>%s</sel>", x.X, x.Sel)
 		fmt.Printf("Selector Expr: %s, %s\n", x.X, x.Sel)
+		xResult := walkNode(x.X)
+		result.XMLString += fmt.Sprintf("<x>%s</x>", xResult.XMLString)
+		//result.AccessedVars = mergeMaps(result.AccessedVars, xResult.AccessedVars)
+		result.XMLString += fmt.Sprintf("<sel>%s</sel>", x.Sel.Name)
+		//result.AccessedVars[x.Sel.Name] = true
 
 	case *ast.ExprStmt:
-		/*if _, ok := x.X.(*ast.CallExpr); ok {
-			callExpr := x.X.(*ast.CallExpr)
-			w.WriteString(fmt.Sprintf("<ExprStmt><CallExpr>%s</CallExpr></ExprStmt>\n", callExpr.Fun))
-
-		}*/
-		retString += walkNode(x.X)
+		exprResult := walkNode(x.X)
+		result = mergeResults(result, exprResult)
 
 	case *ast.BasicLit:
-		retString += processBasicLit(*x)
+		result.XMLString += processBasicLit(*x)
 
 	case *ast.CompositeLit:
-		retString += fmt.Sprintf("<type>%s</type><elts>", walkNode(x.Type))
+		typeResult := walkNode(x.Type)
+		result.XMLString += fmt.Sprintf("<type>%s</type>", typeResult.XMLString)
+		result.AccessedVars = mergeMaps(result.AccessedVars, typeResult.AccessedVars)
+
+		result.XMLString += "<elts>"
 		for i, elt := range x.Elts {
-			retString += fmt.Sprintf("<elt id=\"%d\">%s</elt>", i, walkNode(elt))
+			eltResult := walkNode(elt)
+			result.XMLString += fmt.Sprintf("<elt id=\"%d\">%s</elt>", i, eltResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, eltResult.AccessedVars)
 		}
-		retString += "</elts>"
+		result.XMLString += "</elts>"
+
 	case *ast.IndexExpr:
-		retString += fmt.Sprintf("<index>%s</index><x>%s</x>", walkNode(x.Index), walkNode(x.X))
+		indexResult := walkNode(x.Index)
+		xResult := walkNode(x.X)
+		result.XMLString += fmt.Sprintf("<index>%s</index><x>%s</x>", indexResult.XMLString, xResult.XMLString)
+		result.AccessedVars = mergeMaps(result.AccessedVars, indexResult.AccessedVars)
+		result.AccessedVars = mergeMaps(result.AccessedVars, xResult.AccessedVars)
 
 	case *ast.DeclStmt:
-		// fmt.Printf("Decl statement %s\n", x.Decl)
-		retString += walkNode(x.Decl)
-		// for _, spec := range x.Decl.(*ast.GenDecl).Specs {
-		// 	retString += walkNode(spec)
-		// }
+		declResult := walkNode(x.Decl)
+		result = mergeResults(result, declResult)
+
 	case *ast.ArrayType:
 		if x.Len != nil {
-			retString += fmt.Sprintf("<len>%s</len>", walkNode(x.Len))
+			lenResult := walkNode(x.Len)
+			result.XMLString += fmt.Sprintf("<len>%s</len>", lenResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, lenResult.AccessedVars)
 		}
 		if x.Elt != nil {
-			retString += fmt.Sprintf("<type>%s</type>", walkNode(x.Elt))
+			eltResult := walkNode(x.Elt)
+			result.XMLString += fmt.Sprintf("<type>%s</type>", eltResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, eltResult.AccessedVars)
 		}
 
 	case *ast.ValueSpec:
 		if x.Type != nil {
-			retString += fmt.Sprintf("<type>%s</type>\n", walkNode(x.Type))
+			typeResult := walkNode(x.Type)
+			result.XMLString += fmt.Sprintf("<type>%s</type>\n", typeResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, typeResult.AccessedVars)
 		} else {
-			retString += fmt.Sprintf("<type>nil</type>\n")
+			result.XMLString += "<type>nil</type>\n"
 		}
-		retString += fmt.Sprintf("<names>\n")
+		result.XMLString += "<names>\n"
 		for _, name := range x.Names {
-			//visited[name] = true
-			retString += fmt.Sprint(walkNode(name))
+			nameResult := walkNode(name)
+			result = mergeResults(result, nameResult)
 		}
-		retString += fmt.Sprintf("</names>\n")
-		retString += fmt.Sprintf("<values>\n")
+		result.XMLString += "</names>\n"
+		result.XMLString += "<values>\n"
 		for _, value := range x.Values {
-			retString += fmt.Sprintf("<value>\n")
-			retString += walkNode(value)
-			retString += fmt.Sprintf("</value>\n")
+			valueResult := walkNode(value)
+			result.XMLString += "<value>\n"
+			result.XMLString += valueResult.XMLString
+			result.AccessedVars = mergeMaps(result.AccessedVars, valueResult.AccessedVars)
+			result.XMLString += "</value>\n"
 		}
-		retString += fmt.Sprintf("</values>\n")
+		result.XMLString += "</values>\n"
 
 	case *ast.GenDecl:
-
-		fmt.Printf("---- gen decl\n")
+		fmt.Println("---- gen decl")
 		for _, spec := range x.Specs {
-			retString += walkNode(spec)
+			specResult := walkNode(spec)
+			result = mergeResults(result, specResult)
 		}
 		for _, spec := range x.Specs {
 			switch spec := spec.(type) {
@@ -222,8 +307,7 @@ func processNode(n ast.Node) string {
 				fmt.Println("Type", spec.Name.String())
 			case *ast.ValueSpec:
 				for _, id := range spec.Names {
-					fmt.Printf("Var %s", id.Name)
-					//fmt.Printf("Var %s: %v", id.Name, id.Obj.Decl.(*ast.ValueSpec).Values[0].(*ast.BasicLit).Value)
+					fmt.Printf("CONST %s\n", id.Name)
 				}
 			default:
 				fmt.Printf("Unknown token type: %s\n", x.Tok)
@@ -231,42 +315,70 @@ func processNode(n ast.Node) string {
 		}
 
 	case *ast.CaseClause:
-		retString += fmt.Sprint("<cases>")
+		result.XMLString += "<cases>"
 		for _, c := range x.List {
-			retString += fmt.Sprintf("<case>%s</case>", walkNode(c))
+			cResult := walkNode(c)
+			result.XMLString += fmt.Sprintf("<case>%s</case>", cResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, cResult.AccessedVars)
 		}
-		retString += fmt.Sprint("</cases>")
-		retString += fmt.Sprint("<body>")
+		result.XMLString += "</cases>"
+		result.XMLString += "<body>"
 		for _, b := range x.Body {
-			retString += fmt.Sprintf("%s", walkNode(b))
+			bResult := walkNode(b)
+			result = mergeResults(result, bResult)
 		}
-		retString += fmt.Sprint("</body>")
+		result.XMLString += "</body>"
 
 	case *ast.BinaryExpr:
-		retString += findBottomBinaryExpr(x)
+		xResult := walkNode(x.X)
+		yResult := walkNode(x.Y)
+		result.XMLString += fmt.Sprintf("<op>%s</op><x>%s</x><y>%s</y>", xmlEscape(x.Op.String()), xResult.XMLString, yResult.XMLString)
+		result.AccessedVars = mergeMaps(result.AccessedVars, xResult.AccessedVars)
+		result.AccessedVars = mergeMaps(result.AccessedVars, yResult.AccessedVars)
 
 	case *ast.SwitchStmt:
-		retString += fmt.Sprintf("<tag>%s</tag><body>%s</body>", walkNode(x.Tag), walkNode(x.Body))
+		tagResult := walkNode(x.Tag)
+		bodyResult := walkNode(x.Body)
+		result.XMLString += fmt.Sprintf("<tag>%s</tag><body>%s</body>", tagResult.XMLString, bodyResult.XMLString)
+		result.AccessedVars = mergeMaps(result.AccessedVars, tagResult.AccessedVars)
+		result.ModifiedVars = mergeMaps(result.ModifiedVars, bodyResult.ModifiedVars)
 
 	case *ast.ImportSpec:
-		retString += walkNode(x.Path)
+		pathResult := walkNode(x.Path)
+		result.XMLString += pathResult.XMLString
+		result.AccessedVars = mergeMaps(result.AccessedVars, pathResult.AccessedVars)
 
 	case *ast.ForStmt:
-		initString := walkNode(x.Init)
-		if initString != "" {
-			retString += fmt.Sprintf("<init>%s</init>", initString)
+		initResult := walkNode(x.Init)
+		if initResult.XMLString != "" {
+			result.XMLString += fmt.Sprintf("<init>%s</init>", initResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, initResult.AccessedVars)
+			result.ModifiedVars = mergeMaps(result.ModifiedVars, initResult.ModifiedVars)
 		}
-		condString := walkNode(x.Cond)
-		if condString != "" {
-			retString += fmt.Sprintf("<cond>%s</cond>", condString)
+		condResult := walkNode(x.Cond)
+		if condResult.XMLString != "" {
+			result.XMLString += fmt.Sprintf("<cond>%s</cond>", condResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, condResult.AccessedVars)
 		}
-		postString := walkNode(x.Post)
-		if postString != "" {
-			retString += fmt.Sprintf("<post>%s</post>", postString)
+		postResult := walkNode(x.Post)
+		if postResult.XMLString != "" {
+			result.XMLString += fmt.Sprintf("<post>%s</post>", postResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, postResult.AccessedVars)
+			result.ModifiedVars = mergeMaps(result.ModifiedVars, postResult.ModifiedVars)
 		}
-		bodyString := walkNode(x.Body)
-		if bodyString != "" {
-			retString += fmt.Sprintf("<body>%s</body>", bodyString)
+		bodyResult := walkNode(x.Body)
+		if bodyResult.XMLString != "" {
+			result.XMLString += fmt.Sprintf("<body>%s</body>", bodyResult.XMLString)
+			result.AccessedVars = mergeMaps(result.AccessedVars, bodyResult.AccessedVars)
+			result.ModifiedVars = mergeMaps(result.ModifiedVars, bodyResult.ModifiedVars)
+			result.ChildResults = append(result.ChildResults, bodyResult)
+			if len(bodyResult.ModifiedVars) > 0 {
+				result.XMLString += "<shiftRegisters>"
+				for k, _ := range bodyResult.ModifiedVars {
+					result.XMLString += fmt.Sprintf("<shiftRegister>%s</shiftRegister>", k)
+				}
+				result.XMLString += "</shiftRegisters>"
+			}
 		}
 
 	default:
@@ -277,8 +389,8 @@ func processNode(n ast.Node) string {
 		}
 
 	}
-	retString += fmt.Sprintf("</%s>\n", nodeType)
-	return retString
+	result.XMLString += fmt.Sprintf("</%s>\n", nodeType)
+	return result
 }
 
 func main() {
@@ -298,8 +410,17 @@ func main() {
 
 	w := bufio.NewWriter(file)
 
-	w.WriteString(walkNode(f))
+	analysisResult := walkNode(f)
+
+	w.WriteString(analysisResult.XMLString)
 	w.Flush()
+
+	for k, _ := range analysisResult.AccessedVars {
+		fmt.Printf("Accessed: %s\n", k)
+	}
+	for k, _ := range analysisResult.ModifiedVars {
+		fmt.Printf("Modified: %s\n", k)
+	}
 
 	//fmt.Printf("final depth: %d\n", depthCounter)
 

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lvgpt"
+version = "0.1.0"
+description = "LabVIEW graph builder for LLM-generated code"
+authors = [{ name = "LVGPT" }]
+requires-python = ">=3.10"
+
+[project.scripts]
+lvgpt-build = "lvgpt.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "python"}
+packages = ["lvgpt", "lvgpt.lvgraph"]

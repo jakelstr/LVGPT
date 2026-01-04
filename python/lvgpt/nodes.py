@@ -1,7 +1,8 @@
 import uuid
 import xml.etree.ElementTree as ET
-from lvGraph import LVNode, FrontPanelControl, FrontPanelIndicator, MultiFrameTunnel, SelectorTunnel, ShiftRegister
-from lvGraph.tunnel import Tunnelable
+
+from .lvgraph import LVNode, FrontPanelControl, FrontPanelIndicator, MultiFrameTunnel, SelectorTunnel, ShiftRegister
+from .lvgraph.tunnel import Tunnelable
 
 class NumericControl(LVNode, FrontPanelControl):
     def __init__(self, name, numType):

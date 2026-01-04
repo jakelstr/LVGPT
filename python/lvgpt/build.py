@@ -1,8 +1,23 @@
-import xml.etree.ElementTree as ET
-from lvgptGraph import *
-from lvGraph import *
+"""Graph-building utilities for turning parsed ASTs into LabVIEW graphs."""
+
 import logging
-lvGraph = LVGraph()
+import xml.etree.ElementTree as ET
+
+from .lvgraph import *
+from .nodes import *
+
+
+def reset_graph(graph=None):
+    """Reset the module-level graph reference and return it."""
+
+    global lvGraph
+    lvGraph = graph or LVGraph()
+    return lvGraph
+
+
+# Default graph used by helper routines; callers should prefer ``reset_graph``
+# or pass a graph explicitly to entry points.
+lvGraph = reset_graph()
 
 # Configure logging for better debugging
 logging.basicConfig(level=logging.INFO)
@@ -510,46 +525,49 @@ def processBlockStmtChild(node, blockUUID):
         logger.warning(f"Unhandled block statement type: {node.tag}")
         
 
-def process():
-    tree = ET.parse('goast/goast1.txt')
-    with open("python/goast2.xml", "wb") as writeBack:
-        ET.indent(tree, space="\t", level=0)
-        tree.write(writeBack)
+def build_from_ast_root(ast_root, graph=None):
+    """Populate a :class:`LVGraph` from a parsed AST root element."""
+
+    graph = reset_graph(graph)
+    block_nodes = ast_root.findall(".//BlockStmt")
+
+    if not block_nodes:
+        raise ValueError("No <BlockStmt> elements found in the provided AST")
+
+    for block in block_nodes:
+        for child in block:
+            processBlockStmtChild(child, graph.diagramUUID)
+
+    graph.finalize_layout()
+    return graph
+
+
+def build_from_ast_file(xml_path, graph=None):
+    """Parse an AST XML file and return the populated :class:`LVGraph`."""
+
+    tree = ET.parse(xml_path)
     root = tree.getroot()
-    propNode = PropertyNode()
-    propNode.addProperty("prop1")
-    propNode.addProperty("prop2")
-    lvGraph.addNode(propNode)
-    funcDecls = root.findall(".//FuncDecl")
-    visNode = ET.Element("vis")
-    viNode = ET.Element("vi")
-    bdNode = ET.Element("bd")
-    bdNode.attrib["name"] = "test"
-    outputNodesElem = ET.Element("nodes")
-    outputWiresElem = ET.Element("wires")
-    if len(funcDecls) > 0:
-        for funcDecl in funcDecls:
-            ident = funcDecl.find("Ident/name").text
-            if ident == "main":
-                bdUUID = lvGraph.diagramUUID
-                bdNode.attrib["diagramUUID"] = bdUUID
-                mainBlockStmt = funcDecl.find("BlockStmt")
-                for node in mainBlockStmt:
-                    processBlockStmtChild(node, bdUUID)
-                for i, n in enumerate(lvGraph.graph["nodes"]):
-                    outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
-                for w in lvGraph.getWires():
-                    outputWiresElem.append(writeWireToXML(w))
-    bdNode.append(outputNodesElem)
-    bdNode.append(outputWiresElem)
-    viNode.append(bdNode)
-    visNode.append(viNode)
-    tree = ET.ElementTree(visNode)
-    with open("python/ai.xml", "wb") as files:
-        ET.indent(tree, space="\t", level=0)
-        tree.write(files)
+    return build_from_ast_root(root, graph=graph)
+
+
+def process(xml_path, output_path=None, graph=None):
+    """Build a LabVIEW graph from an AST XML file.
+
+    Args:
+        xml_path: Path to the AST XML file to consume.
+        output_path: Optional destination for the generated VI XML.
+        graph: Optional existing :class:`LVGraph` instance to populate.
+    """
+
+    graph = build_from_ast_file(xml_path, graph=graph)
+
+    if output_path:
+        graph.writeXML("generated", output_path)
+
+    return graph
 
 def test_property_node_wiring():
+    reset_graph()
 
     visNode = ET.Element("vis")
     viNode = ET.Element("vi")
@@ -581,7 +599,7 @@ def test_property_node_wiring():
     for i, n in enumerate(lvGraph.graph["nodes"]):
         outputNodesElem.append(lvGraph.graph["nodes"][n].writeNodeToXML(i))
     for w in lvGraph.getWires():
-        outputWiresElem.append(writeWireToXML(w))
+        outputWiresElem.append(w.writeWireToXML())
     bdNode.append(outputNodesElem)
     bdNode.append(outputWiresElem)
     viNode.append(bdNode)
@@ -592,6 +610,8 @@ def test_property_node_wiring():
         tree.write(files)
 
 def gen_unit_test_file():
+    reset_graph()
+
     # Boolean Control and Indicator Test
     boolControl = BoolControl("boolean control")
     boolControl.setValue(True) # Set a value for testing
@@ -867,7 +887,9 @@ def gen_unit_test_file():
 
     lvGraph.writeXML("test", "LabVIEW/unit_tests/def.xml")
 
-def test_VI_From_File_wiring(path):    
+def test_VI_From_File_wiring(path):
+    reset_graph()
+
     csc1 = ClassSpecifierConstant("csc1", "Control")
     csc1Term = csc1.getTerminal()
     lvGraph.addNode(csc1)
@@ -914,13 +936,14 @@ def test_VI_From_File_wiring(path):
     lvGraph.writeXML("test", "LabVIEW/unit_tests/subVI.xml")
 
 def test():
+    reset_graph()
+
     concat = ConcatenateStrings()
     lvGraph.addNode(concat)
     lvGraph.writeXML("test", "LabVIEW/unit_tests/test.xml")
 
 def GeminiGenerate():
-    lvGraph = LVGraph()
-
+    reset_graph()
     # GPIB Initialization
 
     # Address String Constant

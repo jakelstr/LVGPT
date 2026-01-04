@@ -10,11 +10,19 @@ With the Go AST pipeline removed, the repository now hinges on the Python graph 
 - Add unit tests for node wiring helpers (e.g., concatenation handling, case structures) and golden-file tests for full graph output.
 - Introduce a lightweight CI workflow (GitHub Actions) to run the tests and lint the package with `ruff` or `flake8`.
 
-## 3) Prompting workflow
+## 3) CLI and packaging polish
+- Add `--help` examples and usage docs for `lvgpt-build`.
+- Provide a lightweight config file or CLI flags for input/output paths and logging verbosity.
+
+## 4) Python cleanup
+- Split monolithic helpers in `python/lvgpt/build.py` into focused modules for AST parsing, graph assembly, and node utilities.
+- Add type hints and minimal logging to make debugging and testing easier.
+
+## 5) Prompting workflow
 - Reintroduce a minimal prompting client using the Chat Completions API, capturing prompts, parameters, and outputs for reproducibility.
 - Store prompt/response artifacts alongside version metadata so test cases can be regenerated as models evolve.
 
-## 4) Documentation
+## 6) Documentation
 - Expand `README.md` with an architecture sketch showing how prompts → code → AST → LabVIEW graph flow.
 - Add a short contributor guide covering dependency management, coding conventions, and how to run the tests/linters.
 

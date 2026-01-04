@@ -9,8 +9,12 @@ description = "LabVIEW graph builder for LLM-generated code"
 authors = [{ name = "LVGPT" }]
 requires-python = ">=3.10"
 
+[project.optional-dependencies]
+dev = ["pytest", "jsonschema", "pyyaml"]
+
 [project.scripts]
 lvgpt-build = "lvgpt.cli:main"
+lvgpt-build-ir = "lvgpt.cli_ir:main"
 
 [tool.setuptools]
 package-dir = {"" = "python"}

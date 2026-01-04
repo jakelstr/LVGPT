@@ -1,6 +1,7 @@
 """Graph-building utilities for turning parsed ASTs into LabVIEW graphs."""
 
 import logging
+import pathlib
 import xml.etree.ElementTree as ET
 
 from .lvgraph import *
@@ -119,7 +120,7 @@ def processBinaryDict(binaryDict):
     outType = "int"
     leftOutType = "int"
     rightOutType = "int"
-    opLeftTerm, opRightTerm, opOutputTerm = op.getTerms()
+    opLeftTerm, opRightTerm, opOutputTerm = get_binary_terms(op)
     if type(left) is dict:
         left, leftOutType = processBinaryDict(left)
         _, _, subOutput = left["op"].getTerms()
@@ -147,12 +148,42 @@ def processBinaryDict(binaryDict):
     binaryDict["right"] = right
     return (binaryDict, outType)
 
+
+def get_binary_terms(node):
+    """Return the left, right, and output terminals for binary operator nodes."""
+
+    if hasattr(node, "getTerms"):
+        return node.getTerms()
+
+    left = node.getTerminalByName("x")
+    right = node.getTerminalByName("y")
+    if left is None or right is None:
+        input_terms = [term for term in node.terminals.values() if term.isInput]
+        input_terms.sort(key=lambda term: term.name)
+        if left is None and input_terms:
+            left = input_terms[0]
+        if right is None and len(input_terms) > 1:
+            right = input_terms[1]
+
+    output_terms = [term for term in node.terminals.values() if not term.isInput]
+    output_term = None
+    if isinstance(node, QuotientRemainder):
+        for term in output_terms:
+            if "x-y" in term.name:
+                output_term = term
+                break
+    if output_term is None and output_terms:
+        output_terms.sort(key=lambda term: term.name)
+        output_term = output_terms[0]
+
+    return (left, right, output_term)
+
 def addBinaryNodeToLVGraph(binaryXMLNode, nodeName, createOutputNode=True):
     binExpDict = processBinaryExpr(binaryXMLNode)
     binExpDict, outType = processBinaryDict(binExpDict)
     if outType.upper() == "STRING":
         binExpDict, outType = convertBinaryDictToConcatStrings(binExpDict, 0)
-    _, _, finalOutputTerm = binExpDict["op"].getTerms()
+    _, _, finalOutputTerm = get_binary_terms(binExpDict["op"])
     retVal = finalOutputTerm.uuid
     if createOutputNode:
         retVal = nodeName
@@ -592,11 +623,54 @@ def processBlockStmtChild(node, blockUUID):
         logger.warning(f"Unhandled block statement type: {node.tag}")
         
 
-def process():
-    raise RuntimeError(
-        "The Go AST pipeline has been removed. Use the Python graph builders like "
-        "gen_unit_test_file() or test_property_node_wiring() instead."
-    )
+def build_from_ast_root(ast_root, output_path=None, vi_name="test", layout=True):
+    """Build a LabVIEW graph from an AST XML root element."""
+
+    reset_graph()
+    graph = lvGraph
+
+    block_stmt = None
+    if ast_root.tag == "BlockStmt":
+        block_stmt = ast_root
+    else:
+        for func_decl in ast_root.findall(".//FuncDecl"):
+            func_name = func_decl.findtext("Ident/name")
+            if func_name == "main":
+                block_stmt = func_decl.find("BlockStmt")
+                break
+
+    if block_stmt is None:
+        block_stmt = ast_root.find(".//BlockStmt")
+
+    if block_stmt is None:
+        raise ValueError("No BlockStmt found in AST XML.")
+
+    for child in block_stmt:
+        processBlockStmtChild(child, graph.diagramUUID)
+
+    if layout:
+        graph.finalize_layout()
+
+    if output_path is not None:
+        graph.writeXML(vi_name, output_path)
+
+    return graph
+
+
+def build_from_ast_file(ast_path, output_path=None, vi_name=None, layout=True):
+    """Build a LabVIEW graph from an AST XML file path."""
+
+    ast_path = pathlib.Path(ast_path)
+    tree = ET.parse(ast_path)
+    if vi_name is None:
+        vi_name = ast_path.stem
+    return build_from_ast_root(tree.getroot(), output_path=output_path, vi_name=vi_name, layout=layout)
+
+
+def process(ast_path, output_path=None, vi_name=None):
+    """Compatibility wrapper for AST XML conversion."""
+
+    return build_from_ast_file(ast_path, output_path=output_path, vi_name=vi_name)
 
 def test_property_node_wiring():
     reset_graph()
